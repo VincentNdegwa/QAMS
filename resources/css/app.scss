@@ -1,0 +1,31 @@
+// Variables
+$light-blue: #E9F1FA;
+$bright-blue: #00ABE4;
+$white: #FFFFFF;
+$dark: #040D12;
+
+// Bootstrap Overrides
+$theme-colors: (
+    "primary": $bright-blue,
+    "secondary": $light-blue,
+    "success": $bright-blue,
+    "info": $bright-blue,
+    "warning": $bright-blue,
+    "danger": $bright-blue,
+    "light": $white,
+    "dark": $dark
+);
+
+$theme-colors-inverse: (
+    "primary": $bright-blue,
+    "secondary": $light-blue,
+    "success": $bright-blue,
+    "info": $bright-blue,
+    "warning": $bright-blue,
+    "danger": $bright-blue,
+    "light": $dark,
+    "dark": $white
+);
+
+// Include Bootstrap
+@import "~bootstrap/scss/bootstrap";
