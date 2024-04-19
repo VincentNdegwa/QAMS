@@ -1,5 +1,6 @@
 <template>
-    <div class="container container-section">
+    <Head title="Login" />
+     <div class="container container-section">
         <div class="row d-flex align-items-center">
             <div class="col image_holder align-items-center d-md-flex d-none ">
                 <img src="images/testing.png" alt="">
@@ -21,7 +22,8 @@
                         <button type="submit" class="btn btn-primary w-100 btn-lg">Login</button>
                         <div class="row mt-3">
                             <div class="col-6">
-                                <a href="/forgot-password" class="p text-decoration-none text-secondary">Forgot password?</a>
+                                <a href="/forgot-password" class="p text-decoration-none text-secondary">Forgot
+                                    password?</a>
                             </div>
                             <div class="col-6">
                                 <a href="/register" class="p text-decoration-none text-light">Don't have an account?</a>
@@ -31,7 +33,7 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 </template>
 
 <script>
@@ -48,6 +50,9 @@ export default {
             // Handle login logic here
             console.log('Login form submitted');
         }
+    },
+    components: {
+        Head
     }
 };
 </script>
