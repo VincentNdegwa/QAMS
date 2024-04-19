@@ -3,29 +3,26 @@ $light-blue: #E9F1FA;
 $bright-blue: #00ABE4;
 $white: #FFFFFF;
 $dark: #040D12;
+$light-green: #5C8374;
+
 
 // Bootstrap Overrides
 $theme-colors: (
     "primary": $bright-blue,
-    "secondary": $light-blue,
-    "success": $bright-blue,
+    "secondary": $light-green,
     "info": $bright-blue,
-    "warning": $bright-blue,
-    "danger": $bright-blue,
     "light": $white,
     "dark": $dark
 );
 
 $theme-colors-inverse: (
     "primary": $bright-blue,
-    "secondary": $light-blue,
-    "success": $bright-blue,
+    "secondary": $light-green,
     "info": $bright-blue,
-    "warning": $bright-blue,
-    "danger": $bright-blue,
     "light": $dark,
     "dark": $white
 );
 
 // Include Bootstrap
 @import "~bootstrap/scss/bootstrap";
+
