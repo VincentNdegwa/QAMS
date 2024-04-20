@@ -1,0 +1,29 @@
+:root {
+    --nav_size: 150px;
+    --medimu_nav_height: 2.5em;
+    transition: all ease-out 1s !important;
+}
+
+.dash_container {
+    display: flex;
+}
+.main_content {
+    height: max-content !important;
+    min-height: 100vh;
+    max-height: 100vh;
+    /* border-left: 1px solid var(--bs-secondary); */
+    width: 100% !important;
+    /* background: rgba(0, 0, 0, 0.4) !important; */
+}
+
+@media (max-width: 768px) {
+    .main_content {
+        margin-left: 0;
+        margin-top: calc(var(--medimu_nav_height)) !important;
+        min-height: calc(100vh - var(--medimu_nav_height));
+        border-left: 0px;
+    }
+    .dash_container {
+        display: block;
+    }
+}

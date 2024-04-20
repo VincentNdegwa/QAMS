@@ -23,6 +23,5 @@ defineProps({
 <template>
 
     <Head title="Welcome" />
-    
-</template>
 
+</template>
