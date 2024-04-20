@@ -36,14 +36,14 @@ export default {
 
                 <!-- Navigation Sections -->
                 <nav class="nav">
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-house-door-fill text-primary  me-2"></i>
+                    <a class="nav-link text-secondary w-100 mt-3" href="/dashboard">
+                        <i class="bi bi-house-door-fill text-primary me-2"></i>
                         Dashboard
                     </a>
 
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-chat-left-fill text-primary  me-2"></i>
-                        Inbox
+                    <a class="nav-link text-secondary w-100 mt-3" href="/organisation">
+                        <i class="bi bi-building-fill text-primary me-2"></i>
+                        Organisation
                     </a>
                     <a class="nav-link text-secondary w-100 mt-3" href="#">
                         <i class="bi bi-clipboard-check text-primary  me-2"></i>
