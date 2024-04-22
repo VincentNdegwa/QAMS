@@ -34,5 +34,9 @@ export default {
                 user_id: '3'
             }
         }
+    }, methods: {
+        submitOrganizationForm() {
+            
+        }
     }
 }</script>

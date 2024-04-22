@@ -28,8 +28,8 @@ export default {
         <div class="position-sticky top-0 nav_bar">
             <div class="col d-flex flex-column align-items-center">
                 <!-- Profile Picture -->
-                <img src="images/testing.png" alt="Profile Picture" class="rounded-circle my-3"
-                    style="width: 80px; height: 80px;">
+                <img src="/images/testing.png" alt="Profile Picture"
+                    class="rounded-circle my-3" style="width: 80px; height: 80px;">
 
                 <!-- User Name -->
                 <div class="text-primary mb-4">John Doe</div>
