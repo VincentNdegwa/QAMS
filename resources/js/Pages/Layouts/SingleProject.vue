@@ -1,28 +1,22 @@
 <script>
 import { Head, router } from '@inertiajs/vue3';
-import SideNav from "./components/SideNav.vue"
-import OrganisationMain from "./components/OrgComponents/OrganisationMain.vue"
-import MainLayout from "./Layouts/MainLayout.vue"
-
-
+import SideNav from "../components/SideNav.vue"
+import ProjectNavs from '../components/SingleProjectComponents/ProjectNavs.vue';
 
 export default {
     data() {
         return {
-            nav: false,
 
         }
     },
     methods: {
-        submitOrganizationForm() {
-            // Handle form submission here
-        }
+
     },
     components: {
         SideNav,
         Head,
-        OrganisationMain,
-        MainLayout
+        ProjectNavs,
+        
 
     }
 }
@@ -30,10 +24,15 @@ export default {
 
 <template>
 
-    <MainLayout name="Organisations">
-        <OrganisationMain />
-    </MainLayout>
+    <Head title="Project" />
+    <section class="container dash_container">
+        <SideNav />
+        <div class="main_content pd-0 p-md-2 mt-0">
+            <ProjectNavs />
+            <slot></slot>
+        </div>
 
+    </section>
 </template>
 
 <style>

@@ -1,5 +1,5 @@
 :root {
-    --nav_size: 150px;
+    --nav_size: 170px;
     --medimu_nav_height: 2.5em;
     transition: all ease-out 1s !important;
 }

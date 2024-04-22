@@ -2,20 +2,20 @@
     <div class="col-12 col-md-6 col-lg-4 org_item mt-1 ">
         <div class="card">
             <div class="card-body text-secondary">
-                <h5 class="card-title">Project Name</h5>
-                <p class="card-text mt-4 ">Organization: Organization Name</p>
-                <p class="card-text">Created at: 23rd May, 2024</p>
-                <p class="card-text">Creator: Vincent Ndegwa</p>
-                <p class="card-text">Test Cases: 200</p>
-                <p class="card-text">Issues: 30</p>
+                <h5 class="card-title text-primary ">Project Name</h5>
+                <p class="card-text mt-4 text-light">Organization: <span class="text-secondary">Organization Name</span></p>
+                <p class="card-text text-light">Created at: <span class="text-secondary">23rd May,2024</span></p>
+                <p class="card-text text-light">Creator: <span class="text-secondary">John Doe</span></p>
+                <p class="card-text text-light">Test Cases: <span class="text-secondary">200</span></p>
+                <p class="card-text text-light">Issues: <span class="text-secondary">30</span></p>
+
                 <!-- Add additional details as needed -->
             </div>
             <div class="card-footer border-top border-secondary">
                 <div class="row">
-                    <div data-bs-toggle="modal" data-bs-target="#add_user_modal"
-                        class="col-5 btn btn-primary text-dark">
+                    <a href="/organisation/1/project/1" class="col-5 btn btn-primary text-dark">
                         <i class="bi bi-arrow-right-circle"></i> Open
-                    </div>
+                    </a>
                     <div class="col-7 d-flex justify-content-end align-items-center">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-pencil me-2 h5 pointer text-primary" data-bs-toggle="popover" title="Edit"

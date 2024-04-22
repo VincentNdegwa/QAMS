@@ -19,6 +19,9 @@ Route::middleware("auth")->prefix("/")->group(function () {
     Route::get('/organisation/{id}/project', function ($id) {
         return Inertia::render("Projects");
     });
+    Route::get('/organisation/{organisation}/project/{project}', function ($organisation, $project) {
+        return Inertia::render("ProjectOverview");
+    });
 });
 
 

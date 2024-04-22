@@ -103,9 +103,8 @@ export default {
 }
 
 .nav_holder {
-
     z-index: 1000;
-    width: min-content;
+    width: var(--nav_size);
 }
 
 

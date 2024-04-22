@@ -5,6 +5,8 @@ import CircularProgress from "./components/DashComponents/CircularProgress.vue"
 import TopMetrics from "./components/DashComponents/TopMetrics.vue"
 import ProjectGraphs from "./components/DashComponents/ProjectGraphs.vue"
 import ActivityFeed from "./components/DashComponents/ActivityFeed.vue"
+import MainLayout from "./Layouts/MainLayout.vue"
+
 export default {
     data() {
         return {
@@ -21,17 +23,16 @@ export default {
         CircularProgress,
         TopMetrics,
         ProjectGraphs,
-        ActivityFeed
+        ActivityFeed,
+        MainLayout
     }
 }
 </script>
 
 <template>
 
-    <Head title="Dashboard" />
-    <section class="container dash_container">
-        <SideNav />
-        <div class="main_content pd-0 p-md-2">
+    <MainLayout name="Dashboard">
+        <div class="pd-0">
             <div class="row">
                 <TopMetrics name="Organisation" description="A team of colleagues" />
                 <TopMetrics name="Projects" description="Manage your projects" />
@@ -59,10 +60,8 @@ export default {
                 </div>
             </div>
         </div>
-    </section>
+
+    </MainLayout>
 </template>
 
-<style>
-
-
-</style>
+<style></style>

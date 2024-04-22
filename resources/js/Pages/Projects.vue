@@ -2,7 +2,8 @@
 import { Head, router } from '@inertiajs/vue3';
 import SideNav from "./components/SideNav.vue"
 import ProjectCard from "./components/ProjectComponents/ProjectCard.vue"
-
+import ProjectForm from "./components/ProjectComponents/ProjectForm.vue"
+import MainLayout from "./Layouts/MainLayout.vue"
 export default {
     data() {
         return {
@@ -16,17 +17,17 @@ export default {
     components: {
         SideNav,
         Head,
-        ProjectCard
+        ProjectCard,
+        ProjectForm,
+        MainLayout
     }
 }
 </script>
 
 <template>
 
-    <Head title="Project" />
-    <section class="container dash_container">
-        <SideNav />
-        <div class="main_content pd-0 p-md-2 mt-0">
+    <MainLayout name="Project">
+        <div class="pd-0">
             <div class="d-flex align-items-end justify-content-end  mt-5 w-100">
                 <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form_add_project">
                     <i class="bi bi-plus-lg"></i>
@@ -56,7 +57,7 @@ export default {
                 <div class="col-12 col-md-6 col-lg-4 org_item">
                     <div class="card">
                         <div class="card-body p-4">
-                            <img src="/images/team.png" class="w-100 h-75" alt="">
+                            <img src="/images/project.png" class="w-100 h-75" alt="">
                             <div class="text-center text-primary" style="cursor: pointer;" data-bs-toggle="modal"
                                 data-bs-target="#form_add_project"><i class="bi bi-plus-lg"></i> Add Project</div>
                         </div>
@@ -67,46 +68,12 @@ export default {
             </div>
             <div class="modal fade" id="form_add_project" tabindex="-1" aria-labelledby="form_add_project_label"
                 aria-hidden="true">
-                <!-- Insert your project form component here -->
-                <div class="modal-dialog">
-                    <div class="modal-content bg-dark text-primary">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Create Project
-                            </h5>
-                            <button type="button" class="btn-close bg-dark text-primary" data-bs-dismiss="modal"
-                                aria-label="Close"><i class="bi bi-x-lg"></i></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="">
-                                <div class="mb-3">
-                                    <label for="organizationName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="organizationName" value="project name"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="organizationName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="organizationName" value="project name"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="organizationName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="organizationName" value="project name"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="organizationName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="organizationName" value="project name"
-                                        required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                <ProjectForm />
             </div>
         </div>
+    </MainLayout>
 
-    </section>
+
 </template>
 
 <style>
