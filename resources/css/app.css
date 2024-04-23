@@ -15,7 +15,16 @@
     width: 100% !important;
     /* background: rgba(0, 0, 0, 0.4) !important; */
 }
+.org_item,
+.card {
+    background-color: var(--bs-dark) !important;
+    box-shadow: 3px 4px 20px rgba(0, 0, 0, 0.5);
+    height: 22rem !important;
+}
 
+.pointer {
+    cursor: pointer;
+}
 @media (max-width: 768px) {
     .main_content {
         margin-left: 0;

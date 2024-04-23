@@ -29,6 +29,8 @@ export default {
                         }
                     }
                 }],
+                colors: ['#5C8374', '#ff0000'],
+
             },
             // Define chart series data
             chartSeries: [this.completedTasks, this.totalTasks - this.completedTasks],

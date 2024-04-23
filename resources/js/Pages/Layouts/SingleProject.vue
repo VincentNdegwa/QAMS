@@ -1,7 +1,6 @@
 <script>
-import { Head, router } from '@inertiajs/vue3';
-import SideNav from "../components/SideNav.vue"
 import ProjectNavs from '../components/SingleProjectComponents/ProjectNavs.vue';
+import MainLayout from './MainLayout.vue';
 
 export default {
     data() {
@@ -13,10 +12,9 @@ export default {
 
     },
     components: {
-        SideNav,
-        Head,
         ProjectNavs,
-        
+        MainLayout
+
 
     }
 }
@@ -24,26 +22,12 @@ export default {
 
 <template>
 
-    <Head title="Project" />
-    <section class="container dash_container">
-        <SideNav />
-        <div class="main_content pd-0 p-md-2 mt-0">
-            <ProjectNavs />
-            <slot></slot>
-        </div>
-
-    </section>
+    <MainLayout name="Project" >
+        <ProjectNavs />
+        <slot></slot>
+    </MainLayout>
 </template>
 
 <style>
-.org_item,
-.card {
-    background-color: var(--bs-dark) !important;
-    box-shadow: 3px 4px 20px rgba(0, 0, 0, 0.5);
-    height: 22rem !important;
-}
 
-.pointer {
-    cursor: pointer;
-}
 </style>
