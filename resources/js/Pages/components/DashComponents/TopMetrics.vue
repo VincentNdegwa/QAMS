@@ -1,6 +1,6 @@
 <template>
     <div class="col-12 col-md-3 mt-2">
-        <div class="card border-0">
+        <div class="card border-0 card-dash">
             <div class="card-body text-center bg-dark">
                 <div class="card-title h5 text-secondary">
                     {{ name }} <span v-html="renderIcon(name)"></span>
@@ -44,5 +44,9 @@ export default {
 <style>
 .card {
     box-shadow: 2px 3px 20px rgba(0, 0, 0, 0.3);
+}
+.card-dash{
+    min-height: 200px !important;
+    height: max-content !important;
 }
 </style>
