@@ -23,6 +23,9 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/", function ($organisation, $project) {
             return Inertia::render("ProjectOverview");
         });
+        Route::get("/test", function ($organisation, $project) {
+            return Inertia::render("TestCase");
+        });
     });
 
 });
