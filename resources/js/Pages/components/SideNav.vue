@@ -24,12 +24,12 @@ export default {
 <template>
 
 
-    <nav class="nav_holder">
-        <div class="position-sticky top-0 nav_bar">
+    <nav class="nav_holder position-sticky top-0">
+        <div class="nav_bar">
             <div class="col d-flex flex-column align-items-center">
                 <!-- Profile Picture -->
-                <img src="/images/testing.png" alt="Profile Picture"
-                    class="rounded-circle my-3" style="width: 80px; height: 80px;">
+                <img src="/images/testing.png" alt="Profile Picture" class="rounded-circle my-3"
+                    style="width: 80px; height: 80px;">
 
                 <!-- User Name -->
                 <div class="text-primary mb-4">John Doe</div>
@@ -105,6 +105,7 @@ export default {
 .nav_holder {
     z-index: 1000;
     width: var(--nav_size);
+    position: fixed !important;
 }
 
 

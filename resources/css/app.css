@@ -11,6 +11,7 @@
     height: max-content !important;
     min-height: 100vh;
     max-height: 100vh;
+    margin-left: var(--nav_size);
     /* border-left: 1px solid var(--bs-secondary); */
     width: 100% !important;
     /* background: rgba(0, 0, 0, 0.4) !important; */
