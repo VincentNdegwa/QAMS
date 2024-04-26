@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TestCase extends Model
 {
     use HasFactory;
+    protected $table  = "testcases";
     protected $fillable = ['module_name', 'title', 'tester_name', 'status', 'project_id'];
 
     public function project()

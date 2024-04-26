@@ -7,6 +7,15 @@ import MainLayout from "./Layouts/MainLayout.vue"
 
 
 export default {
+    props: {
+        user_id: {
+            type: Number,
+            default: ""
+        },
+        organisations: {
+            type: Array
+        }
+    },
     data() {
         return {
             nav: false,
@@ -24,14 +33,14 @@ export default {
         OrganisationMain,
         MainLayout
 
-    }
+    },
 }
 </script>
 
 <template>
 
     <MainLayout name="Organisations">
-        <OrganisationMain />
+        <OrganisationMain :user_id="user_id" :organisations="organisations" />
     </MainLayout>
 
 </template>

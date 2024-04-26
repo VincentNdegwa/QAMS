@@ -1,23 +1,24 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <a href="/organisation/1/project" class="card-title text-secondary text-center text-decoration-none h5">Organization Name</a>
+            <a :href=getUrl() class="card-title text-secondary text-center text-decoration-none h5">{{
+                organisation.name }}</a>
             <div class="row mt-4">
-                <small class="card-text text-secondary">Created: 23rd May, 2024</small>
-                <small class="card-text text-secondary">Creator: Vincent Ndegwa</small>
+                <small class="card-text text-secondary">Created: {{ organisation.created_at }}</small>
+                <small class="card-text text-secondary">Creator: {{ organisation.created_by }}</small>
             </div>
             <div class="d-flex justify-content-between mt-5 ">
                 <div class="text-center row text-light">
                     <div class="col-12">
                         Projects
                     </div>
-                    <span class="col-12">2</span>
+                    <span class="col-12">{{ organisation.project_count }}</span>
                 </div>
                 <div class="text-center row text-light">
                     <div class="col-12">
                         Test Cases
                     </div>
-                    <span class="col-12">200</span>
+                    <span class="col-12">{{ organisation.test_case_count }}</span>
                 </div>
                 <div class="text-center row text-light">
                     <div class="col-12">
@@ -49,6 +50,14 @@
 
 <script>
 export default {
-
+    props: {
+        organisation: {
+            type: Object
+        }
+    }, methods: {
+        getUrl() {
+            return "organisation/" + this.organisation.id + "/project"
+        }
+    }
 }
 </script>

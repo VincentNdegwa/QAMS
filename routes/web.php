@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,9 +14,8 @@ Route::middleware("auth")->prefix("/")->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('organisation', function () {
-        return Inertia::render('Organisations');
-    })->name('organisation');
+
+    Route::get("organisation", [OrganisationController::class, "open"])->name("organisation");
     Route::get('/organisation/{id}/project', function ($id) {
         return Inertia::render("Projects");
     });
@@ -27,7 +27,6 @@ Route::middleware("auth")->prefix("/")->group(function () {
             return Inertia::render("TestCase");
         });
     });
-
 });
 
 
