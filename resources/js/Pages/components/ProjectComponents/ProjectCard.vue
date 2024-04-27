@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         getUrl(item) {
-            return `project/${item.id}`;
+            return `project/${item.id}/open`;
         }
     }
 };

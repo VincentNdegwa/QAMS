@@ -1,10 +1,10 @@
 <template>
     <SingleProject name="Test Case">
         <div class="w-100 d-flex justify-content-end">
-            <div class="btn btn-secondary text-light">
+            <a href="new" class="btn btn-secondary text-light">
                 <i class="bi bi-plus-lg"></i>
                 Add Test Case
-            </div>
+            </a>
         </div>
         <div class="row ms-0  mt-3 w-100 ">
             <div class="col-12 col-md-4">
