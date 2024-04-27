@@ -9,17 +9,25 @@ export default {
         projects: {
             type: Array
         }, org_id: {
-            type: String
+            type: Number
         }
     },
     data() {
         return {
             nav: false,
+            overlay: {
+                open: false,
+            }
 
         }
     },
     methods: {
-
+        openOverlay() {
+            this.overlay.open = !this.overlay.open
+        },
+        updateData(data) {
+            this.projects.push(data)
+        }
     },
     components: {
         SideNav,
@@ -38,7 +46,7 @@ export default {
     <MainLayout name="Project">
         <div class="pd-0">
             <div class="d-flex align-items-end justify-content-end  mt-5 w-100">
-                <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form_add_project">
+                <div class="btn btn-primary" @click="openOverlay">
                     <i class="bi bi-plus-lg"></i>
                     Add New Project
                 </div>
@@ -67,17 +75,18 @@ export default {
                     <div class="card">
                         <div class="card-body p-4">
                             <img src="/images/project.png" class="w-100 h-75" alt="">
-                            <div class="text-center text-primary" style="cursor: pointer;" data-bs-toggle="modal"
-                                data-bs-target="#form_add_project"><i class="bi bi-plus-lg"></i> Add Project</div>
+                            <div class="text-center text-primary" style="cursor: pointer;" @click="openOverlay"><i
+                                    class="bi bi-plus-lg"></i>
+                                Add Project</div>
                         </div>
                     </div>
                 </div>
 
-                <ProjectCard />
+                <ProjectCard :projects="projects" />
             </div>
-            <div class="modal fade" id="form_add_project" tabindex="-1" aria-labelledby="form_add_project_label"
-                aria-hidden="true">
-                <ProjectForm />
+            <div :class="{ 'overlay': !overlay.open, 'overlay open': overlay.open }"
+                aria-labelledby="form_add_project_label" aria-hidden="true">
+                <ProjectForm @close0verlay="openOverlay" :org_id="org_id" @updateData="updateData" />
             </div>
         </div>
     </MainLayout>
@@ -86,6 +95,8 @@ export default {
 </template>
 
 <style>
+@import url("../../css/app.css");
+
 .org_item,
 .card {
     background-color: var(--bs-dark) !important;

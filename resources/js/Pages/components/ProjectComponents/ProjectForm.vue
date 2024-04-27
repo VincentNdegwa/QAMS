@@ -1,13 +1,13 @@
 <template>
-    <div class="modal-dialog">
-        <div class="modal-content bg-dark text-primary">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Project
+    <div class="overlay-dialog">
+        <div class="overlay-content bg-dark text-primary">
+            <div class="overlay-header">
+                <h5 class="overlay-title" id="exampleoverlayLabel">Create Project
                 </h5>
-                <button type="button" class="btn-close bg-dark text-primary" data-bs-dismiss="modal"
-                    aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                <button type="button" @click="closeOverlay" class="btn bg-dark text-primary"><i
+                        class="bi bi-x-lg"></i></button>
             </div>
-            <div class="modal-body">
+            <div class="overlay-body">
                 <form @submit.prevent="submitForm">
                     <div class="mb-3">
                         <label for="projectName" class="form-label">Name</label>
@@ -23,22 +23,38 @@
 
 <script>
 import { useForm } from "@inertiajs/vue3";
+import axios from "axios";
 
 export default {
-    setup() {
+    props: {
+        org_id: {
+            type: Number,
+            default: ""
+        }
+    },
+    data() {
         const form = useForm({
             name: "project",
-            // other form fields
+            company_id: this.org_id
         });
 
-        const submitForm = () => {
-            // Handle form submission
-        };
-
         return {
-            form,
-            submitForm
+            form
         };
+    }, methods: {
+        closeOverlay() {
+            this.$emit("close0verlay")
+        },
+        submitForm() {
+            axios.post("/api/project/add", this.form).then((res) => {
+                if (!res.data.error) {
+                    this.$emit("updateData", res.data.project)
+                } else {
+                    console.log(res.data)
+                }
+                this.closeOverlay()
+            })
+        }
     }
 };
 </script>
