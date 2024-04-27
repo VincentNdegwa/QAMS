@@ -44,7 +44,7 @@ export default {
     }, methods: {
         submitOrganizationForm() {
             if (this.organizationForm.name && this.user_id) {
-                axios.post("api/organisation", this.organizationForm).then(response => {
+                axios.post("api/organisation/add", this.organizationForm).then(response => {
                     console.log(response.data);
                     if (!response.data.error) {
                         this.removeOverlay()

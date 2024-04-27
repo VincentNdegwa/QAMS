@@ -3,9 +3,10 @@
         <div class="card">
             <div class="card-body text-secondary">
                 <h5 class="card-title text-primary ">Project Name</h5>
-                <p class="card-text mt-4 text-light">Organization: <span class="text-secondary">Organization Name</span></p>
+                <p class="card-text mt-4 text-light">Organization: <span class="text-secondary">Organization Name</span>
+                </p>
                 <p class="card-text text-light">Created at: <span class="text-secondary">23rd May,2024</span></p>
-                <p class="card-text text-light">Creator: <span class="text-secondary">John Doe</span></p>
+                <!-- <p class="card-text text-light">Creator: <span class="text-secondary">John Doe</span></p> -->
                 <p class="card-text text-light">Test Cases: <span class="text-secondary">200</span></p>
                 <p class="card-text text-light">Issues: <span class="text-secondary">30</span></p>
 

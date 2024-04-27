@@ -5,6 +5,13 @@ import ProjectCard from "./components/ProjectComponents/ProjectCard.vue"
 import ProjectForm from "./components/ProjectComponents/ProjectForm.vue"
 import MainLayout from "./Layouts/MainLayout.vue"
 export default {
+    props: {
+        projects: {
+            type: Array
+        }, org_id: {
+            type: String
+        }
+    },
     data() {
         return {
             nav: false,
@@ -20,6 +27,8 @@ export default {
         ProjectCard,
         ProjectForm,
         MainLayout
+    }, mounted() {
+        console.log(this.projects)
     }
 }
 </script>

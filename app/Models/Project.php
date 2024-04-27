@@ -19,4 +19,8 @@ class Project extends Model
     {
         return $this->hasMany(TestCase::class);
     }
+    public function issues()
+    {
+        return $this->hasMany(Issue::class);
+    }
 }

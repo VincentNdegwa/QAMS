@@ -26,6 +26,40 @@
 .pointer {
     cursor: pointer;
 }
+
+.overlay {
+    position: fixed;
+    width: 100% !important;
+    height: 100vh !important;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.9) !important;
+    display: none;
+}
+
+.overlay-dialog {
+    width: 40% !important;
+    padding: 10px !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+}
+
+.overlay-content {
+    padding: 10px;
+}
+
+.overlay-header {
+    display: flex;
+    align-items: center !important;
+    justify-content: space-between;
+}
+
+.overlay.open {
+    display: block !important;
+}
 @media (max-width: 768px) {
     .main_content {
         margin-left: 0;
