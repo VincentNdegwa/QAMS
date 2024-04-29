@@ -27,9 +27,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/open", function ($organisation, $project) {
             return Inertia::render("ProjectOverview");
         });
-        Route::get("/test", function ($organisation, $project) {
-            return Inertia::render("TestCase");
-        })->name("test.page");
+        Route::get("/test", [TestCaseController::class, "open"])->name("test.page");
         Route::get("/new", [TestCaseController::class, 'index']);
     });
 });

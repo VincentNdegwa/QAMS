@@ -15,16 +15,36 @@ class TestCaseController extends Controller
 {
     public function index($organisation, $project)
     {
-        $modules = TestCase::where("project_id", $project)->select("module_name")->get();
+        $modules = TestCase::where("project_id", $project)->select("module_name")->groupBy("module_name")->get();
+
         $user = User::where("id", auth()->id())->select("id", "name")->first();
 
         return Inertia::render("NewTestCase", [
             "organisation_id" => $organisation,
             "project_id" => $project,
             "modules" => $modules,
-            "user" => $user
+            "user" => $user,
         ]);
     }
+
+    function open($organisation, $project)
+    {
+        $testCases = [];
+        $modules = TestCase::where("project_id", $project)->select("module_name")->groupBy("module_name")->get();
+        foreach ($modules as $module) {
+            $testCase = TestCase::where("module_name", $module["module_name"])
+                ->with(["testSteps" => function ($query) {
+                    $query->with("expectedResult");
+                }])
+                ->where("project_id", $project)
+                ->get();
+            $testCases[] = $testCase;
+        }
+        return Inertia::render("TestCase", [
+            "testCases" => $testCases
+        ]);
+    }
+
     function newTestCase(Request $request)
     {
         $validator = Validator::make($request->all(), [

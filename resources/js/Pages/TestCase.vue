@@ -19,10 +19,10 @@
                     </div>
                 </div>
                 <div class="modules-scroll overflow-y-scroll ">
-                    <div class="module-item d-flex pd-1">
+                    <div class="module-item d-flex pd-1" v-for="(item, index) in modulesArr" :key="index">
                         <i class="bi bi-folder-fill text-primary"></i>
                         <div class="ms-3">
-                            <span class="text-light">Module Name</span>
+                            <span class="text-light">{{ item }}</span>
                             <small class="ms-1">(1)</small>
                         </div>
                         <i class="bi bi-trash3-fill ms-3 pointer "></i>
@@ -98,8 +98,24 @@
 <script>
 import SingleProject from "./Layouts/SingleProject.vue"
 export default {
+    props: {
+        testCases: { type: Array }
+    },
+    data() {
+        return {
+            modulesArr: [],
+        }
+    },
     components: {
         SingleProject
+    }, mounted() {
+        this.testCases.forEach(element => {
+            if (element.length > 0) {
+                this.modulesArr.push(element[0].module_name)
+            }
+        });
+        console.log(this.modulesArr)
+
     }
 }
 </script>

@@ -18,6 +18,6 @@ class TestCase extends Model
 
     public function testSteps()
     {
-        return $this->hasMany(TestStep::class);
+        return $this->hasMany(TestStep::class, "testcase_id");
     }
 }

@@ -12,7 +12,7 @@ class TestStep extends Model
 
     public function testCase()
     {
-        return $this->belongsTo(TestCase::class);
+        return $this->belongsTo(TestCase::class, "testcase_id");
     }
 
     public function expectedResult()
