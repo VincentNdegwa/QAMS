@@ -9,7 +9,7 @@ class TestCase extends Model
 {
     use HasFactory;
     protected $table  = "testcases";
-    protected $fillable = ['module_name', 'title', 'tester_name', 'status', 'project_id'];
+    protected $fillable = ['module_name', 'title', 'tester_id', 'status', 'project_id'];
 
     public function project()
     {

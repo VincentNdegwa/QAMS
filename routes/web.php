@@ -29,7 +29,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         });
         Route::get("/test", function ($organisation, $project) {
             return Inertia::render("TestCase");
-        });
+        })->name("test.page");
         Route::get("/new", [TestCaseController::class, 'index']);
     });
 });

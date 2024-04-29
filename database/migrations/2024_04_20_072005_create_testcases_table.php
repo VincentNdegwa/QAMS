@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->string('module_name');
             $table->string('title');
-            $table->string('tester_name');
+            $table->integer('tester_id');
             $table->string('status');
             $table->timestamps();
         });
