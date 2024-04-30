@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('testcase_id');
             $table->foreign('testcase_id')->references('id')->on('testcases')->onDelete('cascade');
             $table->text('step_description');
-            $table->string('step_status');
+            $table->enum('step_status', ['Pending', 'In progress', 'Complete']);
             $table->timestamps();
         });
     }

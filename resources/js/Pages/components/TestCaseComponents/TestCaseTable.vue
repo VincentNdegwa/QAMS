@@ -48,17 +48,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in testCases" :key="index">
-                        <td>{{ item.test_steps[0].id }}</td>
-                        <td>{{ item.test_steps[0].step_description }}</td>
+                    <tr v-if="testCases.length > 0" v-for="(item, index) in testCases" :key="index">
+                        <td>{{ item?.test_steps[0]?.id }}</td>
+                        <td>{{ item?.title }}</td>
                         <td>
                             <i class="bi bi-pen ms-3 "></i>
                             <i class="bi bi-trash3-fill ms-3 "></i>
                         </td>
                         <td>{{ item.tester.name }}</td>
-                        <td>{{ item.test_steps[0].step_status }}</td>
+                        <td>{{ item?.test_steps[0]?.step_status }}</td>
 
-                        <td>{{ new Date(item.test_steps[0].created_at).toLocaleString() }}</td>
+                        <td>{{ new Date(item?.test_steps[0]?.created_at).toLocaleString() }}</td>
                     </tr>
                 </tbody>
             </table>

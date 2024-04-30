@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('module_name');
             $table->string('title');
             $table->integer('tester_id');
-            $table->string('status');
+            $table->enum('status', ['Incomplete', 'Complete']);
             $table->timestamps();
         });
     }

@@ -107,19 +107,32 @@ class TestCaseController extends Controller
                     "module_name" => $request->input('module'),
                     "title" => $request->input("title"),
                     "tester_id" => $request->input("tester_id"),
-                    "status" => "pending",
+                    "status" => "Incomplete",
                     "project_id" => $request->input("project_id"),
 
                 ]);
-                foreach ($request->input("test_steps") as $step) {
+                if (count($request->input("test_steps")) > 0) {
+                    foreach ($request->input("test_steps") as $step) {
+                        $newTestStep = TestStep::create([
+                            'step_description' => $step["step"],
+                            'step_status' => "pending",
+                            'testcase_id' => $newTestCase->id
+                        ]);
+
+                        $newExpected = ExpectedResult::create([
+                            'result_description' => $step["expected"],
+                            'test_step_id' => $newTestStep->id
+                        ]);
+                    }
+                } else {
                     $newTestStep = TestStep::create([
-                        'step_description' => $step["step"],
+                        'step_description' => "null",
                         'step_status' => "pending",
                         'testcase_id' => $newTestCase->id
                     ]);
 
                     $newExpected = ExpectedResult::create([
-                        'result_description' => $step["expected"],
+                        'result_description' => "null",
                         'test_step_id' => $newTestStep->id
                     ]);
                 }

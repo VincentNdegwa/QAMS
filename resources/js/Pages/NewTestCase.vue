@@ -24,7 +24,6 @@ export default {
         Overlay,
         AddModuleForm
     }, mounted() {
-        console.log(this.organisation_id, this.project_id, this.modules);
     },
     data() {
 
@@ -37,7 +36,10 @@ export default {
             test_steps: [
                 {
                     step: "",
-                    expected: ""
+                    expected: "",
+                    pass: false,
+                    found: ""
+
                 }
             ],
         }
@@ -46,6 +48,9 @@ export default {
                 open: false,
             },
             form,
+            newStep: {
+                open: false
+            }
         }
     }, methods: {
         AddModule(module) {
@@ -63,7 +68,7 @@ export default {
         }, removeStep(index) {
             this.form.test_steps.splice(index, 1)
         }, createTestCase() {
-            if (this.validateForm()) {
+            if (this.validateFullForm()) {
                 axios.post("/api/testCase/add", this.form).then((res) => {
                     if (res.data.error) {
                         console.log(res.data.message)
@@ -74,16 +79,25 @@ export default {
                 }).catch((err) => {
                     console.log(err)
                 })
+                console.log(this.form) 
             } else {
                 console.log("Form is not valid. Show toast alerts...");
             }
         },
         validateForm() {
             if (!this.form.module || !this.form.title || !this.form.description) {
+                alert("Please Enter all inputs")
                 return false;
             }
+
+            this.newStep.open = true
+            return true;
+        }, removeNewStep() {
+            this.newStep.open = !this.newStep.open
+        }, validateFullForm() {
             for (const step of this.form.test_steps) {
                 if (!step.step || !step.expected) {
+                    alert("Please Enter steps inputs")
                     return false;
                 }
             }
@@ -94,7 +108,7 @@ export default {
 </script>
 <template>
     <SingleProject>
-        <form class="needs-validation" novalidate @submit.prevent="createTestCase">
+        <form class="needs-validation" novalidate @submit.prevent="validateForm">
             <div class="d-flex w-100 justify-content-between align-items-center">
                 <div class="btn btn-secodary"><i class="bi bi-arrow-left-circle text-secondary h3"></i>
                 </div>
@@ -107,11 +121,12 @@ export default {
             </div>
             <div class="test-case-form">
                 <div class="row h-100">
-                    <div class="col-12 col-md-4 col-lg-4">
+                    <div class="col-12 col-md-6 col-lg-6">
                         <div>
                             <div class="row p-3">
                                 <label for="module" class="form-label text-secondary">Module</label>
-                                <select class="form-select bg-dark text-light border-secondary" id="module">
+                                <select v-model="form.module" class="form-select bg-dark text-light border-secondary"
+                                    id="module">
                                     <option :value="form.module">{{ form.module }}</option>
                                     <option v-for="(item, index) in modules" :key="index" :value="item.module_name">{{
             item.module_name }}</option>
@@ -149,38 +164,70 @@ export default {
 
                     </div>
                     <div class="col-12 col-md-8 col-lg-8 position-relative">
-                        <div class="d-flex w-100 align-items-center justify-content-between position-sticky top-0">
-                            <div @click="addStep" class="btn btn-secondary text-light">Add Step</div>
-                            <div class="text-secondary">Test Steps</div>
-                        </div>
-                        <div class="steps-display overflow-y-scroll">
-                            <!-- step item -->
-                            <div class="row d-flex w-100 flex-row align-items-center step-item"
-                                v-for="(item, index) in form.test_steps" :key="index">
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class=" col-12 col-md-6">
-                                            <small class="text-primary">Step</small>
-                                            <textarea v-model="item.step"
-                                                class="form-control bg-dark text-light border-secondary step-textarea"
-                                                id="description" rows="5" required
-                                                placeholder="Enter Test Step"></textarea>
-                                        </div>
-                                        <div class=" col-12 col-md-6">
-                                            <small class="text-primary">Expected Results</small>
-                                            <textarea v-model="item.expected"
-                                                class="form-control bg-dark text-light border-secondary step-textarea"
-                                                id="description" rows="5" required
-                                                placeholder="Enter Test Step"></textarea>
+                        <Overlay :open="newStep.open" size="xlg" @closeOverlay="removeNewStep">
+                            <div class="d-flex w-100 align-items-center justify-content-between position-sticky top-0">
+                                <div @click="addStep" class="btn btn-secondary text-light">Add Step</div>
+                                <div @click="createTestCase" class="text-black btn btn-primary">Test Steps</div>
+                            </div>
+                            <div class="steps-display overflow-y-scroll">
+                                <!-- step item -->
+                                <div class="row d-flex w-100 flex-row align-items-center step-item mt-2"
+                                    v-for="(item, index) in form.test_steps" :key="index">
+                                    <div class="col-11">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class=" col-12">
+                                                        <small class="text-primary">Step</small>
+                                                        <textarea v-model="item.step"
+                                                            class="form-control bg-dark text-light border-secondary step-textarea"
+                                                            id="description" rows="5" required
+                                                            placeholder="Enter Test Step"></textarea>
+                                                    </div>
+                                                    <div class=" col-12">
+                                                        <small class="text-primary">Expected Results</small>
+                                                        <textarea v-model="item.expected"
+                                                            class="form-control bg-dark text-light border-secondary step-textarea"
+                                                            id="description" rows="5" required
+                                                            placeholder="Enter Test Step"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-3 d-flex flex-column justify-content-center">
+                                                        <div class="form-control mb-3 bg-dark text-light border-0">
+                                                            <label for="pass">Pass</label>
+                                                            <input v-model="item.pass" type="radio" class="ms-3"
+                                                                id="pass" name="result" value="true">
+                                                        </div>
+                                                        <div class="form-control bg-dark text-light border-0">
+                                                            <label for="fail">Fail</label>
+                                                            <input v-model="item.pass" type="radio" class="ms-3"
+                                                                id="fail" name="result" value="false">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8" v-if="item.pass == 'false'">
+                                                        <small class="text-primary">Found Results</small>
+                                                        <textarea v-model="item.found"
+                                                            class="form-control bg-dark text-light border-secondary step-textarea"
+                                                            id="description" rows="5"
+                                                            placeholder="Explain the found behaviour"></textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-1">
-                                    <div @click="removeStep(index)" class="text-light pointer"><i
-                                            class="bi bi-trash3-fill"></i></div>
+                                    <div class="col-1">
+                                        <div @click="removeStep(index)" class="text-light pointer"><i
+                                                class="bi bi-trash3-fill"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Overlay>
+
                     </div>
                 </div>
             </div>

@@ -39,12 +39,20 @@
 }
 
 .overlay-dialog {
-    width: 40% !important;
     padding: 10px !important;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) !important;
+}
+.overlay-dialog.md {
+    width: 40% !important;
+}
+.overlay-dialog.lg {
+    width: 60% !important;
+}
+.overlay-dialog.xlg {
+    width: 80% !important;
 }
 
 .overlay-content {
