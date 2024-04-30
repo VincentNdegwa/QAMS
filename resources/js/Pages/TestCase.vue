@@ -14,81 +14,25 @@
                     </div>
                     <div class="p text-light">
                         <div class="p">
-                            <i class="bi bi-plus-lg"></i>
+                            <!-- <i class="bi bi-plus-lg"></i> -->
                         </div>
                     </div>
                 </div>
-                <div class="modules-scroll overflow-y-scroll ">
-                    <div class="module-item d-flex pd-1" v-for="(item, index) in modulesArr" :key="index">
+                <div class="modules-scroll overflow-y-scroll">
+                    <div v-for="(item, index) in moduleCount" :key="index" class="module-item d-flex p-2 mt-2 pointer"
+                        @click="updateData(item.module_name)"
+                        :class="{ 'bg-secondary': testCases.length > 0 && testCases[0].module_name === item.module_name }">
                         <i class="bi bi-folder-fill text-primary"></i>
                         <div class="ms-3">
-                            <span class="text-light">{{ item }}</span>
-                            <small class="ms-1">(1)</small>
-                        </div>
-                        <i class="bi bi-trash3-fill ms-3 pointer "></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-8">
-                <div class="w-100 m-0 d-flex justify-content-around align-items-center p-2">
-                    <div class="text-secondary">
-                        Test Cases
-                    </div>
-                    <div class="p d-flex text-light">
-                        <div class="p ms-3 ">
-                            <i class="bi bi-plus-lg"></i>
-                        </div>
-                        <div class="p ms-3 ">
-                            <i class="bi bi-trash3-fill ms-3 "></i>
+                            <span class="text-light">{{ item.module_name }}</span>
+                            <small class="ms-2 text-info">({{ item.test_count }})</small>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex w-100 align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        Show
-                        <select name="" class="bg-dark text-light border-0" id="">
-                            <option value="">10</option>
-                            <option value="">15</option>
 
-                        </select>
-                    </div>
-                    <nav class="pag-nav bg-dark">
-                        <ul class="pagination pagination">
-                            <li class="page-item" aria-current="page">
-                                <span class="page-link">1</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        </ul>
-                    </nav>
-
-                </div>
-                <div class="table-container overflow-scroll  table-page">
-                    <table class="table table-striped table-sm table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">Case Code</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Actions</th>
-                                <th scope="col">Created By</th>
-                                <th scope="col">Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>C123</td>
-                                <td>Case Title 1</td>
-                                <td>
-                                    <i class="bi bi-pen ms-3 "></i>
-                                    <i class="bi bi-trash3-fill ms-3 "></i>
-                                </td>
-                                <td>John Doe</td>
-                                <td>2024-04-25 10:00 AM</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
+            <TestCaseTable :testCases="testCases" />
+
         </div>
 
 
@@ -96,26 +40,46 @@
 </template>
 
 <script>
+import axios from "axios"
 import SingleProject from "./Layouts/SingleProject.vue"
+import TestCaseTable from "./components/TestCaseComponents/TestCaseTable.vue"
 export default {
     props: {
-        testCases: { type: Array }
+        moduleCount: { type: Array },
+        userId: { type: Number },
+        projectId: { type: String }
     },
     data() {
         return {
-            modulesArr: [],
+            testCases: [],
         }
     },
     components: {
-        SingleProject
+        SingleProject,
+        TestCaseTable
     }, mounted() {
-        this.testCases.forEach(element => {
-            if (element.length > 0) {
-                this.modulesArr.push(element[0].module_name)
+        if (this.moduleCount.length > 0) {
+            this.updateData(this.moduleCount[0].module_name);
+        }
+    }, methods: {
+        updateData(module) {
+            let data = {
+                user_id: this.userId,
+                project_id: this.projectId,
+                module_name: module
             }
-        });
-        console.log(this.modulesArr)
 
+            axios.post("/api/testCase/retrieve", data).then((res) => {
+                if (!res.data) {
+                    alert(res.data.message)
+                } else {
+                    this.testCases = res.data.testCases
+                    console.log(this.testCases)
+                }
+            }).catch((err) => {
+                alert(err)
+            })
+        }
     }
 }
 </script>
@@ -175,6 +139,10 @@ td {
 
 .module-item {
     font-size: 13px;
+
+    &:hover {
+        background-color: var(--bs-secondary) !important;
+    }
 }
 
 select {

@@ -15,7 +15,7 @@ class TestCaseController extends Controller
 {
     public function index($organisation, $project)
     {
-        $modules = TestCase::where("project_id", $project)->select("module_name")->groupBy("module_name")->get();
+        $modules = TestCase::where("project_id", $project)->select("module_name")->groupBy("module_name")->orderBy("module_name", "ASC")->get();
 
         $user = User::where("id", auth()->id())->select("id", "name")->first();
 
@@ -29,21 +29,62 @@ class TestCaseController extends Controller
 
     function open($organisation, $project)
     {
-        $testCases = [];
-        $modules = TestCase::where("project_id", $project)->select("module_name")->groupBy("module_name")->get();
-        foreach ($modules as $module) {
-            $testCase = TestCase::where("module_name", $module["module_name"])
-                ->with(["testSteps" => function ($query) {
-                    $query->with("expectedResult");
-                }])
-                ->where("project_id", $project)
-                ->get();
-            $testCases[] = $testCase;
-        }
+
+        $modules = TestCase::where("project_id", $project)
+            ->select("module_name", DB::raw("COUNT(*) as test_count"))
+            ->groupBy("module_name")
+            ->orderBy("module_name", "ASC")
+            ->get();
+
         return Inertia::render("TestCase", [
-            "testCases" => $testCases
+            "moduleCount" => $modules,
+            "userId" => auth()->id(),
+            "projectId" => $project
         ]);
     }
+
+    function getTestSteps(Request $request)
+
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                "module_name" => "required",
+                "user_id" => "required",
+                "project_id" => "required",
+            ]
+        );
+        try {
+            if ($validator->fails()) {
+                return response()->json([
+                    "error" => true,
+                    "message" => $validator->errors()->first(),
+                ]);
+            } else {
+                $testCases = TestCase::where("project_id", $request->input("project_id"))
+                    ->where("module_name", $request->input("module_name"))
+                    ->with([
+                        "testSteps" => function ($query) {
+                            $query->with("expectedResult");
+                        }
+                    ])
+                    ->with("tester")
+                    ->get();
+
+                return response()->json([
+                    "error" => false,
+                    "testCases" =>  $testCases,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => true,
+                "message" => $th->getMessage(),
+            ]);
+        }
+    }
+
+
 
     function newTestCase(Request $request)
     {

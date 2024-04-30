@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,10 @@ class TestCase extends Model
     public function testSteps()
     {
         return $this->hasMany(TestStep::class, "testcase_id");
+    }
+
+    public function tester()
+    {
+        return $this->belongsTo(User::class, 'tester_id');
     }
 }
