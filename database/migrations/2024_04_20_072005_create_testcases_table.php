@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->string('module_name');
             $table->string('title');
+            $table->string('description')->nullable();
             $table->integer('tester_id');
             $table->enum('status', ['Incomplete', 'Complete']);
             $table->timestamps();

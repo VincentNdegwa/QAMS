@@ -9,5 +9,5 @@ Route::post("organisation/add", [OrganisationController::class, "create"])->name
 Route::post("project/add", [ProjectController::class, "create"])->name("project.create");
 Route::prefix("/testCase")->group(function () {
     Route::post("add", [TestCaseController::class, "newTestCase"]);
-    Route::post("retrieve", [TestCaseController::class, "getTestSteps"]);
+    Route::post("retrieve", [TestCaseController::class, "getTestCases"]);
 });

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExpectedResult extends Model
 {
     use HasFactory;
-    protected $fillable = ['result_description', 'test_step_id'];
+    protected $fillable = ['result_description', 'test_step_id', 'found_description', 'pass'];
 
     public function testStep()
     {

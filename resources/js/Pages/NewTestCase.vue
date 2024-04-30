@@ -34,13 +34,7 @@ export default {
             description: "",
             project_id: this.project_id,
             test_steps: [
-                {
-                    step: "",
-                    expected: "",
-                    pass: false,
-                    found: ""
 
-                }
             ],
         }
         return {
@@ -79,14 +73,14 @@ export default {
                 }).catch((err) => {
                     console.log(err)
                 })
-                console.log(this.form) 
+                console.log(this.form)
             } else {
                 console.log("Form is not valid. Show toast alerts...");
             }
         },
         validateForm() {
-            if (!this.form.module || !this.form.title || !this.form.description) {
-                alert("Please Enter all inputs")
+            if (!this.form.module || !this.form.title) {
+                alert("Please fill in the required inputs")
                 return false;
             }
 
@@ -102,6 +96,8 @@ export default {
                 }
             }
             return true;
+        }, back() {
+            window.history.back()
         }
     }
 }
@@ -110,12 +106,15 @@ export default {
     <SingleProject>
         <form class="needs-validation" novalidate @submit.prevent="validateForm">
             <div class="d-flex w-100 justify-content-between align-items-center">
-                <div class="btn btn-secodary"><i class="bi bi-arrow-left-circle text-secondary h3"></i>
+                <div @click="back" class="btn btn-secodary"><i class="bi bi-arrow-left-circle text-secondary h3"></i>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="btn btn-danger text-light">Cancel</div>
-                        <input type="submit" class="btn btn-primary ms-2 text-light" />
+                        <div @click="validateForm" class="btn ms-2 btn-primary">
+                            Add Steps
+                            <i class="bi bi-arrow-right-square-fill"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,7 +151,10 @@ export default {
                                 </div>
                             </div>
                             <div class="row p-3">
-                                <label for="description" class="form-label text-secondary">Description</label>
+                                <label for="description" class="form-label text-secondary d-flex ">
+                                    Description
+                                    <div class="text-primary ms-1 ">(Optionaal)</div>
+                                </label>
                                 <textarea v-model="form.description"
                                     class="form-control bg-dark text-light border-secondary" id="description" rows="5"
                                     required placeholder="Enter Description"></textarea>
@@ -167,11 +169,12 @@ export default {
                         <Overlay :open="newStep.open" size="xlg" @closeOverlay="removeNewStep">
                             <div class="d-flex w-100 align-items-center justify-content-between position-sticky top-0">
                                 <div @click="addStep" class="btn btn-secondary text-light">Add Step</div>
-                                <div @click="createTestCase" class="text-black btn btn-primary">Test Steps</div>
+                                <div @click="createTestCase" class="text-black btn btn-primary">Submit</div>
                             </div>
                             <div class="steps-display overflow-y-scroll">
                                 <!-- step item -->
-                                <div class="row d-flex w-100 flex-row align-items-center step-item mt-2"
+                                <div v-if="form.test_steps.length > 0"
+                                    class="row d-flex w-100 flex-row align-items-center step-item mt-2"
                                     v-for="(item, index) in form.test_steps" :key="index">
                                     <div class="col-11">
                                         <div class="row">
@@ -223,6 +226,12 @@ export default {
                                     <div class="col-1">
                                         <div @click="removeStep(index)" class="text-light pointer"><i
                                                 class="bi bi-trash3-fill"></i></div>
+                                    </div>
+                                </div>
+                                <div v-else class="d-flex justify-content-center align-items-center h-100 flex-column">
+                                    Click the button to add a step
+                                    <div @click="addStep" class="btn btn-primary">
+                                        Add Step
                                     </div>
                                 </div>
                             </div>

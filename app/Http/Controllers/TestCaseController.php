@@ -43,7 +43,7 @@ class TestCaseController extends Controller
         ]);
     }
 
-    function getTestSteps(Request $request)
+    function getTestCases(Request $request)
 
     {
         $validator = Validator::make(
@@ -63,13 +63,12 @@ class TestCaseController extends Controller
             } else {
                 $testCases = TestCase::where("project_id", $request->input("project_id"))
                     ->where("module_name", $request->input("module_name"))
-                    ->with([
-                        "testSteps" => function ($query) {
-                            $query->with("expectedResult");
-                        }
-                    ])
                     ->with("tester")
+                    ->withCount(["testSteps as expected_result_count" => function ($query) {
+                        $query->select(DB::raw("count(*)"));
+                    }])
                     ->get();
+
 
                 return response()->json([
                     "error" => false,
@@ -90,7 +89,6 @@ class TestCaseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => "required",
-            // 'description' => "required",
             "module" => "required",
             "project_id" => "required",
             "tester_id" => "required",
@@ -109,19 +107,31 @@ class TestCaseController extends Controller
                     "tester_id" => $request->input("tester_id"),
                     "status" => "Incomplete",
                     "project_id" => $request->input("project_id"),
-
+                    "description" => $request->input("description"),
                 ]);
                 if (count($request->input("test_steps")) > 0) {
                     foreach ($request->input("test_steps") as $step) {
+                        $stepStatus = "";
+                        if ($step["pass"] == 'false') {
+                            $stepStatus = "Pending";
+                        } else {
+                            $stepStatus = "Complete";
+                        }
                         $newTestStep = TestStep::create([
                             'step_description' => $step["step"],
-                            'step_status' => "pending",
+                            'step_status' => $stepStatus,
                             'testcase_id' => $newTestCase->id
                         ]);
 
+                        $found = '';
+                        if (isset($step["found"])) {
+                            $found = $step["found"];
+                        }
                         $newExpected = ExpectedResult::create([
                             'result_description' => $step["expected"],
-                            'test_step_id' => $newTestStep->id
+                            'test_step_id' => $newTestStep->id,
+                            "found_description" => $found,
+                            'pass' => $step['pass']
                         ]);
                     }
                 } else {
@@ -150,4 +160,4 @@ class TestCaseController extends Controller
             }
         }
     }
-}
+};

@@ -13,6 +13,8 @@ return new class extends Migration
             $table->unsignedBigInteger('test_step_id');
             $table->foreign('test_step_id')->references('id')->on('test_steps')->onDelete('cascade');
             $table->text('result_description');
+            $table->text('found_description')->nullable();
+            $table->enum("pass", ["true", "false"]);
             $table->timestamps();
         });
     }

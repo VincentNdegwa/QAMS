@@ -6,9 +6,7 @@
                 Test Cases
             </div>
             <div class="p d-flex text-light">
-                <div class="p ms-3 ">
-                    <i class="bi bi-plus-lg"></i>
-                </div>
+                
                 <div class="p ms-3 ">
                     <i class="bi bi-trash3-fill ms-3 "></i>
                 </div>
@@ -49,16 +47,20 @@
                 </thead>
                 <tbody>
                     <tr v-if="testCases.length > 0" v-for="(item, index) in testCases" :key="index">
-                        <td>{{ item?.test_steps[0]?.id }}</td>
+                        <td>{{ item?.id }}</td>
                         <td>{{ item?.title }}</td>
                         <td>
-                            <i class="bi bi-pen ms-3 "></i>
-                            <i class="bi bi-trash3-fill ms-3 "></i>
+                            <i class="bi bi-pen ms-3 pointer"></i>
+                            <i class="bi bi-trash3-fill ms-3 pointer"></i>
                         </td>
                         <td>{{ item.tester.name }}</td>
-                        <td>{{ item?.test_steps[0]?.step_status }}</td>
 
-                        <td>{{ new Date(item?.test_steps[0]?.created_at).toLocaleString() }}</td>
+                        <td>
+                            <span class="badge" :class="getClass(item.status)">{{
+                        item.status }}</span>
+                        </td>
+
+                        <td>{{ new Date(item?.created_at).toLocaleString() }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -72,6 +74,19 @@ export default {
     props: {
         testCases: {
             type: Array,
+        }
+    }, methods: {
+        getClass(status) {
+            switch (status) {
+                case "Incomplete":
+                    return 'text-bg-yellow';
+                    break;
+                case 'Complete':
+                    return 'text-bg-green'
+                default:
+                    return 'text-bg-secondary'
+                    break;
+            }
         }
     }
 }

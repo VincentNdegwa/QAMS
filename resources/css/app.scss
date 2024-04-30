@@ -4,8 +4,9 @@ $bright-blue: #00ABE4;
 $white: #FFFFFF;
 $dark: #040D12;
 $light-green: #5C8374;
-$danger :#ff0000;
-
+$danger: #ff0000;
+$green: #00FF00; // Custom green color
+$yellow: #FFFF00; // Custom yellow color
 
 // Bootstrap Overrides
 $theme-colors: (
@@ -14,7 +15,9 @@ $theme-colors: (
     "info": $bright-blue,
     "light": $white,
     "dark": $dark,
-    "danger":$danger
+    "danger": $danger,
+    "green": $green,
+    "yellow": $yellow 
 );
 
 $theme-colors-inverse: (
@@ -23,9 +26,27 @@ $theme-colors-inverse: (
     "info": $bright-blue,
     "light": $dark,
     "dark": $white,
-    "danger":$danger
+    "danger": $danger,
+    "green": $green,
+    "yellow": $yellow
 );
 
 // Include Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
+.text-green {
+    color: $green;
+}
+
+.text-yellow {
+    color: $yellow;
+}
+.text-bg-yellow{
+    background-color: $yellow;
+}
+.text-bg-red {
+    background-color: $danger;
+}
+.text-bg-green {
+    background-color: $green;
+}
