@@ -6,7 +6,7 @@
                 Test Cases
             </div>
             <div class="p d-flex text-light">
-                
+
                 <div class="p ms-3 ">
                     <i class="bi bi-trash3-fill ms-3 "></i>
                 </div>
@@ -50,8 +50,10 @@
                         <td>{{ item?.id }}</td>
                         <td>{{ item?.title }}</td>
                         <td>
-                            <i class="bi bi-pen ms-3 pointer"></i>
-                            <i class="bi bi-trash3-fill ms-3 pointer"></i>
+                            <button @click="openTestCase(item.id)"
+                                class="bg-primary border-0 rounded-1 btn-outline-secondary ">
+                                Open
+                            </button>
                         </td>
                         <td>{{ item.tester.name }}</td>
 
@@ -70,6 +72,8 @@
 </template>
 
 <script>
+import { router } from '@inertiajs/vue3';
+
 export default {
     props: {
         testCases: {
@@ -87,6 +91,9 @@ export default {
                     return 'text-bg-secondary'
                     break;
             }
+        },
+        openTestCase(id) {
+            router.get(`view/${id}`);
         }
     }
 }

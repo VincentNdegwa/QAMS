@@ -29,9 +29,10 @@ Route::middleware("auth")->prefix("/")->group(function () {
         });
         Route::get("/test", [TestCaseController::class, "open"])->name("test.page");
         Route::get("/new", [TestCaseController::class, 'index']);
-        Route::get("/step", function(){
+        Route::get("/step", function () {
             return Inertia::render("NewTestStep");
         });
+        Route::get("view/{id}", [TestCaseController::class, "viewTask"]);
     });
 });
 

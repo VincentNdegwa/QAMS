@@ -160,4 +160,20 @@ class TestCaseController extends Controller
             }
         }
     }
+
+    function viewTask($organisation, $project, $id)
+    {
+        $testCase = TestCase::where("id", $id)
+            ->with([
+                "testSteps" => function ($query) {
+                    $query->with("expectedResult");
+                }
+            ])
+            ->with("tester")
+            ->with("project")
+            ->first();
+        return Inertia::render("ViewTestCase", [
+            "testCase" => $testCase
+        ]);
+    }
 };

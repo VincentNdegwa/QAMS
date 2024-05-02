@@ -34,7 +34,12 @@ export default {
             description: "",
             project_id: this.project_id,
             test_steps: [
-
+                {
+                    step: "",
+                    expected: "",
+                    pass: "false",
+                    found: ""
+                }
             ],
         }
         return {
@@ -199,18 +204,18 @@ export default {
                                             <div class="col-6">
                                                 <div class="row">
                                                     <div class="col-3 d-flex flex-column justify-content-center">
-                                                        <div class="form-control mb-3 bg-dark text-light border-0">
-                                                            <label for="pass">Pass</label>
-                                                            <input v-model="item.pass" type="radio" class="ms-3"
-                                                                id="pass" name="result" value="true">
+                                                        <div class="mb-3">
+                                                            <label for="" class="form-label">Test State</label>
+                                                            <select v-model="item.pass"
+                                                                class="form-select form-select-sm bg-dark text-light"
+                                                                name="state" id="">
+                                                                <option value="false">False</option>
+                                                                <option value="true">True</option>
+                                                            </select>
                                                         </div>
-                                                        <div class="form-control bg-dark text-light border-0">
-                                                            <label for="fail">Fail</label>
-                                                            <input v-model="item.pass" type="radio" class="ms-3"
-                                                                id="fail" name="result" value="false">
-                                                        </div>
+
                                                     </div>
-                                                    <div class="col-8" v-if="item.pass == 'false'">
+                                                    <div class="col-8" v-if="item.pass === 'false'">
                                                         <small class="text-primary">Found Results</small>
                                                         <textarea v-model="item.found"
                                                             class="form-control bg-dark text-light border-secondary step-textarea"
