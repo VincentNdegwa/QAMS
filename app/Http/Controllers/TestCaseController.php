@@ -173,7 +173,8 @@ class TestCaseController extends Controller
             ->with("project")
             ->first();
         return Inertia::render("ViewTestCase", [
-            "testCase" => $testCase
+            "testCase" => $testCase,
+            "testCase_id" => $id
         ]);
     }
 };

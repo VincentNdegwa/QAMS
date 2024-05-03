@@ -63,7 +63,7 @@
                         <div class="text-primary h5 col-6">
                             Test Steps
                         </div>
-                        <div @click="addStep()" class="col-6 btn btn-primary">
+                        <div @click="openOverlay()" class="col-6 btn btn-primary">
                             Add Step
                         </div>
                     </div>
@@ -95,8 +95,8 @@
                     'No' }}</p>
                                 </div>
                             </div>
-                            
-                            
+
+
                         </div>
 
                     </div>
@@ -104,16 +104,26 @@
             </div>
         </div>
     </MainLayout>
+    <Overlay :open="overlay.open" size="lg" @closeOverlay="openOverlay">
+        <AddSteps :testCase_id="testCase_id" />
+    </Overlay>
 </template>
 
 <script>
 import MainLayout from "./Layouts/MainLayout.vue"
+import Overlay from "./Layouts/Overlay.vue"
+import AddSteps from "./components/TestCaseComponents/AddSteps.vue"
 export default {
     components: {
-        MainLayout
+        MainLayout,
+        Overlay,
+        AddSteps
     }, props: {
         testCase: {
             type: Object
+        },
+        testCase_id: {
+            type: String
         }
     }, data() {
         return {
@@ -134,10 +144,13 @@ export default {
                 }],
                 colors: ['#5C8374', '#ff0000'],
             },
+            overlay: {
+                open: false
+            }
         }
     }, mounted() {
         this.countCompleted()
-        console.log(this.testCase)
+        console.log(this.testCase_id)
     }, methods: {
         formatDate(date) {
             return new Date(date).toLocaleString();
@@ -152,8 +165,8 @@ export default {
             this.series.push(this.completeness.completed, (this.completeness.total - this.completeness.completed))
         }, goBack() {
             window.history.back()
-        }, addStep() {
-
+        }, openOverlay() {
+            this.overlay.open = !this.overlay.open
         }
     }
 }
