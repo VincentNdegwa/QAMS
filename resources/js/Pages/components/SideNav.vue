@@ -24,7 +24,7 @@ export default {
 <template>
 
 
-    <nav class="nav_holder position-sticky top-0">
+    <nav class="nav_holder bg-dark position-sticky top-0">
         <div class="nav_bar">
             <div class="col d-flex flex-column align-items-center">
                 <!-- Profile Picture -->
@@ -85,7 +85,8 @@ export default {
     top: 0;
     height: 100vh !important;
     width: var(--nav_size) !important;
-    background: rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.2);
+    /* background: rgba(0, 0, 0, 0.4) !important; */
 }
 
 .medium_nav {

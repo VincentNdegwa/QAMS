@@ -1,5 +1,5 @@
 <template>
-    <div class="card mt-3">
+    <div class="card">
         <div class="card-body">
             <a :href=getUrl() class="card-title text-secondary text-center text-decoration-none h5">{{
                 organisation.name }}</a>

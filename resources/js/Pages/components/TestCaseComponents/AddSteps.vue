@@ -63,6 +63,8 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     props: {
         testCase_id: {
@@ -89,7 +91,18 @@ export default {
             this.form.test_steps.splice(index, 1);
         },
         sendTheSteps() {
-            console.log(this.form.test_steps);
+            axios.post("/api/testStep/add", {
+                testCase_id: this.testCase_id,
+                data: this.form
+            }).then((res) => {
+                if (res.data.error) {
+                    alert(res.data.message);
+                } else {
+                    console.log(res.data.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
         }
     }
 };
