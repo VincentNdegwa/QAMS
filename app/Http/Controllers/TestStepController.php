@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpectedResult;
+use App\Models\TestCase;
 use App\Models\TestStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,5 +67,56 @@ class TestStepController extends Controller
                 ];
             }
         }
+    }
+
+    function updateTestStep(Request $request)
+    {
+        try {
+            $stepStatus = "";
+            if ($request->expected_result['pass'] == 'false') {
+                $stepStatus = "Pending";
+            } else {
+                $stepStatus = "Complete";
+            }
+            $testStep = TestStep::find($request->id);
+            $testStep->step_description = $request->step_description;
+            $testStep->step_status = $stepStatus;
+            $testStep->save();
+
+            $expectedResult = ExpectedResult::find($request->expected_result['id']);
+            $expectedResult->result_description = $request->expected_result['result_description'];
+            $expectedResult->found_description = $request->expected_result['found_description'];
+            $expectedResult->pass = $request->expected_result['pass'];
+            $expectedResult->save();
+
+            // Call the updateTestCase method with the testcase_id from the request
+            $this->updateTestCase($request->testcase_id);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'Test step updated successfully.',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
+
+    function upDateTestCase($testCaseId)
+    {
+        $testCase = TestCase::where("id", $testCaseId)->with("testSteps")->first();
+        $allStepsComplete = $testCase->testSteps->every(function ($step) {
+            return $step->step_status === 'Complete';
+        });
+
+        if ($allStepsComplete) {
+            $testCase->status = 'Complete';
+        } else {
+            $testCase->status = 'Incomplete';
+        }
+
+        $testCase->save();
     }
 }

@@ -20,14 +20,20 @@
                     <option value="true">True</option>
                 </select>
             </div>
-            <div class="col-8" v-if="newEdit.expected_result.pass === 'true'">
+            <div class="col-8" v-if="newEdit.expected_result.pass === 'false'">
                 <label for="" class="form-label text-primary">Found</label>
                 <textarea class=" form-control textarea" v-model="newEdit.expected_result.found_description"></textarea>
             </div>
         </div>
+        <div class="row w-100  mt-5 ">
+            <div class="col-md-12 w-100  col-5 text-light btn btn-danger m-2" @click="cancelOverlay">Cancel</div>
+            <div class="col-md-12 w-100  col-5 btn btn-secondary m-2" @click="SubmiForm">Submit</div>
+        </div>
     </form>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
     props: {
         editData: {
@@ -49,6 +55,20 @@ export default {
     }, methods: {
         updateData(data) {
             this.newEdit = data
+        }, cancelOverlay() {
+
+        }, async SubmiForm() {
+            console.log(this.newEdit)
+            await axios.post("/api/testStep/update", this.newEdit).then((res) => {
+                if (res.data.error) {
+                    alert(res.data.message)
+                } else {
+                    alert(res.data.message)
+                }
+            }).catch((err) => {
+                alert(err)
+            })
+            await this.cancelOverlay()
         }
     }
 }

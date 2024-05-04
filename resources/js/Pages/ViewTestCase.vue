@@ -102,7 +102,7 @@
                                 <div class="d-flex step-details">
                                     <p class="text-light">Pass:</p>
                                     <p class="text-secondary ms-2">{{ step.expected_result.pass === 'true' ? 'Yes' :
-                                        'No' }}</p>
+                    'No' }}</p>
                                 </div>
                             </div>
 
@@ -117,7 +117,7 @@
     <Overlay :open="overlay.open" size="lg" @closeOverlay="openOverlay">
         <AddSteps :testCase_id="testCase_id" @closeOverlay="openOverlay" />
     </Overlay>
-    <Overlay :open="overlay.edit" @closeOverlay="closeEditOverlay" v-if="overlay.edit" >
+    <Overlay :open="overlay.edit" @closeOverlay="closeEditOverlay" v-if="overlay.edit">
         <EditStep :editData="editData" />
     </Overlay>
 </template>
@@ -166,7 +166,7 @@ export default {
         }
     }, mounted() {
         this.countCompleted()
-        console.log(this.testCase_id)
+        console.log(this.testCase)
     }, methods: {
         formatDate(date) {
             return new Date(date).toLocaleString();

@@ -28,29 +28,41 @@ class TestCaseController extends Controller
     }
     public function view($organisation, $project)
     {
-        $testCases = TestCase::where("project_id", $project)->with("testSteps")->get();
-        $testCount = [
-            "casename" => "",
-            "casecount" => ""
-        ];
-        $array = [];
-        foreach ($testCases as $test) {
-            $steps = $test['test_steps'];
-            $array[] = $test;
-            // $testCount['casename'] = $test->name
+        $testCases = TestCase::where("project_id", $project)->with('testSteps')->get();
 
-            // $allComplete = $steps->every(function ($step) {
-            //     $testArr[] = $step;
-            //     $step->step_status = 'Complete';
-            // });
-            // if ($allComplete) {
-            //     $test->status = "Complete";
-            // } else {
-            //     $test->status = "Complete";
-            // }
+        foreach ($testCases as $testCase) {
+            $allStepsComplete = $testCase->testSteps->every(function ($step) {
+                return $step->step_status === 'Complete';
+            });
+
+            if ($allStepsComplete) {
+                $testCase->status = 'Complete';
+            } else {
+                $testCase->status = 'Incomplete';
+            }
+
+            $testCase->save();
         }
-        return Inertia::render("ProjectOverview", ["data" => $testCases]);
+
+        return Inertia::render("ProjectOverview");
     }
+
+    function upDateTestCase($testCaseId)
+    {
+        $testCase = TestCase::where("id", $testCaseId)->with("testSteps")->first();
+        $allStepsComplete = $testCase->testSteps->every(function ($step) {
+            return $step->step_status === 'Complete';
+        });
+
+        if ($allStepsComplete) {
+            $testCase->status = 'Complete';
+        } else {
+            $testCase->status = 'Incomplete';
+        }
+
+        $testCase->save();
+    }
+
 
     function open($organisation, $project)
     {

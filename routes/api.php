@@ -14,4 +14,5 @@ Route::prefix("/testCase")->group(function () {
 });
 Route::prefix("/testStep")->group(function () {
     Route::post("/add", [TestStepController::class, "addStep"]);
+    Route::post("/update", [TestStepController::class, "updateTestStep"]);
 });
