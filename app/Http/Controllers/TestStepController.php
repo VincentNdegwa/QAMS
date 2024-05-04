@@ -8,6 +8,7 @@ use App\Models\TestStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class TestStepController extends Controller
 {
@@ -95,6 +96,17 @@ class TestStepController extends Controller
             return response()->json([
                 'error' => false,
                 'message' => 'Test step updated successfully.',
+                "data" => [
+                    "testCase" => TestCase::where("id", $request->testcase_id)->with([
+                        "testSteps" => function ($query) {
+                            $query->with("expectedResult");
+                        }
+                    ])
+                        ->with("tester")
+                        ->with("project")
+                        ->first(),
+                    "testCase_id" => $request->testcase_id
+                ]
             ]);
         } catch (\Throwable $th) {
             return response()->json([

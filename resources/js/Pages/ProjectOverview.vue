@@ -24,7 +24,7 @@
         </div>
         <div class="row top-stats mt-3 ">
             <!--  -->
-            <div class="col-12 col-lg-5 box-shadow">
+            <!-- <div class="col-12 col-lg-5 box-shadow">
                 <div class="row">
                     <div class="col-12 text-light ">
                         Stages is Modules
@@ -33,9 +33,9 @@
                         <apexchart type="area" :options="Baroptions" :series="Barseries"></apexchart>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!--  -->
-            <div class="col-12 col-lg-3">
+            <div class="col-12 col-lg-4">
                 <div class="w-100 d-flex flex-column align-items-center h-100 justify-content-between">
                     <div
                         class="w-100 h-100 mt-1 d-flex flex-column align-items-center pd-3 box-shadow justify-content-center">
@@ -44,7 +44,7 @@
                             Test Cases
                         </div>
                         <div class="text-center h2 text-light">
-                            20
+                            {{ data.totalCases }}
                         </div>
                     </div>
                     <div
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <!--  -->
-            <div class="col-12 col-lg-4 top-stats box-shadow">
+            <div class="col-12 col-lg-8 top-stats box-shadow">
                 <div class="row">
                     <div class="col-12 text-light ">Activity Feed</div>
                 </div>
@@ -93,7 +93,7 @@ export default {
         SingleProject
     }, data() {
         return {
-            series: [44, 55],
+            series: [this.data.completedCases, this.data.totalCases - this.data.completedCases],
             options: {
                 labels: ['Completed', 'Remaining'],
                 responsive: [{
@@ -103,7 +103,7 @@ export default {
                         }
                     }
                 }],
-                colors: ['#5C8374', '#ff0000'],
+                colors: ['#7FFF00', '#EE4B2B'],
             },
             Baroptions: {
                 chart: {
@@ -123,7 +123,7 @@ export default {
                     }
                 },
                 xaxis: {
-                    categories: ["contact", "header", "footer", "search", "cart"]
+                    categories: this.data?.moduleCount?.map(item => item.module_name)
                 },
                 colors: ['#5C8374'],
                 stroke: {
@@ -132,7 +132,7 @@ export default {
             },
             Barseries: [{
                 name: 'Test Cases',
-                data: [30, 40, 45, 50, 49]
+                data: this.data?.moduleCount?.map(item => item.test_count)
             }]
         }
     }

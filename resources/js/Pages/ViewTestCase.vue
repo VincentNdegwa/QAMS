@@ -8,7 +8,7 @@
 
             </div>
             <div class="text-center text-light h4">
-                {{ testCase.title }}
+                {{ newtestCase.title }}
             </div>
             <div class="row">
                 <div class="col-12 col-md-4 col-lg-6 h-100 d-flex flex-column ">
@@ -28,31 +28,31 @@
                         <div class="d-flex flex-column text-case-item">
                             <div class="d-flex">
                                 <p class="text-light">Description:</p>
-                                <p class="text-secondary ms-2">{{ testCase.description }}</p>
+                                <p class="text-secondary ms-2">{{ newtestCase.description }}</p>
                             </div>
                         </div>
                         <div class="d-flex flex-column text-case-item">
                             <div class="d-flex">
                                 <p class="text-light">Status:</p>
-                                <p class="text-secondary ms-2">{{ testCase.status }}</p>
+                                <p class="text-secondary ms-2">{{ newtestCase.status }}</p>
                             </div>
                         </div>
                         <div class="d-flex flex-column text-case-item">
                             <div class="d-flex">
                                 <p class="text-light">Module:</p>
-                                <p class="text-secondary ms-2">{{ testCase.module_name }}</p>
+                                <p class="text-secondary ms-2">{{ newtestCase.module_name }}</p>
                             </div>
                         </div>
                         <div class="d-flex flex-column text-case-item">
                             <div class="d-flex">
                                 <p class="text-light">Tester:</p>
-                                <p class="text-secondary ms-2">{{ testCase.tester.name }}</p>
+                                <p class="text-secondary ms-2">{{ newtestCase.tester?.name }}</p>
                             </div>
                         </div>
                         <div class="d-flex flex-column text-case-item">
                             <div class="d-flex">
                                 <p class="text-light">Created At:</p>
-                                <p class="text-secondary ms-2">{{ formatDate(testCase.created_at) }}</p>
+                                <p class="text-secondary ms-2">{{ formatDate(newtestCase?.created_at) }}</p>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="test-steps-container mt-1">
                         <div class="mt-1">
 
-                            <div v-for="step in testCase.test_steps" :key="step.id"
+                            <div v-for="step in newtestCase?.test_steps" :key="step.id"
                                 class="box-shadow test-step-item p-4 mt-1 step-item">
                                 <div class="edit-actions">
                                     <i class="bi bi-pencil me-2 pointer text-green" data-bs-toggle="popover"
@@ -85,23 +85,23 @@
 
                                 <div class="d-flex step-details">
                                     <p class="text-light">Step:</p>
-                                    <p class="text-secondary ms-2">{{ step.step_description }}</p>
+                                    <p class="text-secondary ms-2">{{ step?.step_description }}</p>
                                 </div>
                                 <div class="d-flex step-details">
                                     <p class="text-light">Status:</p>
-                                    <p class="text-secondary ms-2">{{ step.step_status }}</p>
+                                    <p class="text-secondary ms-2">{{ step?.step_status }}</p>
                                 </div>
                                 <div class="d-flex step-details">
                                     <p class="text-light">Expected:</p>
-                                    <p class="text-secondary ms-2">{{ step.expected_result.result_description }}</p>
+                                    <p class="text-secondary ms-2">{{ step?.expected_result?.result_description }}</p>
                                 </div>
                                 <div class="d-flex step-details">
                                     <p class="text-light">Found:</p>
-                                    <p class="text-secondary ms-2">{{ step.expected_result.found_description }}</p>
+                                    <p class="text-secondary ms-2">{{ step?.expected_result?.found_description }}</p>
                                 </div>
                                 <div class="d-flex step-details">
                                     <p class="text-light">Pass:</p>
-                                    <p class="text-secondary ms-2">{{ step.expected_result.pass === 'true' ? 'Yes' :
+                                    <p class="text-secondary ms-2">{{ step?.expected_result?.pass === 'true' ? 'Yes' :
                     'No' }}</p>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
         <AddSteps :testCase_id="testCase_id" @closeOverlay="openOverlay" />
     </Overlay>
     <Overlay :open="overlay.edit" @closeOverlay="closeEditOverlay" v-if="overlay.edit">
-        <EditStep :editData="editData" />
+        <EditStep :editData="editData" @closeOverlay="closeEditOverlay" @updateDate="updateDate" />
     </Overlay>
 </template>
 
@@ -142,6 +142,7 @@ export default {
         }
     }, data() {
         return {
+            newtestCase: {},
             completeness: {
                 completed: 0,
                 total: 0,
@@ -157,7 +158,7 @@ export default {
                         }
                     }
                 }],
-                colors: ['#5C8374', '#ff0000'],
+                colors: ['#7FFF00', '#EE4B2B'],
             },
             overlay: {
                 open: false,
@@ -165,14 +166,14 @@ export default {
             }
         }
     }, mounted() {
+        this.newtestCase = this.testCase
         this.countCompleted()
-        console.log(this.testCase)
     }, methods: {
         formatDate(date) {
             return new Date(date).toLocaleString();
         }, countCompleted() {
-            this.completeness.total = this.testCase.test_steps.length
-            this.testCase.test_steps.forEach(element => {
+            this.completeness.total = this.newtestCase.test_steps.length
+            this.newtestCase.test_steps.forEach(element => {
                 if (element.step_status == "Complete") {
                     this.completeness.completed++
                 }
@@ -190,6 +191,17 @@ export default {
 
         }, closeEditOverlay() {
             this.overlay.edit = !this.overlay.edit
+        }, updateDate(data) {
+            this.newtestCase = data.testCase
+            this.completeness = {
+                completed: 0,
+                total: 0,
+                percentage: 0
+            }
+            this.series = []
+            console.log(this.completeness)
+
+            this.countCompleted()
         }
     }
 }

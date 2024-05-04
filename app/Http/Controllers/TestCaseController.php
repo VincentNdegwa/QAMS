@@ -29,7 +29,7 @@ class TestCaseController extends Controller
     public function view($organisation, $project)
     {
         $testCases = TestCase::where("project_id", $project)->with('testSteps')->get();
-
+        $count = 0;
         foreach ($testCases as $testCase) {
             $allStepsComplete = $testCase->testSteps->every(function ($step) {
                 return $step->step_status === 'Complete';
@@ -42,9 +42,26 @@ class TestCaseController extends Controller
             }
 
             $testCase->save();
+            if ($testCase->status === 'Complete') {
+                $count++;
+            }
         }
+        $modules = TestCase::where("project_id", $project)
+            ->select("module_name", DB::raw("COUNT(*) as test_count"))
+            ->groupBy("module_name")
+            ->orderBy("module_name", "ASC")
+            ->get();
 
-        return Inertia::render("ProjectOverview");
+        $totalTestCaseCount = count($testCases);
+        $completedTestCaseCount = $count;
+
+        return Inertia::render("ProjectOverview", [
+            "data" => [
+                "completedCases" => $completedTestCaseCount,
+                "totalCases" => $totalTestCaseCount,
+                "moduleCount" => $modules
+            ]
+        ]);
     }
 
     function upDateTestCase($testCaseId)

@@ -56,7 +56,7 @@ export default {
         updateData(data) {
             this.newEdit = data
         }, cancelOverlay() {
-
+            this.$emit("closeOverlay")
         }, async SubmiForm() {
             console.log(this.newEdit)
             await axios.post("/api/testStep/update", this.newEdit).then((res) => {
@@ -64,6 +64,7 @@ export default {
                     alert(res.data.message)
                 } else {
                     alert(res.data.message)
+                    this.$emit("updateDate", res.data.data)
                 }
             }).catch((err) => {
                 alert(err)
@@ -74,20 +75,3 @@ export default {
 }
 </script>
 
-<!-- {
-"id": 9,
-"testcase_id": 9,
-"step_description": "first",
-"step_status": "Complete",
-"created_at": "2024-05-01T18:45:28.000000Z",
-"updated_at": "2024-05-01T18:45:28.000000Z",
-"expected_result": {
-"id": 7,
-"test_step_id": 9,
-"result_description": "efrsfdf",
-"created_at": "2024-05-01T18:45:28.000000Z",
-"updated_at": "2024-05-01T18:45:28.000000Z",
-"found_description": "",
-"pass": "true"
-}
-} -->
