@@ -24,13 +24,14 @@ Route::middleware("auth")->prefix("/")->group(function () {
     Route::get('/organisation/{organisation_id}/project/', [ProjectController::class, "open"])->name("project.open");
 
     Route::prefix("/organisation/{organisation}/project/{project}/")->group(function () {
-    
+
         Route::get("/open", [TestCaseController::class, "view"]);
         Route::get("/test", [TestCaseController::class, "open"])->name("test.page");
         Route::get("/new", [TestCaseController::class, 'index']);
         Route::get("/step", function () {
             return Inertia::render("NewTestStep");
         });
+        Route::get("/modules", [TestCaseController::class, "openModules"]);
         Route::get("view/{id}", [TestCaseController::class, "viewTask"]);
     });
 });

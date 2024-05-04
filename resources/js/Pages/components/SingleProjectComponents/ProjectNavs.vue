@@ -7,7 +7,7 @@
             <a href="test" class="btn btn-dark text-primary p-1">Test Cases</a>
         </div>
         <div class="">
-            <a href="" class="btn btn-dark text-primary p-1">Modules</a>
+            <a href="modules" class="btn btn-dark text-primary p-1">Modules</a>
         </div>
         <div class="">
             <a href="" class="btn btn-dark text-primary p-1">Issues</a>
