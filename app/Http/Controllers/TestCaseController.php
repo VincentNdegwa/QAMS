@@ -26,6 +26,31 @@ class TestCaseController extends Controller
             "user" => $user,
         ]);
     }
+    public function view($organisation, $project)
+    {
+        $testCases = TestCase::where("project_id", $project)->with("testSteps")->get();
+        $testCount = [
+            "casename" => "",
+            "casecount" => ""
+        ];
+        $array = [];
+        foreach ($testCases as $test) {
+            $steps = $test['test_steps'];
+            $array[] = $test;
+            // $testCount['casename'] = $test->name
+
+            // $allComplete = $steps->every(function ($step) {
+            //     $testArr[] = $step;
+            //     $step->step_status = 'Complete';
+            // });
+            // if ($allComplete) {
+            //     $test->status = "Complete";
+            // } else {
+            //     $test->status = "Complete";
+            // }
+        }
+        return Inertia::render("ProjectOverview", ["data" => $testCases]);
+    }
 
     function open($organisation, $project)
     {

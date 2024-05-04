@@ -5,7 +5,8 @@
     </div>
     <div class="steps-display steps-display-100 overflow-y-scroll">
         <!-- step item -->
-        <div v-if="form.test_steps.length > 0" class="row d-flex w-100 flex-row align-items-center step-item mt-2"
+        <div v-if="form.test_steps.length > 0"
+            class="row d-flex w-100 flex-row align-items-center step-item mt-2"
             v-for="(item, index) in form.test_steps" :key="index">
             <div class="col-11">
                 <div class="row">
@@ -91,18 +92,38 @@ export default {
             this.form.test_steps.splice(index, 1);
         },
         sendTheSteps() {
-            axios.post("/api/testStep/add", {
-                testCase_id: this.testCase_id,
-                data: this.form
-            }).then((res) => {
-                if (res.data.error) {
-                    alert(res.data.message);
-                } else {
-                    console.log(res.data.message)
+            if (this.validate()) {
+                axios.post("/api/testStep/add", {
+                    testCase_id: this.testCase_id,
+                    data: this.form
+                }).then((res) => {
+                    if (res.data.error) {
+                        alert(res.data.message);
+                    } else {
+                        console.log(res.data.message)
+                        this.removerFormDisplay();
+                    }
+                    this.removerFormDisplay();
+                }).catch((err) => {
+                    console.log(err)
+                    this.removerFormDisplay();
+                })
+            }
+
+        }, removerFormDisplay() {
+            this.$emit("closeOverlay")
+        }, validate() {
+            this.form.test_steps.forEach(element => {
+                if (this.form.test_steps.length == 0) {
+                    alert("Steps cannot be zero")
+                    return false
                 }
-            }).catch((err) => {
-                console.log(err)
-            })
+                if (this.form.test_steps.length > 0 && !element.step.trim() && !element.expected.trim()) {
+                    alert("empty inputs")
+                    return false
+                }
+                return true;
+            });
         }
     }
 };
@@ -110,5 +131,9 @@ export default {
 <style>
 .steps-display-100 {
     height: 90vh !important;
+}
+
+.step-item {
+    position: relative;
 }
 </style>

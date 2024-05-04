@@ -71,7 +71,17 @@
                         <div class="mt-1">
 
                             <div v-for="step in testCase.test_steps" :key="step.id"
-                                class="box-shadow test-step-item p-4 mt-3">
+                                class="box-shadow test-step-item p-4 mt-1 step-item">
+                                <div class="edit-actions">
+                                    <i class="bi bi-pencil me-2 pointer text-green" data-bs-toggle="popover"
+                                        @click="editStep(step.id)" title="Edit"
+                                        data-bs-content="Click to edit this item" data-bs-trigger="hover">
+                                    </i>
+                                    <i class="bi bi-trash-fill me-2 pointer text-danger" data-bs-toggle="popover"
+                                        @click="deleteStep(step.id)" title="Delete"
+                                        data-bs-content="Click to delete this item" data-bs-trigger="hover">
+                                    </i>
+                                </div>
 
                                 <div class="d-flex step-details">
                                     <p class="text-light">Step:</p>
@@ -92,7 +102,7 @@
                                 <div class="d-flex step-details">
                                     <p class="text-light">Pass:</p>
                                     <p class="text-secondary ms-2">{{ step.expected_result.pass === 'true' ? 'Yes' :
-                    'No' }}</p>
+                                        'No' }}</p>
                                 </div>
                             </div>
 
@@ -105,7 +115,10 @@
         </div>
     </MainLayout>
     <Overlay :open="overlay.open" size="lg" @closeOverlay="openOverlay">
-        <AddSteps :testCase_id="testCase_id" />
+        <AddSteps :testCase_id="testCase_id" @closeOverlay="openOverlay" />
+    </Overlay>
+    <Overlay :open="overlay.edit" @closeOverlay="closeEditOverlay" v-if="overlay.edit" >
+        <EditStep :editData="editData" />
     </Overlay>
 </template>
 
@@ -113,11 +126,13 @@
 import MainLayout from "./Layouts/MainLayout.vue"
 import Overlay from "./Layouts/Overlay.vue"
 import AddSteps from "./components/TestCaseComponents/AddSteps.vue"
+import EditStep from "./components/TestCaseComponents/EditStep.vue"
 export default {
     components: {
         MainLayout,
         Overlay,
-        AddSteps
+        AddSteps,
+        EditStep
     }, props: {
         testCase: {
             type: Object
@@ -131,7 +146,7 @@ export default {
                 completed: 0,
                 total: 0,
                 percentage: 0
-            },
+            }, editData: {},
             series: [],
             options: {
                 labels: ['Completed', 'Remaining'],
@@ -145,7 +160,8 @@ export default {
                 colors: ['#5C8374', '#ff0000'],
             },
             overlay: {
-                open: false
+                open: false,
+                edit: false
             }
         }
     }, mounted() {
@@ -167,6 +183,13 @@ export default {
             window.history.back()
         }, openOverlay() {
             this.overlay.open = !this.overlay.open
+        }, editStep(id) {
+            this.editData = this.testCase.test_steps.find((item) => item.id == id);
+            this.closeEditOverlay()
+        }, deleteStep(id) {
+
+        }, closeEditOverlay() {
+            this.overlay.edit = !this.overlay.edit
         }
     }
 }
@@ -186,11 +209,24 @@ export default {
 
 
 .test-step-item {
-    box-shadow: 1px 0px 20px var(--bs-primary);
+    box-shadow: 1px 0px 20px var(--bs-dark);
 }
 
 .step-details {
     padding: 2px;
     border-bottom: 1px solid gray;
+}
+
+.step-item {
+    position: relative;
+}
+
+.edit-actions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1;
 }
 </style>

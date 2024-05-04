@@ -65,7 +65,8 @@
                     <div class="col-12 text-light ">Activity Feed</div>
                 </div>
                 <ul class="row list-unstyled overflow-y-scroll h-75 scroll-none mt-5">
-                    <li class="p-1 mt-1 pointer text-secondary box-shadow d-flex flex-row justify-content-between " style="height: 2.4rem">
+                    <li class="p-1 mt-1 pointer text-secondary box-shadow d-flex flex-row justify-content-between "
+                        style="height: 2.4rem">
                         <small class="p-0 overflow-x-hidden ellipsis w-75">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo nihil magni asperiores
                         </small>
@@ -80,6 +81,14 @@
 <script>
 import SingleProject from './Layouts/SingleProject.vue';
 export default {
+    props: {
+        data: {
+            type: Array
+        }
+    },
+    mounted() {
+        console.log(this.data)
+    },
     components: {
         SingleProject
     }, data() {
