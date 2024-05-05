@@ -2,19 +2,27 @@
     <div class="row">
         <div class="col-12 col-lg-6">
             <div class="p text-center text-primary ">Testcases in projects</div>
-            <apexchart type="bar" :options="chartOptions" :series="chartSeries" />
+            <apexchart type="bar" :options="TestCasechartOptions" :series="TestCasechartSeries" />
         </div>
         <div class="col-12 col-lg-6">
             <div class="p text-center text-primary ">Projects in organisation</div>
-            <apexchart type="area" :options="chartOptions" :series="chartSeries" />
+            <apexchart type="area" :options="ProjectchartOptions" :series="ProjectchartSeries" />
         </div>
     </div>
 </template>
 <script>
 export default {
+    props: {
+        testcaseProject: {
+            type: Array
+        },
+        projectOrganisation: {
+            type: Array
+        },
+    },
     data() {
         return {
-            chartOptions: {
+            ProjectchartOptions: {
                 chart: {
                     id: 'basic-line-chart',
                     toolbar: {
@@ -22,7 +30,7 @@ export default {
                     }
                 },
                 xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    categories: this.projectOrganisation.map(item => item.name),
                 },
                 grid: {
                     show: false
@@ -32,12 +40,36 @@ export default {
                     curve: 'smooth',
                 }
             },
-            chartSeries: [
+            ProjectchartSeries: [
                 {
-                    name: 'Series 1',
-                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+                    name: 'Projects',
+                    data: this.projectOrganisation.map(item => item.project_count),
                 },
             ],
+            TestCasechartOptions: {
+                chart: {
+                    id: 'basic-line-chart',
+                    toolbar: {
+                        show: false
+                    }
+                },
+                xaxis: {
+                    categories: this.testcaseProject.map(item => item.name),
+                },
+                grid: {
+                    show: false
+                },
+                colors: ['#5C8374'],
+                stroke: {
+                    curve: 'smooth',
+                }
+            },
+            TestCasechartSeries: [
+                {
+                    name: 'TestCases',
+                    data: this.testcaseProject.map(item => item.test_count),
+                },
+            ]
         }
     }
 }

@@ -232,14 +232,14 @@ class TestCaseController extends Controller
         ]);
     }
 
-    function openModules($organisation, $project)
+    function openIssues($organisation, $project)
     {
         $modules = TestCase::where("project_id", $project)
             ->select("module_name", DB::raw("COUNT(*) as test_count"))
             ->groupBy("module_name")
             ->orderBy("module_name", "ASC")
             ->get();
-        return Inertia::render("ModulesView", [
+        return Inertia::render("IssuesView", [
             "moduleCount" => $modules
         ]);
     }

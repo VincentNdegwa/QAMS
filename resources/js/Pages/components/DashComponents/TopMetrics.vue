@@ -9,7 +9,7 @@
                     {{ description }}
                 </div>
                 <div class="card-text mt-2 h1 text-primary">
-                    3
+                    {{ count }}
                 </div>
             </div>
         </div>
@@ -20,7 +20,8 @@
 export default {
     props: {
         name: String,
-        description: String
+        description: String,
+        count: String
     },
     methods: {
         renderIcon(name) {
@@ -45,7 +46,8 @@ export default {
 .card {
     box-shadow: 2px 3px 20px rgba(0, 0, 0, 0.3);
 }
-.card-dash{
+
+.card-dash {
     min-height: 200px !important;
     height: max-content !important;
 }

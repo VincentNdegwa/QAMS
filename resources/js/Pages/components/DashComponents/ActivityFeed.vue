@@ -1,14 +1,19 @@
 <template>
-    <div class="activity_list">
-        <div class="list-group">
-            <a v-for="(item, index) in activities" :key="index" href="#"
-                class="list-group-item list-group-item-action bg-dark text-secondary ">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ item.name }}</h5>
-                    <small>{{ item.time }}</small>
-                </div>
-            </a>
+    <div class="col-12 box-shadow">
+        <div class="row text-center ">
+            <div class="col-12 text-light ">Activity Feed</div>
         </div>
+        <ul class="row list-unstyled overflow-y-scroll  scroll-none m-1 activity_list">
+            <li v-for="(item, index) in activities" :key="index"
+                class="p-1 mt-1 pointer text-secondary box-shadow d-flex flex-row justify-content-between "
+                style="height: 2.4rem">
+                <small class="p-0 overflow-x-hidden ellipsis w-75">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo nihil magni asperiores
+                </small>
+                <small class="m-0 p-0">23:05pm</small>
+            </li>
+        </ul>
+
     </div>
 </template>
 <script>
@@ -39,8 +44,8 @@ export default {
 
 <style>
 .activity_list {
-    height: 330px !important;
-    max-height: 330px !important;
+    height: 30vh !important;
+    max-height: 30vh !important;
     overflow-y: scroll;
 }
 

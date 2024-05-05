@@ -15,6 +15,14 @@ export default {
 
         }
     },
+    props: {
+        data: {
+            type: Object
+        }
+    },
+    mounted() {
+        console.log(this.data)
+    },
     methods: {
 
     }, components: {
@@ -34,30 +42,19 @@ export default {
     <MainLayout name="Dashboard">
         <div class="pd-0">
             <div class="row">
-                <TopMetrics name="Organisation" description="A team of colleagues" />
-                <TopMetrics name="Projects" description="Manage your projects" />
-                <TopMetrics name="Tests" description="Run your tests" />
-                <TopMetrics name="Issues" description="Track your issues" />
+                <TopMetrics name="Organisation" :count="data.organisationCount" description="A team of colleagues" />
+                <TopMetrics name="Projects" :count="data.projectCount" description="Manage your projects" />
+                <TopMetrics name="Tests" :count="data.testCount" description="Run your tests" />
+                <TopMetrics name="Issues" :count="data.issueCount" description="Track your issues" />
             </div>
 
             <div class="row">
-                <ProjectGraphs />
+                <ProjectGraphs :testcaseProject="data.testcaseProject"
+                    :projectOrganisation="data.projectOrganisation" />
             </div>
-            <div class="row mt-3">
-                <div class="col-12 col-xl-6">
-                    <div class="row d-flex ms-5 ms-md-0">
-                        <div class="col-12 col-md-6">
-                            <CircularProgress />
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <CircularProgress />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-xl-6 flex-column">
-                    <div class="p text-center text-primary">Activity Feed</div>
-                    <ActivityFeed />
-                </div>
+            <div class="row">
+                <ActivityFeed />
+              
             </div>
         </div>
 

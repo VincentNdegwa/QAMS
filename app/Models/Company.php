@@ -19,4 +19,9 @@ class Company extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    public function userCompany()
+    {
+        return $this->hasMany(UserCompany::class, "company_id");
+    }
 }

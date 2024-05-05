@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TestCaseController;
@@ -16,9 +17,7 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware("auth")->prefix("/")->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get("dashboard", [PageController::class, "openDashboard"])->name('dashboard');
 
     Route::get("organisation", [OrganisationController::class, "open"])->name("organisation");
     Route::get('/organisation/{organisation_id}/project/', [ProjectController::class, "open"])->name("project.open");
@@ -31,7 +30,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/step", function () {
             return Inertia::render("NewTestStep");
         });
-        Route::get("/modules", [TestCaseController::class, "openModules"]);
+        Route::get("/issues", [TestCaseController::class, "openIssues"]);
         Route::get("view/{id}", [TestCaseController::class, "viewTask"]);
     });
 });

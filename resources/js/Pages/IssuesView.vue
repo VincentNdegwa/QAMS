@@ -27,7 +27,7 @@ export default {
         <div class="w-100 d-flex justify-content-end">
             <a href="new" class="btn btn-secondary text-light">
                 <i class="bi bi-plus-lg"></i>
-                Add Test Case
+                Add Issues
             </a>
         </div>
         <div class="row ms-0  mt-3 w-100 ">

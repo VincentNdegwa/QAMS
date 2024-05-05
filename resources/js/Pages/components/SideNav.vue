@@ -46,17 +46,8 @@ export default {
                         Organisation
                     </a>
                     <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-clipboard-check text-primary  me-2"></i>
-                        Sent
-                    </a>
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-journal-album text-primary  me-2"></i>
-                        Archive
-                    </a>
-
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-gear-fill text-primary  me-2"></i>
-                        Settings
+                        <i class="bi bi-kanban text-primary me-2"></i>
+                        Projects
                     </a>
                     <a class="nav-link text-secondary w-100 mt-3" href="#">
                         <i class="bi bi-person-badge-fill text-primary  me-2"></i>
