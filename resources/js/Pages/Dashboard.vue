@@ -8,20 +8,17 @@ import ActivityFeed from "./components/DashComponents/ActivityFeed.vue"
 import MainLayout from "./Layouts/MainLayout.vue"
 
 export default {
+    props: {
+        Data: {
+            type: Object,
+        }
+    },
     data() {
         return {
             nav: false,
 
 
         }
-    },
-    props: {
-        data: {
-            type: Object
-        }
-    },
-    mounted() {
-        console.log(this.data)
     },
     methods: {
 
@@ -33,6 +30,8 @@ export default {
         ProjectGraphs,
         ActivityFeed,
         MainLayout
+    }, mounted() {
+        console.log(this.Data)
     }
 }
 </script>
@@ -42,19 +41,19 @@ export default {
     <MainLayout name="Dashboard">
         <div class="pd-0">
             <div class="row">
-                <TopMetrics name="Organisation" :count="data.organisationCount" description="A team of colleagues" />
-                <TopMetrics name="Projects" :count="data.projectCount" description="Manage your projects" />
-                <TopMetrics name="Tests" :count="data.testCount" description="Run your tests" />
-                <TopMetrics name="Issues" :count="data.issueCount" description="Track your issues" />
+                <TopMetrics name="Organisation" :count="Data?.organisationCount" description="A team of colleagues" />
+                <TopMetrics name="Projects" :count="Data?.projectCount" description="Manage your projects" />
+                <TopMetrics name="Tests" :count="Data?.testCount" description="Run your tests" />
+                <TopMetrics name="Issues" :count="Data?.issueCount" description="Track your issues" />
             </div>
 
             <div class="row">
-                <ProjectGraphs :testcaseProject="data.testcaseProject"
-                    :projectOrganisation="data.projectOrganisation" />
+                <ProjectGraphs :testcaseProject="Data?.testcaseProject"
+                    :projectOrganisation="Data?.projectOrganisation" />
             </div>
             <div class="row">
                 <ActivityFeed />
-              
+
             </div>
         </div>
 

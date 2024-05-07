@@ -12,9 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get("/", [PageController::class, "openDashboard"])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware("auth")->prefix("/")->group(function () {
     Route::get("dashboard", [PageController::class, "openDashboard"])->name('dashboard');

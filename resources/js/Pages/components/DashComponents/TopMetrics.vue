@@ -21,7 +21,7 @@ export default {
     props: {
         name: String,
         description: String,
-        count: String
+        count: Number
     },
     methods: {
         renderIcon(name) {
