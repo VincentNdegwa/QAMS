@@ -11,7 +11,7 @@
                 {{ newtestCase.title }}
             </div>
             <div class="row">
-                <div class="col-12 col-md-4 col-lg-6 h-100 d-flex flex-column ">
+                <div class="col-12 col-lg-6 h-100 d-flex flex-column ">
                     <div class="text-primary h5">
                         TesCase Details
                     </div>
@@ -58,7 +58,7 @@
                     </div>
 
                 </div>
-                <div class="col-12 col-md-4 col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="row">
                         <div class="text-primary h5 col-6">
                             Test Steps
@@ -188,6 +188,8 @@ export default {
             this.editData = this.testCase.test_steps.find((item) => item.id == id);
             this.closeEditOverlay()
         }, deleteStep(id) {
+            // console.log(id)
+        
 
         }, closeEditOverlay() {
             this.overlay.edit = !this.overlay.edit
