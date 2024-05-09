@@ -1,12 +1,11 @@
 <template>
-    <div class="d-flex w-100 align-items-center justify-content-between position-sticky top-0">
-        <div @click="addStep" class="btn btn-secondary text-light">Add Step</div>
+    <div class="d-flex w-100 position-sticky top-0">
         <div @click="sendTheSteps" class="text-black btn btn-primary">Submit</div>
+        <div @click="addStep" class="btn btn-secondary text-light ms-1 ">Add Step</div>
     </div>
     <div class="steps-display steps-display-100 overflow-y-scroll">
         <!-- step item -->
-        <div v-if="form.test_steps.length > 0"
-            class="row d-flex w-100 flex-row align-items-center step-item mt-2"
+        <div v-if="form.test_steps.length > 0" class="row d-flex w-100 flex-row align-items-center step-item mt-2"
             v-for="(item, index) in form.test_steps" :key="index">
             <div class="col-11">
                 <div class="row">
@@ -130,7 +129,12 @@ export default {
 </script>
 <style>
 .steps-display-100 {
-    height: 90vh !important;
+    max-height: 80vh !important;
+    height: max-content;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .step-item {

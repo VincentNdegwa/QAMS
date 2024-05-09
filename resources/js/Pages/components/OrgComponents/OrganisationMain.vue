@@ -78,7 +78,7 @@ export default {
                 </div>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0 m-1 " v-for="(item, index) in organisations"
+            <div class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0" v-for="(item, index) in organisations"
                 :key="index">
                 <OrganisationCards :organisation="item" />
             </div>

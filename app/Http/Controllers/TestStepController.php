@@ -131,4 +131,32 @@ class TestStepController extends Controller
 
         $testCase->save();
     }
+
+    function Delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "step_id" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "error" => true,
+                "message" => $validator->errors()->first()
+            ]);
+        } else {
+            $id = $request->input("step_id");
+            $deteleted = TestStep::where("id", $id)->delete();
+            if ($deteleted) {
+                return response()->json([
+                    "error" => false,
+                    "message" => "Test Step Deleted",
+                ]);
+            } else {
+                return response()->json([
+                    "error" => true,
+                    "message" => "Failed to delete",
+                ]);
+            }
+        }
+    }
 }

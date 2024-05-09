@@ -70,15 +70,15 @@
                     <div class="test-steps-container mt-1">
                         <div class="mt-1">
 
-                            <div v-for="step in newtestCase?.test_steps" :key="step.id"
+                            <div v-for="(step, index) in newtestCase?.test_steps" :key="step.id"
                                 class="box-shadow test-step-item p-4 mt-1 step-item">
                                 <div class="edit-actions">
                                     <i class="bi bi-pencil me-2 pointer text-green" data-bs-toggle="popover"
-                                        @click="editStep(step.id)" title="Edit"
+                                        @click="editStep(step.id, index)" title="Edit"
                                         data-bs-content="Click to edit this item" data-bs-trigger="hover">
                                     </i>
                                     <i class="bi bi-trash-fill me-2 pointer text-danger" data-bs-toggle="popover"
-                                        @click="deleteStep(step.id)" title="Delete"
+                                        @click="deleteStep(step.id,)" title="Delete"
                                         data-bs-content="Click to delete this item" data-bs-trigger="hover">
                                     </i>
                                 </div>
@@ -114,7 +114,7 @@
             </div>
         </div>
     </MainLayout>
-    <Overlay :open="overlay.open" size="lg" @closeOverlay="openOverlay">
+    <Overlay :open="overlay.open" size="xlg" @closeOverlay="openOverlay">
         <AddSteps :testCase_id="testCase_id" @closeOverlay="openOverlay" />
     </Overlay>
     <Overlay :open="overlay.edit" @closeOverlay="closeEditOverlay" v-if="overlay.edit">
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import axios from "axios"
 import MainLayout from "./Layouts/MainLayout.vue"
 import Overlay from "./Layouts/Overlay.vue"
 import AddSteps from "./components/TestCaseComponents/AddSteps.vue"
@@ -187,9 +188,23 @@ export default {
         }, editStep(id) {
             this.editData = this.testCase.test_steps.find((item) => item.id == id);
             this.closeEditOverlay()
-        }, deleteStep(id) {
-            // console.log(id)
-        
+        }, deleteStep(id, index) {
+            let data = {
+                step_id: id
+            }
+            axios.post("/api/testStep/delete", data).then((res) => {
+                let status = res.data.error
+                if (status) {
+                    alert(res.data.message)
+                } else {
+                    this.newtestCase?.test_steps?.splice(index, 1)
+                    console.log(res.data.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+                alert(err)
+            })
+
 
         }, closeEditOverlay() {
             this.overlay.edit = !this.overlay.edit
