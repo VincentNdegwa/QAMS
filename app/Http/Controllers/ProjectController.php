@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Company;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,18 +23,25 @@ class ProjectController extends Controller
 
         return Inertia::render("Projects", [
             "projects" => $projects,
-            "org_id" => $organisation_id
+            "org_id" => $organisation_id,
+            "user_id" => auth()->id()
         ]);
     }
 
     function create(Request $request)
     {
         try {
+            $user_id = $request->input("user_id");
+            $user = User::where("id", $user_id)->first();
             $project = Project::create([
                 'name' => $request->input("name"),
                 'company_id' => $request->input("company_id")
             ]);
             if ($project) {
+                Activity::create([
+                    "activity_text" => "@" . $user->name . " Created project " . "'" . $project->name . "'",
+                    "project_id" => $project->id,
+                ]);
                 $projectDetails = Project::where("id", $project->id)->with([
                     "company" => function ($query) {
                         $query->select("id", "name");

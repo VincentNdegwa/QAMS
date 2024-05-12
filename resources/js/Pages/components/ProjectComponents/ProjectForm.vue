@@ -28,14 +28,17 @@ import axios from "axios";
 export default {
     props: {
         org_id: {
-            type: Number,
+            type: String,
             default: ""
+        }, user_id: {
+            type: Number
         }
     },
     data() {
         const form = useForm({
             name: "project",
-            company_id: this.org_id
+            company_id: this.org_id,
+            user_id: this.user_id
         });
 
         return {

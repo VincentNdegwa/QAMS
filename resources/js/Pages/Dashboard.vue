@@ -52,7 +52,7 @@ export default {
                     :projectOrganisation="Data?.projectOrganisation" />
             </div>
             <div class="row">
-                <ActivityFeed />
+                <ActivityFeed :activities="Data?.activities" />
 
             </div>
         </div>

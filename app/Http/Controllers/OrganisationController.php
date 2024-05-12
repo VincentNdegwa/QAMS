@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Company;
 use App\Models\Project;
+use App\Models\User;
 use App\Models\UserCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +59,7 @@ class OrganisationController extends Controller
             "user_id" => 'required|exists:users,id'
         ]);
         if (!$validation->fails()) {
+            $user = User::where("id", $request->input("user_id"))->first();
             DB::beginTransaction();
             try {
                 $company = Company::create([
@@ -76,6 +79,10 @@ class OrganisationController extends Controller
                 $projects = Project::with("company")->where("company_id", $company->id)->withCount("testCases")->get();
                 $projectCount = $projects->count();
                 $testCaseCount = $projects->sum("test_cases_count");
+
+                $activity = Activity::create([
+                    "activity_text" => "@" . $user->name . " Created a organisation " . "'" . $company->name . "'",
+                ]);
 
                 DB::commit();
 

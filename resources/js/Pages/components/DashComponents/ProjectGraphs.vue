@@ -35,7 +35,7 @@ export default {
                 grid: {
                     show: false
                 },
-                colors: ['#5C8374'],
+                colors: ['#EC7A08'],
                 stroke: {
                     curve: 'smooth',
                 }
@@ -59,7 +59,7 @@ export default {
                 grid: {
                     show: false
                 },
-                colors: ['#5C8374'],
+                colors: ['#F0AB00'],
                 stroke: {
                     curve: 'smooth',
                 }

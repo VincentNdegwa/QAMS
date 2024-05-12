@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\ExpectedResult;
 use App\Models\TestCase;
 use App\Models\TestStep;
@@ -155,6 +156,9 @@ class TestCaseController extends Controller
         } else {
             DB::beginTransaction();
             try {
+                $user = User::where("id", $request->input("tester_id"))->first();
+                $userName = $user->name;
+              
                 $newTestCase = TestCase::create([
                     "module_name" => $request->input('module'),
                     "title" => $request->input("title"),
@@ -162,6 +166,10 @@ class TestCaseController extends Controller
                     "status" => "Incomplete",
                     "project_id" => $request->input("project_id"),
                     "description" => $request->input("description"),
+                ]);
+                Activity::create([
+                    "activity_text" => "@" . $userName . " Created a new TestCase " . "'". $newTestCase->title. "'",
+                    "project_id" => $request->input("project_id")
                 ]);
                 if (count($request->input("test_steps")) > 0) {
                     foreach ($request->input("test_steps") as $step) {

@@ -9,6 +9,8 @@ export default {
         projects: {
             type: Array
         }, org_id: {
+            type: String
+        }, user_id: {
             type: Number
         }
     },
@@ -36,7 +38,7 @@ export default {
         ProjectForm,
         MainLayout
     }, mounted() {
-        console.log(this.projects)
+        // console.log(this.user_id)
     }
 }
 </script>
@@ -86,7 +88,7 @@ export default {
             </div>
             <div :class="{ 'overlay': !overlay.open, 'overlay open': overlay.open }"
                 aria-labelledby="form_add_project_label" aria-hidden="true">
-                <ProjectForm @close0verlay="openOverlay" :org_id="org_id" @updateData="updateData" />
+                <ProjectForm @close0verlay="openOverlay" :org_id="org_id" @updateData="updateData" :user_id="user_id" />
             </div>
         </div>
     </MainLayout>

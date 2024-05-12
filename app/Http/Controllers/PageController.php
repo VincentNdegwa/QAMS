@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Project;
 use App\Models\UserCompany;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ class PageController extends Controller
             $issueCount = 0;
             $testCaseArray = [];
             $projectArray = [];
+            $activities = Activity::select("activity_text", "created_at")->limit(10)->orderBy("id", "ASC")->get();
 
             foreach ($organisations as $organisation) {
                 $organisationCount++;
@@ -48,7 +50,8 @@ class PageController extends Controller
                     "testCount" => $testCount,
                     "issueCount" => $issueCount,
                     "testcaseProject" => $testCaseArray,
-                    "projectOrganisation" => $projectArray
+                    "projectOrganisation" => $projectArray,
+                    "activities" => $activities
                 ]
             ]);
         } catch (\Throwable $th) {
