@@ -24,4 +24,9 @@ class Company extends Model
     {
         return $this->hasMany(UserCompany::class, "company_id");
     }
+
+    public function usersInCompany()
+    {
+        return $this->hasMany(UserCompany::class, "user_id");
+    }
 }

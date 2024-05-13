@@ -33,7 +33,9 @@ export default {
         OrganisationMain,
         MainLayout
 
-    },
+    }, mounted() {
+        console.log(this.organisations);
+    }
 }
 </script>
 

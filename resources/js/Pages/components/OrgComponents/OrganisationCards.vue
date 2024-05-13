@@ -5,7 +5,7 @@
                 organisation.name }}</a>
             <div class="row mt-4">
                 <small class="card-text text-secondary">Created: {{ organisation.created_at }}</small>
-                <small class="card-text text-secondary">Creator: {{ organisation.created_by }}</small>
+                <small class="card-text text-secondary">Creator: {{ organisation.created_by.users.name }}</small>
             </div>
             <div class="d-flex justify-content-between mt-5 ">
                 <div class="text-center row text-light">

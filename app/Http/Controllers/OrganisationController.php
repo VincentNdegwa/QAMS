@@ -18,31 +18,26 @@ class OrganisationController extends Controller
     {
         $id = auth()->id();
         $data = [];
-        $organisation = Company::with([
-            "users" => function ($query) {
-                $query->where("users.id", auth()->id());
-            },
-            "projects" => function ($query) {
-                $query->withCount("testCases");
-            }
-        ])->get();
+        $organisation = [];
+        $Organisation2 = UserCompany::where("user_id", auth()->id())->with("company")->get();
 
-        foreach ($organisation as $item) {
-            $uC = UserCompany::where("role", "creator")->where("company_id", $item->id)->with("users")->first();
-            $org_user = $uC->users;
+        foreach ($Organisation2 as $item) {
             $org_proj = Project::with("company")->where("company_id", $item->id)->withCount("testCases")->get();
             $org_project_count = $org_proj->count();
             $org_test_count = $org_proj->sum("test_cases_count");
             $org = [
-                "name" => $item->name,
+                "name" => $item->company->name,
                 "id" => $item->id,
-                "created_at" => $item->created_at,
-                "created_by" => $org_user->name,
+                "created_at" => $item->company->created_at,
+                "created_by" => UserCompany::where("role", "creator")->with("users")->where("company_id", $item->company_id)->first(),
                 "project_count" => $org_project_count,
                 "test_case_count" => $org_test_count,
+                "user_id" => $id,
             ];
             $data[] = $org;
         }
+
+
 
 
 
