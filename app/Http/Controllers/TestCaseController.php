@@ -30,6 +30,8 @@ class TestCaseController extends Controller
     public function view($organisation, $project)
     {
         $testCases = TestCase::where("project_id", $project)->with('testSteps')->get();
+        $activities = Activity::select("activity_text", "created_at")->limit(10)->orderBy("id", "ASC")->where("project_id", $project)->get();
+
         $count = 0;
         foreach ($testCases as $testCase) {
             $allStepsComplete = $testCase->testSteps->every(function ($step) {
@@ -60,7 +62,9 @@ class TestCaseController extends Controller
             "data" => [
                 "completedCases" => $completedTestCaseCount,
                 "totalCases" => $totalTestCaseCount,
-                "moduleCount" => $modules
+                "moduleCount" => $modules,
+                "activities" => $activities
+
             ]
         ]);
     }
@@ -84,7 +88,6 @@ class TestCaseController extends Controller
 
     function open($organisation, $project)
     {
-
         $modules = TestCase::where("project_id", $project)
             ->select("module_name", DB::raw("COUNT(*) as test_count"))
             ->groupBy("module_name")
@@ -94,7 +97,7 @@ class TestCaseController extends Controller
         return Inertia::render("TestCase", [
             "moduleCount" => $modules,
             "userId" => auth()->id(),
-            "projectId" => $project
+            "projectId" => $project,
         ]);
     }
 
@@ -158,7 +161,7 @@ class TestCaseController extends Controller
             try {
                 $user = User::where("id", $request->input("tester_id"))->first();
                 $userName = $user->name;
-              
+
                 $newTestCase = TestCase::create([
                     "module_name" => $request->input('module'),
                     "title" => $request->input("title"),
@@ -168,7 +171,7 @@ class TestCaseController extends Controller
                     "description" => $request->input("description"),
                 ]);
                 Activity::create([
-                    "activity_text" => "@" . $userName . " Created a new TestCase " . "'". $newTestCase->title. "'",
+                    "activity_text" => "@" . $userName . " Created a new TestCase " . "'" . $newTestCase->title . "'",
                     "project_id" => $request->input("project_id")
                 ]);
                 if (count($request->input("test_steps")) > 0) {

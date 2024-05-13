@@ -60,26 +60,18 @@
                 </div>
             </div>
             <!--  -->
+
             <div class="col-12 col-lg-8 top-stats box-shadow">
                 <div class="row">
-                    <div class="col-12 text-light ">Activity Feed</div>
+                    <ActivityFeed :activities="data.activities" />
                 </div>
-                <ul class="row list-unstyled overflow-y-scroll h-75 scroll-none mt-5">
-                    <li class="p-1 mt-1 pointer text-secondary box-shadow d-flex flex-row justify-content-between "
-                        style="height: 2.4rem">
-                        <small class="p-0 overflow-x-hidden ellipsis w-75">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo nihil magni asperiores
-                        </small>
-                        <small class="m-0 p-0">23:05pm</small>
-                    </li>
-                </ul>
-
             </div>
         </div>
     </SingleProject>
 </template>
 <script>
 import SingleProject from './Layouts/SingleProject.vue';
+import ActivityFeed from "./components/DashComponents/ActivityFeed.vue"
 export default {
     props: {
         data: {
@@ -90,7 +82,8 @@ export default {
         console.log(this.data)
     },
     components: {
-        SingleProject
+        SingleProject,
+        ActivityFeed
     }, data() {
         return {
             series: [this.data.completedCases, this.data.totalCases - this.data.completedCases],
@@ -103,7 +96,11 @@ export default {
                         }
                     }
                 }],
-                colors: ['#7FFF00', '#EE4B2B'],
+                colors: ['#00FF00', '#FF0000'],
+                stroke: {
+                    color: null
+                }
+
             },
             Baroptions: {
                 chart: {
@@ -125,7 +122,7 @@ export default {
                 xaxis: {
                     categories: this.data?.moduleCount?.map(item => item.module_name)
                 },
-                colors: ['#5C8374'],
+                colors: ['#EC7A08'],
                 stroke: {
                     curve: 'smooth',
                 }
