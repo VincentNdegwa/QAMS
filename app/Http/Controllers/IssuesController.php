@@ -53,7 +53,7 @@ class IssuesController extends Controller
                 "project" => function ($query) {
                     $query->select('name', 'id');
                 }
-            ])->get();
+            ])->paginate(1);
             return Inertia::render("IssuesView", [
                 "issue" => $issues,
                 "project_id" => $project
@@ -96,7 +96,11 @@ class IssuesController extends Controller
             "description" => $request->input("description"),
         ]);
 
-        $updatedIssue = Issue::where("id", $request->input("id"))->with("project")->first();
+        $updatedIssue = Issue::where("id", $request->input("id"))->with([
+            "project" => function ($query) {
+                $query->select('name', 'id');
+            }
+        ])->first();
 
         return response()->json([
             "error" => false,
@@ -106,6 +110,34 @@ class IssuesController extends Controller
     }
     public function searchAndFilterIssue(Request $request)
     {
-        $issues = Issue::where("title", "like", "%" . $request->input("search") . "%")->get();
+        $search = $request->input("search");
+        $filter = $request->input("filter");
+        $page = $request->input("page", 1);
+
+        $query = Issue::query();
+        if ($search) {
+            $query->where("title", "like", "%" . $search . "%")
+                ->orWhere("description", "like", "%" . $search . "%")
+                ->orWhere("id", "like", "%" . $search . "%")
+                ->with([
+                    "project" => function ($query) {
+                        $query->select('name', 'id');
+                    }
+                ]);
+        }
+
+        if ($filter && $filter != 'all') {
+            $query->where("stage", $filter);
+        }
+        $issues = $query->with([
+            "project" => function ($query) {
+                $query->select('name', 'id');
+            }
+        ])->paginate(1, ['*'], $page);
+
+        return response()->json([
+            "error" => false,
+            "data" => $issues
+        ]);
     }
 }

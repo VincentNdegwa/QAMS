@@ -9,8 +9,8 @@ export default {
             type: String,
         },
         issue: {
-            type: Array,
-            default: [],
+            type: Object,
+            default: {},
         },
     },
     data() {
@@ -22,6 +22,7 @@ export default {
             },
             issuesArray: [],
             editIssue: {},
+            current_page: this.issue.current_page,
         };
     },
     components: {
@@ -30,7 +31,8 @@ export default {
         AddNewIssue,
     },
     mounted() {
-        this.issuesArray = this.issue;
+        this.issuesArray = this.issue.data;
+        console.log(this.issue);
     },
     methods: {
         toggleForm() {
@@ -67,15 +69,26 @@ export default {
             let data = {
                 search: this.search_input,
                 filter: this.seacrh_filter,
+                page: this.current_page,
             };
             axios
-                .post("/api/issue/searchAndFilter", data)
+                .post("/api/issues/searchAndFilter", data)
                 .then((res) => {
-                    console.log(res.data);
+                    if (!res.data.error) {
+                        this.issuesArray = res.data.data.data;
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        previousPage() {
+            this.current_page--;
+            this.perfomSearchAndFilter();
+        },
+        nextPage() {
+            this.current_page++;
+            this.perfomSearchAndFilter();
         },
     },
 };
@@ -103,6 +116,7 @@ export default {
         <div class="d-flex justify-content-start mt-2">
             <input
                 v-model="search_input"
+                @input="perfomSearchAndFilter"
                 type="text"
                 class="search-form p-2 bg-dark text-light border-1 border-primary"
                 placeholder="Search by title, description, id..."
@@ -122,17 +136,17 @@ export default {
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in issuesArray" :key="index">
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.project.name }}</td>
-                        <td>{{ item.title }}</td>
-                        <td>{{ item.description }}</td>
-                        <span :class="badgeClass(item.stage)">{{
-                            item.stage
+                        <td>{{ item?.id }}</td>
+                        <td>{{ item?._project?.name }}</td>
+                        <td>{{ item?.title }}</td>
+                        <td>{{ item?.description }}</td>
+                        <span :class="badgeClass(item?.stage)">{{
+                            item?.stage
                         }}</span>
                         <td>
                             <div
                                 class="btn-primary btn-sm text-primary h5 pointer"
-                                @click="openEditForm(item.id)"
+                                @click="openEditForm(item?.id)"
                             >
                                 <i class="bi bi-pencil-square"></i>
                             </div>
@@ -153,11 +167,15 @@ export default {
                 </select>
             </div>
             <div class="pager-nav d-flex align-items-center">
-                <span class="bg-primary p-1 rounded-circle"
+                <span
+                    @click="previousPage"
+                    class="bg-primary p-1 rounded-circle"
                     ><i class="bi bi-chevron-left"></i
                 ></span>
-                <div class="count">1 of 34</div>
-                <span class="bg-primary p-1 rounded-circle"
+                <div class="count">
+                    {{ issue.from }} of {{ issue.last_page }}
+                </div>
+                <span @click="nextPage" class="bg-primary p-1 rounded-circle"
                     ><i class="bi bi-chevron-right"></i
                 ></span>
             </div>
