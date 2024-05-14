@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TestCaseController;
@@ -16,4 +17,10 @@ Route::prefix("/testStep")->group(function () {
     Route::post("/add", [TestStepController::class, "addStep"]);
     Route::post("/update", [TestStepController::class, "updateTestStep"]);
     Route::post("/delete", [TestStepController::class, "Delete"]);
+});
+
+Route::prefix("/issues")->group(function () {
+    Route::post("/add", [IssuesController::class, "addIssue"]);
+    Route::post("/update", [IssuesController::class, "updateIssue"]);
+    Route::post("/searchAndFilter", [IssuesController::class, "searchAndFilterIssue"]);
 });

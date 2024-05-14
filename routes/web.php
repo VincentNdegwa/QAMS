@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
@@ -28,8 +29,8 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/step", function () {
             return Inertia::render("NewTestStep");
         });
-        Route::get("/issues", [TestCaseController::class, "openIssues"]);
         Route::get("view/{id}", [TestCaseController::class, "viewTask"]);
+        Route::get("/issues", [IssuesController::class, "getIssues"]);
     });
 });
 
