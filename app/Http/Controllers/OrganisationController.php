@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Company;
+use App\Models\Issue;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\UserCompany;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -32,6 +34,7 @@ class OrganisationController extends Controller
                 "created_by" => UserCompany::where("role", "creator")->with("users")->where("company_id", $item->company_id)->first(),
                 "project_count" => $org_project_count,
                 "test_case_count" => $org_test_count,
+                "issues_count" => Issue::where("project_id", $item->company_id)->count(),
                 "user_id" => $id,
             ];
             $data[] = $org;
@@ -87,7 +90,7 @@ class OrganisationController extends Controller
                         "name" => $company->name,
                         "id" => $company->id,
                         "created_at" => $company->created_at,
-                        "created_by" => $user->name,
+                        "created_by" => UserCompany::where("role", "creator")->with("users")->where("company_id", $company->id)->first(),
                         "project_count" => $projectCount,
                         "test_case_count" => $testCaseCount,
                     ],
@@ -101,6 +104,61 @@ class OrganisationController extends Controller
             }
         } else {
             return response(["error" => true, "message" => $validation->errors()]);
+        }
+    }
+
+    public function updateOrganisation(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            "id" => "required",
+            "name" => 'required',
+            "existing_name" => 'required',
+            'user_id' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                "error" => true,
+                "message" => $validation->errors()->first()
+            ]);
+        } else {
+
+            try {
+                DB::beginTransaction();
+                $update = Company::find($request->input("id"))->update([
+                    "name" => $request->input("name")
+                ]);
+                if (!$update) {
+                    return response()->json([
+                        "error" => true,
+                        "message" => "Organisation with Id " . $request->input("id") . " not found",
+                    ]);
+                }
+
+                $existing_name = $request->input('existing_name');
+                $user = User::where("id", $request->input("user_id"))->first();
+
+                $newActivity = Activity::create([
+                    "activity_text" => "@" . $user->name . " updated the organisation '" . $existing_name . "' to '" . $request->input("name") . "'",
+                ]);
+
+                DB::commit();
+
+                return response()->json([
+                    "error" => false,
+                    "message" => "Organisation updated",
+                    "data" => [
+                        "id" => $request->input("id"),
+                        "name" => $request->input("name")
+                    ]
+                ]);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json([
+                    "error" => true,
+                    "message" => $th->getMessage()
+                ]);
+            }
         }
     }
 }

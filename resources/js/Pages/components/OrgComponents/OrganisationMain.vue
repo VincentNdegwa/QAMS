@@ -1,8 +1,8 @@
 <script>
-import { Head, router } from '@inertiajs/vue3';
-import OrganisationForm from "./OrganisationForm.vue"
-import OrganisationCards from "./OrganisationCards.vue"
-import OrganisationAddUserForm from "./OrganisationAddUserForm.vue"
+import { Head, router } from "@inertiajs/vue3";
+import OrganisationForm from "./OrganisationForm.vue";
+import OrganisationCards from "./OrganisationCards.vue";
+import OrganisationAddUserForm from "./OrganisationAddUserForm.vue";
 
 export default {
     props: {
@@ -10,38 +10,56 @@ export default {
             type: Number,
         },
         organisations: {
-            type: Array
-        }
+            type: Array,
+        },
     },
     data() {
         return {
             nav: false,
             overlay: {
-                show: false
-            }
-        }
+                show: false,
+            },
+            OrganisationToUpdate: {},
+            organisationArray: this.organisations || [],
+        };
     },
     methods: {
         updateData(data) {
-            this.organisations.push(data)
+            this.organisations.push(data);
         },
         openOverlay() {
             this.overlay.show = !this.overlay.show;
-        }
+        },
+        updateOrganisation(data) {
+            this.OrganisationToUpdate = data;
+            this.openOverlay();
+        },
+        updateData(data) {
+            let id = data.id;
+            let name = data.name;
+            let item = this.organisationArray.find((item) => item.id === id);
+            if (item) {
+                item.name = name;
+            } else {
+                console.log(`Item with id ${id} not found`);
+            }
+        },
     },
     components: {
         Head,
         OrganisationForm,
         OrganisationCards,
-        OrganisationAddUserForm
+        OrganisationAddUserForm,
     },
-}
+};
 </script>
 
 <template>
     <div>
-        <div class="d-flex flex-column position-sticky top-0 bg-dark top-header">
-            <div class="d-flex align-items-end justify-content-end  mt-5 w-100">
+        <div
+            class="d-flex flex-column position-sticky top-0 bg-dark top-header"
+        >
+            <div class="d-flex align-items-end justify-content-end mt-5 w-100">
                 <div @click="openOverlay" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i>
                     Create Organisation
@@ -50,44 +68,71 @@ export default {
             <div class="row">
                 <div class="col-12 col-md-6 mt-1">
                     <form class="input-group">
-                        <input type="text" class="form-control bg-secondary text-light border-0"
-                            placeholder="Search by organisation name">
-                        <button class="btn btn-primary" type="submit">Search</button>
+                        <input
+                            type="text"
+                            class="form-control bg-secondary text-light border-0"
+                            placeholder="Search by organisation name"
+                        />
+                        <button class="btn btn-primary" type="submit">
+                            Search
+                        </button>
                     </form>
                 </div>
-                
             </div>
         </div>
         <div class="row mt-3 ms-1">
-            <div class="col-12 col-md-6 col-lg-4 ">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card">
                     <div class="card-body p-4">
-                        <img src="images/team.png" class="w-100 h-75" alt="">
-                        <div class="text-center text-primary" style="cursor: pointer;" @click="openOverlay"><i
-                                class="bi bi-plus-lg"></i> Add
-                            Project</div>
+                        <img src="images/team.png" class="w-100 h-75" alt="" />
+                        <div
+                            class="text-center text-primary"
+                            style="cursor: pointer"
+                            @click="openOverlay"
+                        >
+                            <i class="bi bi-plus-lg"></i> Add Project
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0" v-for="(item, index) in organisations"
-                :key="index">
-                <OrganisationCards :organisation="item" />
+            <div
+                class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0"
+                v-for="(item, index) in organisationArray"
+                :key="index"
+            >
+                <OrganisationCards
+                    :organisation="item"
+                    @updateOrganisation="updateOrganisation"
+                />
             </div>
         </div>
 
-        <div :class="{ 'overlay': !overlay.show, 'overlay open': overlay.show }" id="form_org_modal">
-            <OrganisationForm :user_id="user_id" @new_org="updateData" @removeOverlay="openOverlay" />
+        <div
+            :class="{ overlay: !overlay.show, 'overlay open': overlay.show }"
+            id="form_org_modal"
+        >
+            <OrganisationForm
+                :user_id="user_id"
+                @new_org="updateData"
+                @removeOverlay="openOverlay"
+                :OrganisationToUpdate="OrganisationToUpdate"
+                @updateData="updateData"
+            />
         </div>
-        <div class="modal fade" id="form_add_user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div
+            class="modal fade"
+            id="form_add_user"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
             <OrganisationAddUserForm />
         </div>
     </div>
 </template>
 
 <style>
-
-
 .top-header {
     z-index: 100 !important;
 }

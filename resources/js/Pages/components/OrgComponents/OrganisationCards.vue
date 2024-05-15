@@ -8,7 +8,10 @@
             >
             <div class="row mt-4">
                 <small class="card-text text-secondary"
-                    >Created: {{ organisation.created_at }}</small
+                    >Created:
+                    {{
+                        new Date(organisation.created_at).toLocaleDateString()
+                    }}</small
                 >
                 <small class="card-text text-secondary"
                     >Creator: {{ organisation.created_by.users.name }}</small
@@ -27,7 +30,7 @@
                 </div>
                 <div class="text-center row text-light">
                     <div class="col-12">Issues</div>
-                    <span class="col-12">30</span>
+                    <span class="col-12">{{ organisation.issues_count }}</span>
                 </div>
             </div>
         </div>
@@ -46,6 +49,7 @@
                 >
                     <div class="d-flex align-items-center">
                         <i
+                            @click="editOrganisation(organisation)"
                             class="bi bi-pencil me-2 h5 pointer text-primary"
                             data-bs-toggle="popover"
                             title="Edit"
@@ -61,7 +65,7 @@
                             data-bs-trigger="hover"
                         >
                         </i>
-                        <a :href="getUrl(item)">
+                        <a :href="getUrl()">
                             <i
                                 class="bi bi-arrow-right-circle text-primary pointer h5"
                                 data-bs-toggle="popover"
@@ -87,6 +91,9 @@ export default {
     methods: {
         getUrl() {
             return "organisation/" + this.organisation.id + "/project";
+        },
+        editOrganisation(data) {
+            this.$emit("updateOrganisation", data);
         },
     },
 };

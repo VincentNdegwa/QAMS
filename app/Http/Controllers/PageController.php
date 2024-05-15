@@ -20,7 +20,7 @@ class PageController extends Controller
             $issueCount = 0;
             $testCaseArray = [];
             $projectArray = [];
-            $activities = Activity::select("activity_text", "created_at")->limit(10)->orderBy("id", "ASC")->get();
+            $activities = Activity::select("activity_text", "created_at")->limit(10)->orderBy("created_at", "DESC")->get();
 
             foreach ($organisations as $organisation) {
                 $organisationCount++;
