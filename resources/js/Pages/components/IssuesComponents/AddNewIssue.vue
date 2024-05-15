@@ -71,6 +71,7 @@ export default {
                 title: "",
                 description: "",
                 stage: "opened",
+                project_id: this.project_id,
             },
         };
     },
@@ -99,6 +100,12 @@ export default {
                 .then((res) => {
                     if (!res.data.error) {
                         this.$emit("updateIssue", res.data.data);
+                        this.formData = {
+                            title: "",
+                            description: "",
+                            stage: "opened",
+                            project_id: this.project_id,
+                        };
                     } else {
                         alert(res.data.message);
                     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\ExpectedResult;
+use App\Models\Issue;
 use App\Models\TestCase;
 use App\Models\TestStep;
 use App\Models\User;
@@ -31,6 +32,7 @@ class TestCaseController extends Controller
     {
         $testCases = TestCase::where("project_id", $project)->with('testSteps')->get();
         $activities = Activity::select("activity_text", "created_at")->limit(10)->orderBy("id", "ASC")->where("project_id", $project)->get();
+        $issuesCount = Issue::where("project_id", $project)->count();
 
         $count = 0;
         foreach ($testCases as $testCase) {
@@ -63,8 +65,8 @@ class TestCaseController extends Controller
                 "completedCases" => $completedTestCaseCount,
                 "totalCases" => $totalTestCaseCount,
                 "moduleCount" => $modules,
-                "activities" => $activities
-
+                "activities" => $activities,
+                "issuesCount" => $issuesCount
             ]
         ]);
     }

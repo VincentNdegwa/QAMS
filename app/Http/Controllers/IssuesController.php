@@ -53,7 +53,7 @@ class IssuesController extends Controller
                 "project" => function ($query) {
                     $query->select('name', 'id');
                 }
-            ])->paginate(1);
+            ])->paginate(10);
             return Inertia::render("IssuesView", [
                 "issue" => $issues,
                 "project_id" => $project
@@ -113,6 +113,7 @@ class IssuesController extends Controller
         $search = $request->input("search");
         $filter = $request->input("filter");
         $page = $request->input("page", 1);
+        $rows_per_page = $request->input("rows_per_page", 10);
 
         $query = Issue::query();
         if ($search) {
@@ -129,11 +130,12 @@ class IssuesController extends Controller
         if ($filter && $filter != 'all') {
             $query->where("stage", $filter);
         }
+
         $issues = $query->with([
             "project" => function ($query) {
                 $query->select('name', 'id');
             }
-        ])->paginate(1, ['*'], $page);
+        ])->paginate($rows_per_page, ['*'], 'page', $page);
 
         return response()->json([
             "error" => false,

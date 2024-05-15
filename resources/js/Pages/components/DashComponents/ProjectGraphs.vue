@@ -1,12 +1,22 @@
 <template>
     <div class="row">
         <div class="col-12 col-lg-6">
-            <div class="p text-center text-primary ">Testcases in projects</div>
-            <apexchart type="bar" :options="TestCasechartOptions" :series="TestCasechartSeries" />
+            <div class="p text-center text-primary">Testcases in projects</div>
+            <apexchart
+                type="bar"
+                :options="TestCasechartOptions"
+                :series="TestCasechartSeries"
+            />
         </div>
         <div class="col-12 col-lg-6">
-            <div class="p text-center text-primary ">Projects in organisation</div>
-            <apexchart type="area" :options="ProjectchartOptions" :series="ProjectchartSeries" />
+            <div class="p text-center text-primary">
+                Projects in organisation
+            </div>
+            <apexchart
+                type="area"
+                :options="ProjectchartOptions"
+                :series="ProjectchartSeries"
+            />
         </div>
     </div>
 </template>
@@ -14,63 +24,68 @@
 export default {
     props: {
         testcaseProject: {
-            type: Array
+            type: Array,
         },
         projectOrganisation: {
-            type: Array
+            type: Array,
+            default: [],
         },
     },
     data() {
         return {
             ProjectchartOptions: {
                 chart: {
-                    id: 'basic-line-chart',
+                    id: "basic-line-chart",
                     toolbar: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 },
                 xaxis: {
-                    categories: this.projectOrganisation.map(item => item.name),
+                    categories: this.projectOrganisation?.map(
+                        (item) => item.name
+                    ),
                 },
                 grid: {
-                    show: false
+                    show: false,
                 },
-                colors: ['#EC7A08'],
+                colors: ["#EC7A08"],
                 stroke: {
-                    curve: 'smooth',
-                }
+                    curve: "smooth",
+                },
             },
             ProjectchartSeries: [
                 {
-                    name: 'Projects',
-                    data: this.projectOrganisation.map(item => item.project_count),
+                    name: "Projects",
+                    data: this.projectOrganisation?.map(
+                        (item) => item.project_count
+                    ),
                 },
             ],
             TestCasechartOptions: {
                 chart: {
-                    id: 'basic-line-chart',
+                    id: "basic-line-chart",
                     toolbar: {
-                        show: false
-                    }
+                        show: false,
+                    },
                 },
                 xaxis: {
-                    categories: this.testcaseProject.map(item => item.name),
+                    categories: this.testcaseProject?.map((item) => item.name),
                 },
                 grid: {
-                    show: false
+                    show: false,
                 },
-                colors: ['#F0AB00'],
+                colors: ["#F0AB00"],
                 stroke: {
-                    curve: 'smooth',
-                }
+                    curve: "smooth",
+                },
             },
             TestCasechartSeries: [
                 {
-                    name: 'TestCases',
-                    data: this.testcaseProject.map(item => item.test_count),
+                    name: "TestCases",
+                    data: this.testcaseProject?.map((item) => item.test_count),
                 },
-            ]
-        }
-    }
-}
+            ],
+        };
+    },
+};
 </script>

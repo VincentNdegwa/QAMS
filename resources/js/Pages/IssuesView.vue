@@ -22,7 +22,10 @@ export default {
             },
             issuesArray: [],
             editIssue: {},
+            rows_per_page: 10,
             current_page: this.issue.current_page,
+            startPage: this.issue.from,
+            endPage: this.issue.last_page,
         };
     },
     components: {
@@ -70,7 +73,9 @@ export default {
                 search: this.search_input,
                 filter: this.seacrh_filter,
                 page: this.current_page,
+                rows_per_page: this.rows_per_page,
             };
+            console.log(data);
             axios
                 .post("/api/issues/searchAndFilter", data)
                 .then((res) => {
@@ -85,10 +90,12 @@ export default {
         previousPage() {
             this.current_page--;
             this.perfomSearchAndFilter();
+            this.startPage = this.current_page;
         },
         nextPage() {
             this.current_page++;
             this.perfomSearchAndFilter();
+            this.startPage = this.current_page;
         },
     },
 };
@@ -137,7 +144,7 @@ export default {
                 <tbody>
                     <tr v-for="(item, index) in issuesArray" :key="index">
                         <td>{{ item?.id }}</td>
-                        <td>{{ item?._project?.name }}</td>
+                        <td>{{ item?.project?.name }}</td>
                         <td>{{ item?.title }}</td>
                         <td>{{ item?.description }}</td>
                         <span :class="badgeClass(item?.stage)">{{
@@ -160,24 +167,31 @@ export default {
         >
             <div class="row-change">
                 <span class="text-light"> Rows per page </span>
-                <select class="form bg-dark text-light">
+                <select @change="perfomSearchAndFilter" class="form bg-dark text-light" v-model="rows_per_page">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
                     <option value="75">75</option>
                 </select>
             </div>
-            <div class="pager-nav d-flex align-items-center">
-                <span
+            <div class="pager-nav d-flex align-items-center g-2">
+                <button
+                    :disabled="startPage === 1"
                     @click="previousPage"
                     class="bg-primary p-1 rounded-circle"
-                    ><i class="bi bi-chevron-left"></i
-                ></span>
-                <div class="count">
-                    {{ issue.from }} of {{ issue.last_page }}
-                </div>
-                <span @click="nextPage" class="bg-primary p-1 rounded-circle"
-                    ><i class="bi bi-chevron-right"></i
-                ></span>
+                >
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div class="count">{{ startPage }} of {{ endPage }}</div>
+                <button
+                    @click="nextPage"
+                    :disabled="startPage == issue.last_page"
+                    class="bg-primary p-1 rounded-circle"
+                >
+                    <i class="bi bi-chevron-right"></i>
+                </button>
             </div>
         </div>
         <Overlay :open="overlay.open" @closeOverlay="toggleForm">
@@ -243,5 +257,15 @@ option {
 
 table {
     height: max-content;
+}
+.rounded-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 0;
+    &:disabled {
+        background-color: gray !important;
+        cursor: not-allowed;
+    }
 }
 </style>
