@@ -55,15 +55,7 @@ export default {
                         <button class="btn btn-primary" type="submit">Search</button>
                     </form>
                 </div>
-                <div class="col-12 col-md-6 mt-1">
-                    <select class="form-select bg-secondary text-light border-0">
-                        <option value="">Filter by...</option>
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                        <!-- Add more options as needed -->
-                    </select>
-                </div>
+                
             </div>
         </div>
         <div class="row mt-3 ms-1">
