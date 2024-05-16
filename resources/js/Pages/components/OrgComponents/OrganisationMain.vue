@@ -3,6 +3,8 @@ import { Head, router } from "@inertiajs/vue3";
 import OrganisationForm from "./OrganisationForm.vue";
 import OrganisationCards from "./OrganisationCards.vue";
 import OrganisationAddUserForm from "./OrganisationAddUserForm.vue";
+import ConfirmOverlay from "../ConfirmOverlay.vue";
+import axios from "axios";
 
 export default {
     props: {
@@ -21,6 +23,10 @@ export default {
             },
             OrganisationToUpdate: {},
             organisationArray: this.organisations || [],
+            organisationSearch: "",
+            selectedOrganisation: "",
+            openConfirm: false,
+            confirmationMessage: "",
         };
     },
     methods: {
@@ -44,12 +50,59 @@ export default {
                 console.log(`Item with id ${id} not found`);
             }
         },
+        handleSearch() {
+            if (this.organisationSearch.trim()) {
+                axios
+                    .post("/api/organisation/search", {
+                        search: this.organisationSearch,
+                        user_id: this.user_id,
+                    })
+                    .then((res) => {
+                        if (!res.data.error) {
+                            this.organisationArray = res.data.data;
+                            // console.log(res.data.data);
+                        } else {
+                            alert(res.data.message);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        },
+        deleteOrganisation(data) {
+            this.openConfirm = true;
+            this.confirmationMessage =
+                "Are you sure you want to delete this organisation? <br> This action will delete all the data related to the organisation.";
+            this.selectedOrganisation = data.id;
+        },
+        handleDelete(status) {
+            this.openConfirm = false;
+            if (status) {
+                axios
+                    .post("/api/organisation/delete", {
+                        id: this.selectedOrganisation,
+                        user_id: this.user_id,
+                    })
+                    .then((res) => {
+                        if (!res.data.error) {
+                            console.log(res.data);
+                        } else {
+                            alert(res.data.message);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        },
     },
     components: {
         Head,
         OrganisationForm,
         OrganisationCards,
         OrganisationAddUserForm,
+        ConfirmOverlay,
     },
 };
 </script>
@@ -72,6 +125,8 @@ export default {
                             type="text"
                             class="form-control bg-secondary text-light border-0"
                             placeholder="Search by organisation name"
+                            v-model="organisationSearch"
+                            @input="handleSearch"
                         />
                         <button class="btn btn-primary" type="submit">
                             Search
@@ -104,6 +159,7 @@ export default {
                 <OrganisationCards
                     :organisation="item"
                     @updateOrganisation="updateOrganisation"
+                    @deleteOrganisation="deleteOrganisation"
                 />
             </div>
         </div>
@@ -130,6 +186,12 @@ export default {
             <OrganisationAddUserForm />
         </div>
     </div>
+    <ConfirmOverlay
+        v-if="openConfirm"
+        :openOverlay="openConfirm"
+        :message="confirmationMessage"
+        @confirmed="handleDelete"
+    />
 </template>
 
 <style>

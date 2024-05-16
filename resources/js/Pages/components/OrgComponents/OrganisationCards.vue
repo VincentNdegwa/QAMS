@@ -63,6 +63,7 @@
                             title="Delete"
                             data-bs-content="Click to delete this item"
                             data-bs-trigger="hover"
+                            @click="deleteOrganisation(organisation)"
                         >
                         </i>
                         <a :href="getUrl()">
@@ -94,6 +95,9 @@ export default {
         },
         editOrganisation(data) {
             this.$emit("updateOrganisation", data);
+        },
+        deleteOrganisation(data) {
+            this.$emit("deleteOrganisation", data);
         },
     },
 };

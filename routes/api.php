@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix("organisation")->group(function () {
     Route::post("/add", [OrganisationController::class, "create"])->name("organisation.create");
     Route::post("/update", [OrganisationController::class, "updateOrganisation"]);
+    Route::post("/search", [OrganisationController::class, "searchOrganisation"]);
+    Route::post("/delete", [OrganisationController::class, "deleteOrganisation"]);
 });
 Route::post("project/add", [ProjectController::class, "create"])->name("project.create");
 Route::prefix("/testCase")->group(function () {

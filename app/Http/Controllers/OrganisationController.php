@@ -161,4 +161,98 @@ class OrganisationController extends Controller
             }
         }
     }
+
+    public function searchOrganisation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "user_id" => 'required',
+            "search" => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "error" => true,
+                "message" => $validator->errors()->first()
+            ]);
+        } else {
+            try {
+                $search = $request->input("search");
+                $id = $request->input("user_id");
+                $data = [];
+
+                $Organisations = Company::where("name", 'LIKE', "%" . $search . "%")->with([
+                    'userCompany' => function ($query) use ($id) {
+                        $query->where('user_id', $id);
+                    }
+                ])->with('projects')->get();
+                foreach ($Organisations as $organisation) {
+                    $projectCount = $organisation->projects->count();
+                    $org_test_count = $organisation->projects()->withCount("testCases")->get();
+                    $issues_count = 0;
+                    foreach ($organisation->projects as $project) {
+                        $issues_count += $project->issues->count();
+                    }
+
+                    $org = [
+                        "name" => $organisation->name,
+                        "id" => $organisation->id,
+                        "created_at" => $organisation->created_at,
+                        "created_by" => UserCompany::where("role", "creator")->with("users")->where("company_id", $organisation->id)->first(),
+                        "project_count" => $projectCount,
+                        "test_case_count" => $org_test_count->sum('test_cases_count'),
+                        "issues_count" => $issues_count,
+                        "user_id" => $id,
+                    ];
+                    $data[] = $org;
+                }
+
+                return response()->json([
+                    "error" => false,
+                    "data" => $data
+                ]);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    "error" => true,
+                    "message" => $th->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public function deleteOrganisation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "id" => 'required',
+            "user_id" => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "error" => true,
+                "message" => $validator->errors()->first()
+            ]);
+        } else {
+            $id = $request->input("id");
+            $user_id = $request->input("user_id");
+            $user = User::where("id", $user_id)->first();
+            try {
+                $organisation = Company::where("id", $id)->first();
+                $organisationName = $organisation->name;
+                $organisation->delete();
+
+                Activity::create([
+                    "activity_text" => "@" . $user->name . "Deleted organisation" . $organisationName,
+                ]);
+                return response()->json([
+                    "error" => false,
+                    "message" => "Organisation deleted successfully"
+                ]);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    "error" => true,
+                    "message" => $th->getMessage()
+                ]);
+            }
+        }
+    }
 }

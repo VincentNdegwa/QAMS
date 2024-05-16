@@ -4,7 +4,7 @@
             <div
                 class="d-flex flex-column align-items-center justify-content-center"
             >
-                <h3 v-html="message"></h3>
+                <span class="text-center" v-html="message"></span>
 
                 <img
                     class="w-25 h-25"
@@ -45,7 +45,7 @@ export default {
         },
         openOverlay: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
     data() {
