@@ -142,4 +142,21 @@ class IssuesController extends Controller
             "data" => $issues
         ]);
     }
+
+    public function deleteIssue(Request $request)
+    {
+        try {
+            $issue = Issue::where("id", $request->input("id"))->first();
+            $issue->delete();
+            return response()->json([
+                "error" => false,
+                "message" => "Issue deleted"
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => true,
+                "message" => $th->getMessage()
+            ]);
+        }
+    }
 }

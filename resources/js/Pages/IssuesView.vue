@@ -2,6 +2,7 @@
 import SingleProject from "./Layouts/SingleProject.vue";
 import Overlay from "./Layouts/Overlay.vue";
 import AddNewIssue from "./components/IssuesComponents/AddNewIssue.vue";
+import ConfirmOverlay from "./components/ConfirmOverlay.vue";
 import axios from "axios";
 export default {
     props: {
@@ -26,16 +27,19 @@ export default {
             current_page: this.issue.current_page,
             startPage: this.issue.from,
             endPage: this.issue.last_page,
+            startConfrim: false,
+            message: "",
+            selectedIssueId: "",
         };
     },
     components: {
         SingleProject,
         Overlay,
         AddNewIssue,
+        ConfirmOverlay,
     },
     mounted() {
         this.issuesArray = this.issue.data;
-        console.log(this.issue);
     },
     methods: {
         toggleForm() {
@@ -97,6 +101,36 @@ export default {
             this.perfomSearchAndFilter();
             this.startPage = this.current_page;
         },
+        deleteIssue(id) {
+            this.startConfrim = true;
+            this.message =
+                "Are you sure you want to delete this issue id" +
+                id +
+                "?<br> <span class='text-danger text-center'>This action cannot be undone.</span>";
+            this.selectedIssueId = id;
+        },
+        handleDelete(result) {
+            this.startConfrim = false;
+            if (result) {
+                axios
+                    .post("/api/issues/delete", {
+                        id: this.selectedIssueId,
+                    })
+                    .then((res) => {
+                        if (res.data.error) {
+                            alert(res.data.message);
+                        } else {
+                            let index = this.issuesArray.findIndex(
+                                (item) => item.id === this.selectedIssueId
+                            );
+                            this.issuesArray.splice(index, 1);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        },
     },
 };
 </script>
@@ -150,12 +184,20 @@ export default {
                         <span :class="badgeClass(item?.stage)">{{
                             item?.stage
                         }}</span>
-                        <td>
-                            <div
-                                class="btn-primary btn-sm text-primary h5 pointer"
-                                @click="openEditForm(item?.id)"
-                            >
-                                <i class="bi bi-pencil-square"></i>
+                        <td class="">
+                            <div class="d-flex row">
+                                <div
+                                    class="btn-primary btn-sm text-primary h6 pointer col-4"
+                                    @click="openEditForm(item?.id)"
+                                >
+                                    <i class="bi bi-pencil-square"></i>
+                                </div>
+                                <div
+                                    class="btn-primary btn-sm text-primary h6 pointer col-4"
+                                    @click="deleteIssue(item?.id)"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -167,7 +209,11 @@ export default {
         >
             <div class="row-change">
                 <span class="text-light"> Rows per page </span>
-                <select @change="perfomSearchAndFilter" class="form bg-dark text-light" v-model="rows_per_page">
+                <select
+                    @change="perfomSearchAndFilter"
+                    class="form bg-dark text-light"
+                    v-model="rows_per_page"
+                >
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -203,6 +249,12 @@ export default {
                 :data="editIssue"
             />
         </Overlay>
+        <ConfirmOverlay
+            v-if="startConfrim"
+            :message="message"
+            :openOverlay="startConfrim"
+            @confirmed="handleDelete"
+        />
     </SingleProject>
 </template>
 <style>

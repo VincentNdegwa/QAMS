@@ -26,4 +26,5 @@ Route::prefix("/issues")->group(function () {
     Route::post("/add", [IssuesController::class, "addIssue"]);
     Route::post("/update", [IssuesController::class, "updateIssue"]);
     Route::post("/searchAndFilter", [IssuesController::class, "searchAndFilterIssue"]);
+    Route::post("/delete", [IssuesController::class, "deleteIssue"]);
 });
