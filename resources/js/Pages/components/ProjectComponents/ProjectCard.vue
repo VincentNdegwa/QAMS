@@ -4,7 +4,7 @@
         v-for="(item, index) in projects"
         :key="index"
     >
-        <div class="card">
+        <div class="card mt-1">
             <div class="card-body text-secondary">
                 <h5 class="card-title text-primary text-capitalize">
                     {{ item.name }}

@@ -1,47 +1,91 @@
 <script>
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router } from "@inertiajs/vue3";
 export default {
     data() {
         return {
-            nav: false
-        }
+            nav: false,
+            isDarkMode: false,
+        };
     },
     methods: {
         logout() {
-            router.post(route("logout"))
+            router.post(route("logout"));
         },
         openNav() {
-            this.nav = !this.nav
-            const navBar = document.querySelector('.nav_bar');
-            navBar.classList.toggle('open');
+            this.nav = !this.nav;
+            const navBar = document.querySelector(".nav_bar");
+            navBar.classList.toggle("open");
+        },
+        toggleTheme() {
+            this.isDarkMode = !this.isDarkMode;
+            document.documentElement.classList.toggle(
+                "dark-theme",
+                this.isDarkMode
+            );
+            document.documentElement.classList.toggle(
+                "light-theme",
+                !this.isDarkMode
+            );
+            localStorage.setItem("theme", this.isDarkMode ? "dark" : "light");
+        },
+    },
+    mounted() {
+        const savedTheme = localStorage.getItem("theme");
+        this.isDarkMode = savedTheme === "dark";
+        document.documentElement.classList.toggle(
+            "dark-theme",
+            this.isDarkMode
+        );
+        document.documentElement.classList.toggle(
+            "light-theme",
+            !this.isDarkMode
+        );
+        if (savedTheme) {
+            document.documentElement.classList.toggle(
+                "dark-theme",
+                savedTheme === "dark"
+            );
+            document.documentElement.classList.toggle(
+                "light-theme",
+                savedTheme === "light"
+            );
         }
-    }, components: {
-        Head
-    }
-}
+    },
+    components: {
+        Head,
+    },
+};
 </script>
 
 <template>
-
-
     <nav class="nav_holder bg-dark position-sticky top-0">
         <div class="nav_bar">
             <div class="col d-flex flex-column align-items-center">
                 <!-- Profile Picture -->
-                <img src="/images/testing.png" alt="Profile Picture" class="rounded-circle my-3"
-                    style="width: 80px; height: 80px;">
+                <img
+                    src="/images/testing.png"
+                    alt="Profile Picture"
+                    class="rounded-circle my-3"
+                    style="width: 80px; height: 80px"
+                />
 
                 <!-- User Name -->
                 <div class="text-primary mb-4">John Doe</div>
 
                 <!-- Navigation Sections -->
                 <nav class="nav">
-                    <a class="nav-link text-secondary w-100 mt-3" href="/dashboard">
+                    <a
+                        class="nav-link text-secondary w-100 mt-3"
+                        href="/dashboard"
+                    >
                         <i class="bi bi-house-door-fill text-primary me-2"></i>
                         Dashboard
                     </a>
 
-                    <a class="nav-link text-secondary w-100 mt-3" href="/organisation">
+                    <a
+                        class="nav-link text-secondary w-100 mt-3"
+                        href="/organisation"
+                    >
                         <i class="bi bi-building-fill text-primary me-2"></i>
                         Organisation
                     </a>
@@ -50,25 +94,36 @@ export default {
                         Projects
                     </a>
                     <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-person-badge-fill text-primary  me-2"></i>
+                        <i
+                            class="bi bi-person-badge-fill text-primary me-2"
+                        ></i>
                         Profile
                     </a>
-                    <a @click="logout" class="nav-link text-secondary w-100 mt-3">
-                        <i class="bi bi-box-arrow-left text-primary  me-2"></i>
+                    <a
+                        @click="toggleTheme"
+                        class="nav-link text-secondary w-100 mt-3"
+                    >
+                        Dark Mode
+                    </a>
+                    <a
+                        @click="logout"
+                        class="nav-link text-secondary w-100 mt-3"
+                    >
+                        <i class="bi bi-box-arrow-left text-primary me-2"></i>
                         Logout
                     </a>
                 </nav>
             </div>
         </div>
 
-        <div class="d-md-none position-fixed start-0 align-items-center text-primary bg-dark medium_nav">
+        <div
+            class="d-md-none position-fixed start-0 align-items-center text-primary bg-dark medium_nav"
+        >
             <div class="ms-auto text-end">
                 <i @click="openNav" class="bi bi-list h1"></i>
             </div>
         </div>
     </nav>
-
-
 </template>
 
 <style>
@@ -99,8 +154,6 @@ export default {
     width: var(--nav_size);
     position: fixed !important;
 }
-
-
 
 @media (max-width: 768px) {
     .nav_bar {

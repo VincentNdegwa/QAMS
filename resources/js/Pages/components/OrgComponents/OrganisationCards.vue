@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card mt-1">
         <div class="card-body">
             <a
                 :href="getUrl()"
