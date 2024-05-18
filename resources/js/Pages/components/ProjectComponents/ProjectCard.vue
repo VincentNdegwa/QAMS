@@ -51,6 +51,7 @@
                                 title="Edit"
                                 data-bs-content="Click to edit this project"
                                 data-bs-trigger="hover"
+                                @click="handleEdit(item.id)"
                             ></i>
                             <i
                                 class="bi bi-trash-fill me-2 h5 pointer text-primary"
@@ -58,6 +59,7 @@
                                 title="Delete"
                                 data-bs-content="Click to delete this project"
                                 data-bs-trigger="hover"
+                                @click="handleDelete(item.id)"
                             ></i>
                         </div>
                     </div>
@@ -74,9 +76,20 @@ export default {
             type: Array,
         },
     },
+    data() {
+        return {
+            openEdit: true,
+        };
+    },
     methods: {
         getUrl(item) {
             return `project/${item.id}/open`;
+        },
+        handleDelete(id) {
+            this.$emit("handleDelete", id);
+        },
+        handleEdit(id) {
+            this.$emit("handleEdit", id);
         },
     },
 };

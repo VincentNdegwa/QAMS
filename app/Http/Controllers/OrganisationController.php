@@ -241,7 +241,7 @@ class OrganisationController extends Controller
                 $organisation->delete();
 
                 Activity::create([
-                    "activity_text" => "@" . $user->name . "Deleted organisation" . $organisationName,
+                    "activity_text" => "@" . $user->name . " Deleted organisation " . $organisationName,
                 ]);
                 return response()->json([
                     "error" => false,
