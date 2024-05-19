@@ -4,6 +4,7 @@ import SideNav from "./components/SideNav.vue";
 import ProjectCard from "./components/ProjectComponents/ProjectCard.vue";
 import ProjectForm from "./components/ProjectComponents/ProjectForm.vue";
 import MainLayout from "./Layouts/MainLayout.vue";
+import ConfirmOverlay from "./components/ConfirmOverlay.vue";
 export default {
     props: {
         projects: {
@@ -23,6 +24,8 @@ export default {
                 open: false,
             },
             selectedProject: {},
+            openConfirm: false,
+            confrimMessage: "",
         };
     },
     methods: {
@@ -35,6 +38,8 @@ export default {
         handleDelete(id) {
             let project = this.projects.find((item) => item.id === id);
             this.selectedProject = project;
+            this.confrimMessage = `Are you sure you want to delete ${project.name}?`;
+            this.openConfirm = true;
         },
         handleEdit(id) {
             let project = this.projects.find((item) => item.id === id);
@@ -44,6 +49,23 @@ export default {
         editData(data) {
             console.log(data);
         },
+        completeDelete(status) {
+            if (status) {
+                let data = {
+                    id: this.selectedProject.id,
+                    user_id: this.user_id,
+                };
+                console.log("start delete");
+                axios.post("/api/project/delete", data).then((res) => {
+                    if (!res.data.error) {
+                        console.log(res.data);
+                    } else {
+                        console.log(res.data);
+                    }
+                });
+            }
+            this.openConfirm = false;
+        },
     },
     components: {
         SideNav,
@@ -51,6 +73,7 @@ export default {
         ProjectCard,
         ProjectForm,
         MainLayout,
+        ConfirmOverlay,
     },
     mounted() {
         // console.log(this.user_id)
@@ -126,6 +149,11 @@ export default {
                 />
             </div>
         </div>
+        <ConfirmOverlay
+            :openOverlay="openConfirm"
+            :message="confrimMessage"
+            @confirmed="completeDelete"
+        />
     </MainLayout>
 </template>
 

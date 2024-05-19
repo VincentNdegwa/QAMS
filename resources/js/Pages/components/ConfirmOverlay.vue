@@ -1,6 +1,6 @@
 <template>
-    <OverLay :open="isOpen" @closeOverlay="cancel">
-        <div class="bg-dark" v-if="isOpen">
+    <OverLay :open="openOverlay" @closeOverlay="cancel">
+        <div class="bg-dark" v-if="openOverlay">
             <div
                 class="d-flex flex-column align-items-center justify-content-center"
             >
@@ -49,24 +49,17 @@ export default {
         },
     },
     data() {
-        return {
-            isOpen: this.openOverlay,
-        };
+        return {};
     },
     methods: {
         show() {
-            this.isOpen = true;
+            this.openOverlay = true;
         },
         confirm() {
             this.$emit("confirmed", true);
-            this.hide();
         },
         cancel() {
             this.$emit("confirmed", false);
-            this.hide();
-        },
-        hide() {
-            this.isOpen = false;
         },
     },
 };
