@@ -18,7 +18,7 @@ Route::prefix('project')->group(
         Route::post("/add", [ProjectController::class, "create"])->name("project.create");
         Route::post("/update", [ProjectController::class, "updateProject"]);
         Route::post("/delete", [ProjectController::class, "deleteProject"]);
-
+        Route::post("/search", [ProjectController::class, "searchProject"]);
     }
 );
 

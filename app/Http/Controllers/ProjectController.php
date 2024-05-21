@@ -155,4 +155,25 @@ class ProjectController extends Controller
             ]);
         }
     }
+
+    function searchProject(Request $request)
+    {
+        $query = $request->input('query');
+        $organisation_id = $request->input("organisation_id");
+
+        $projects = Project::where("company_id", $organisation_id)->where('name', 'like', "%{$query}%")
+            ->orWhereHas('company', function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%");
+            })
+            ->with(['company' => function ($q) {
+                $q->select('id', 'name');
+            }])
+            ->withCount(['testCases', 'issues'])
+            ->get();
+
+        return response()->json([
+            'error' => false,
+            'projects' => $projects
+        ]);
+    }
 }
