@@ -20,6 +20,7 @@ export default {
     data() {
         return {
             nav: false,
+            search: "",
             overlay: {
                 open: false,
             },
@@ -66,6 +67,11 @@ export default {
             }
             this.openConfirm = false;
         },
+        handleProjectSearch() {
+            let data = {
+                
+            }
+        },
     },
     components: {
         SideNav,
@@ -97,6 +103,8 @@ export default {
                             type="text"
                             class="form-control bg-secondary text-light border-0"
                             placeholder="Search by project name"
+                            @change="handleProjectSearch"
+                            v-model="search"
                         />
                         <button class="btn btn-primary" type="submit">
                             Search
