@@ -27,6 +27,7 @@ export default {
             selectedProject: {},
             openConfirm: false,
             confrimMessage: "",
+            projectArray: [],
         };
     },
     methods: {
@@ -34,16 +35,16 @@ export default {
             this.overlay.open = !this.overlay.open;
         },
         updateData(data) {
-            this.projects.push(data);
+            this.projectArray.push(data);
         },
         handleDelete(id) {
-            let project = this.projects.find((item) => item.id === id);
+            let project = this.projectArray.find((item) => item.id === id);
             this.selectedProject = project;
             this.confrimMessage = `Are you sure you want to delete ${project.name}?`;
             this.openConfirm = true;
         },
         handleEdit(id) {
-            let project = this.projects.find((item) => item.id === id);
+            let project = this.projectArray.find((item) => item.id === id);
             this.selectedProject = project;
             this.openOverlay();
         },
@@ -67,10 +68,18 @@ export default {
             }
             this.openConfirm = false;
         },
-        handleProjectSearch() {
+        handleprojectArrayearch() {
             let data = {
-                
-            }
+                query: this.search,
+                organisation_id: this.org_id,
+            };
+            axios.post("/api/project/search", data).then((res) => {
+                if (!res.data.error) {
+                    this.projectArray = res.data.projects;
+                } else {
+                    console.log(res.data);
+                }
+            });
         },
     },
     components: {
@@ -82,7 +91,15 @@ export default {
         ConfirmOverlay,
     },
     mounted() {
-        // console.log(this.user_id)
+        this.projectArray = this.projects;
+    },
+    watch: {
+        projects: {
+            handler: function (newData, oldData) {
+                console.log(newData);
+            },
+            deep: true,
+        },
     },
 };
 </script>
@@ -103,7 +120,7 @@ export default {
                             type="text"
                             class="form-control bg-secondary text-light border-0"
                             placeholder="Search by project name"
-                            @change="handleProjectSearch"
+                            @input="handleprojectArrayearch"
                             v-model="search"
                         />
                         <button class="btn btn-primary" type="submit">
@@ -134,7 +151,7 @@ export default {
                 </div>
 
                 <ProjectCard
-                    :projects="projects"
+                    :projects="projectArray"
                     @handleDelete="handleDelete"
                     @handleEdit="handleEdit"
                 />
