@@ -64,7 +64,7 @@ export default {
     },
     data() {
         const form = useForm({
-            name: "project",
+            name: "",
             company_id: this.org_id,
             user_id: this.user_id,
         });
@@ -78,14 +78,18 @@ export default {
             this.$emit("close0verlay");
         },
         submitForm() {
-            axios.post("/api/project/add", this.form).then((res) => {
-                if (!res.data.error) {
-                    this.$emit("updateData", res.data.project);
-                } else {
-                    console.log(res.data);
-                }
-                this.closeOverlay();
-            });
+            if (this.form.name.trim()) {
+                axios.post("/api/project/add", this.form).then((res) => {
+                    if (!res.data.error) {
+                        this.$emit("updateData", res.data.project);
+                    } else {
+                        console.log(res.data);
+                    }
+                    this.closeOverlay();
+                });
+            } else {
+                alert("The project name should not be empty");
+            }
         },
         updateProject() {
             console.log("sending");
