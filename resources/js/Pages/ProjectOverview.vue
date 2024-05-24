@@ -111,7 +111,7 @@ export default {
                         },
                     },
                 ],
-                colors: ["#00FF00", "#FF0000"],
+                colors: ["#25D366", "#FF0000"],
                 stroke: {
                     color: null,
                 },
