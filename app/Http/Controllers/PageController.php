@@ -53,7 +53,8 @@ class PageController extends Controller
                     "issueCount" => $issueCount,
                     "testcaseProject" => $testCaseArray,
                     "projectOrganisation" => $projectArray,
-                    "activities" => $activities
+                    "activities" => $activities,
+                    "user" => $user
                 ]
             ]);
         } catch (\Throwable $th) {

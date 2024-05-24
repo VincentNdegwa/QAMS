@@ -5,6 +5,7 @@ export default {
         return {
             nav: false,
             isDarkMode: false,
+            user: {},
         };
     },
     methods: {
@@ -18,11 +19,11 @@ export default {
         },
         toggleTheme() {
             this.isDarkMode = !this.isDarkMode;
-            
         },
     },
     mounted() {
-    
+        let userData = window.localStorage.getItem("user");
+        this.user = JSON.parse(userData);
     },
     components: {
         Head,
@@ -43,7 +44,7 @@ export default {
                 />
 
                 <!-- User Name -->
-                <div class="text-primary mb-4">John Doe</div>
+                <div class="text-primary mb-4">{{ user.name }}</div>
 
                 <!-- Navigation Sections -->
                 <nav class="nav">
