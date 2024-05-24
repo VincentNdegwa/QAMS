@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Project;
+use App\Models\User;
 use App\Models\UserCompany;
 use Inertia\Inertia;
 
@@ -13,6 +14,7 @@ class PageController extends Controller
     {
         try {
             $organisations = UserCompany::where("user_id", auth()->id())->with("company")->get();
+            $user = User::where("id", auth()->id())->first();
 
             $organisationCount = 0;
             $projectCount = 0;

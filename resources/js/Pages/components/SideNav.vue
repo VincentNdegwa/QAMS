@@ -18,38 +18,11 @@ export default {
         },
         toggleTheme() {
             this.isDarkMode = !this.isDarkMode;
-            document.documentElement.classList.toggle(
-                "dark-theme",
-                this.isDarkMode
-            );
-            document.documentElement.classList.toggle(
-                "light-theme",
-                !this.isDarkMode
-            );
-            localStorage.setItem("theme", this.isDarkMode ? "dark" : "light");
+            
         },
     },
     mounted() {
-        const savedTheme = localStorage.getItem("theme");
-        this.isDarkMode = savedTheme === "dark";
-        document.documentElement.classList.toggle(
-            "dark-theme",
-            this.isDarkMode
-        );
-        document.documentElement.classList.toggle(
-            "light-theme",
-            !this.isDarkMode
-        );
-        if (savedTheme) {
-            document.documentElement.classList.toggle(
-                "dark-theme",
-                savedTheme === "dark"
-            );
-            document.documentElement.classList.toggle(
-                "light-theme",
-                savedTheme === "light"
-            );
-        }
+    
     },
     components: {
         Head,
@@ -90,21 +63,17 @@ export default {
                         Organisation
                     </a>
                     <a class="nav-link text-secondary w-100 mt-3" href="#">
-                        <i class="bi bi-kanban text-primary me-2"></i>
-                        Projects
-                    </a>
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
                         <i
                             class="bi bi-person-badge-fill text-primary me-2"
                         ></i>
                         Profile
                     </a>
-                    <a
+                    <!-- <a
                         @click="toggleTheme"
                         class="nav-link text-secondary w-100 mt-3"
                     >
                         Dark Mode
-                    </a>
+                    </a> -->
                     <a
                         @click="logout"
                         class="nav-link text-secondary w-100 mt-3"
