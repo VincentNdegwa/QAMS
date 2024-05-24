@@ -51,24 +51,22 @@ export default {
             }
         },
         handleSearch() {
-            if (this.organisationSearch.trim()) {
-                axios
-                    .post("/api/organisation/search", {
-                        search: this.organisationSearch,
-                        user_id: this.user_id,
-                    })
-                    .then((res) => {
-                        if (!res.data.error) {
-                            this.organisationArray = res.data.data;
-                            // console.log(res.data.data);
-                        } else {
-                            alert(res.data.message);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            }
+            axios
+                .post("/api/organisation/search", {
+                    search: this.organisationSearch,
+                    user_id: this.user_id,
+                })
+                .then((res) => {
+                    if (!res.data.error) {
+                        this.organisationArray = res.data.data;
+                        // console.log(res.data.data);
+                    } else {
+                        alert(res.data.message);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         deleteOrganisation(data) {
             this.openConfirm = true;

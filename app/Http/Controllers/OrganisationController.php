@@ -166,7 +166,6 @@ class OrganisationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "user_id" => 'required',
-            "search" => 'required'
         ]);
 
         if ($validator->fails()) {
