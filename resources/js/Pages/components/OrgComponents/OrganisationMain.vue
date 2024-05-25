@@ -27,6 +27,7 @@ export default {
             selectedOrganisation: "",
             openConfirm: false,
             confirmationMessage: "",
+            clickedOrganisationId: "",
         };
     },
     methods: {
@@ -94,6 +95,9 @@ export default {
                     });
             }
         },
+        inviteUser(id) {
+            this.clickedOrganisationId = id;
+        },
     },
     components: {
         Head,
@@ -158,6 +162,7 @@ export default {
                     :organisation="item"
                     @updateOrganisation="updateOrganisation"
                     @deleteOrganisation="deleteOrganisation"
+                    @inviteUser="inviteUser"
                 />
             </div>
         </div>
@@ -181,7 +186,10 @@ export default {
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
         >
-            <OrganisationAddUserForm />
+            <OrganisationAddUserForm
+                :user_id="user_id"
+                :organisation_id="clickedOrganisationId"
+            />
         </div>
     </div>
     <ConfirmOverlay

@@ -20,7 +20,6 @@ class OrganisationController extends Controller
     {
         $id = auth()->id();
         $data = [];
-        $organisation = [];
         $Organisation2 = UserCompany::where("user_id", auth()->id())->with("company")->get();
 
         foreach ($Organisation2 as $item) {
@@ -35,7 +34,6 @@ class OrganisationController extends Controller
                 "project_count" => $org_project_count,
                 "test_case_count" => $org_test_count,
                 "issues_count" => Issue::where("project_id", $item->company_id)->count(),
-                "user_id" => $id,
             ];
             $data[] = $org;
         }

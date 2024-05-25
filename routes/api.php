@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\ProjectController;
@@ -37,4 +38,7 @@ Route::prefix("/issues")->group(function () {
     Route::post("/update", [IssuesController::class, "updateIssue"]);
     Route::post("/searchAndFilter", [IssuesController::class, "searchAndFilterIssue"]);
     Route::post("/delete", [IssuesController::class, "deleteIssue"]);
+});
+Route::prefix("/invite")->group(function () {
+    Route::post("/add", [InvitationController::class, "inviteUser"]);
 });

@@ -40,6 +40,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#form_add_user"
                     class="col-5 btn btn-primary text-dark"
+                    @click="addUser(organisation)"
                 >
                     <i class="bi bi-person-add"></i> Add User
                 </div>
@@ -98,6 +99,9 @@ export default {
         },
         deleteOrganisation(data) {
             this.$emit("deleteOrganisation", data);
+        },
+        addUser(data) {
+            this.$emit("inviteUser", data?.id);
         },
     },
 };
