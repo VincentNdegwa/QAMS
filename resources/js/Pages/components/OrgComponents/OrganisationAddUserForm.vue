@@ -32,7 +32,7 @@
                             type="text"
                             class="form-control"
                             id="userId"
-                            v-model="organizationForm.organisation"
+                            v-model="organizationForm.company_id"
                             readonly
                             required
                         />
@@ -57,7 +57,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
     props: {
@@ -73,7 +73,7 @@ export default {
         return {
             organizationForm: {
                 email: "",
-                organisation: this.organisation_id,
+                company_id: this.organisation_id,
                 user_id: this.user_id,
             },
             formErrors: null,
@@ -84,45 +84,44 @@ export default {
             this.organizationForm.user_id = newVal;
         },
         organisation_id(newVal) {
-            this.organizationForm.organisation = newVal;
+            this.organizationForm.company_id = newVal;
         },
     },
     methods: {
         validateForm() {
             this.formErrors = null;
             const errors = {};
-            
+
             if (!this.organizationForm.email) {
-                errors.email = 'Email is required.';
+                errors.email = "Email is required.";
             } else if (!/\S+@\S+\.\S+/.test(this.organizationForm.email)) {
-                errors.email = 'Email is invalid.';
+                errors.email = "Email is invalid.";
             }
-            
+
             return Object.keys(errors).length === 0 ? null : errors;
         },
         async submitOrganizationForm() {
             this.formErrors = this.validateForm();
-            
+
             if (this.formErrors) {
                 return;
             }
-            
+
             try {
-                const response = await axios.post('/api/invite/add', this.organizationForm);
-                
+                const response = await axios.post(
+                    "/api/invite/add",
+                    this.organizationForm
+                );
+
                 if (response.data.error) {
-                    // Handle error from the server
-                    console.error('Error from server:', response.data.error);
+                    console.log(response.data.message);
                 } else {
-                    // Handle success
-                    console.log('Success:', response.data);
+                    console.log("Success:", response.data);
                 }
             } catch (error) {
-                console.error('Request failed:', error);
+                console.error("Request failed:", error);
             }
-        }
-    }
+        },
+    },
 };
 </script>
-
-
