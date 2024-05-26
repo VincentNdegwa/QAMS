@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 
 class InvitationController extends Controller
 {
@@ -59,6 +60,20 @@ class InvitationController extends Controller
 
     public function checkInvitation(Request $request)
     {
-        return response()->json($request->all());
+        $id = $request->input("link");
+        $invitation = Invitation::where('company_hash', $id)->first();
+        if ($invitation) {
+            return Inertia::render('Invitation', [
+                'error' => false,
+                'message' => 'Invitation found.',
+                'data' => $invitation,
+            ]);
+        } else {
+            return Inertia::render('Invitation', [
+                'error' => true,
+                'message' => 'Invitation not found.',
+                'data' => null,
+            ]);
+        }
     }
 }
