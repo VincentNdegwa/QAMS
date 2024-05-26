@@ -56,4 +56,9 @@ class InvitationController extends Controller
             ], 500);
         }
     }
+
+    public function checkInvitation(Request $request)
+    {
+        return response()->json($request->all());
+    }
 }

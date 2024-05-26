@@ -28,7 +28,7 @@ class InvitationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation Mail',
+            subject: 'Invitation To ' . $this->data['organisation'],
         );
     }
 
@@ -40,7 +40,7 @@ class InvitationMail extends Mailable implements ShouldQueue
         return new Content(
             view: 'invitation',
             with: [
-                "link" => env('APP_URL') . "/invite?id=" . $this->data['link'],
+                "link" => env('APP_URL') . "/invite?link=" . $this->data['link'],
                 "organisation" => $this->data['organisation']
             ]
         );
