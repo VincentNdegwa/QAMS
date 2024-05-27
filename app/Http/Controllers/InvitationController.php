@@ -28,7 +28,7 @@ class InvitationController extends Controller
                 'company_id' => $validatedData['company_id'],
                 'company_hash' => Str::random(32),
                 'status' => 'opened',
-                'expiration_date' => Carbon::now()->addHours(24),
+                'expiration_date' => Carbon::now()->addDay(),
             ]);
             $invitationData = [
                 "link" => $invitation['company_hash'],
@@ -63,36 +63,43 @@ class InvitationController extends Controller
         $id = $request->input("link");
         $invitation = Invitation::where('company_hash', $id)->with(['user', 'company'])->first();
 
-        if ($invitation) {
-            $currentDateTime = Carbon::now();
-
-            if ($currentDateTime < $invitation->expiration_date) {
-                return Inertia::render('Invitation', [
-                    'error' => true,
-                    'message' => 'The invitation has expired.',
-                    'data' => null,
-                ]);
-            } elseif ($invitation->status !== 'opened') {
-                $message = 'The invitation is ' . $invitation->status . '.';
-                return Inertia::render('Invitation', [
-                    'error' => true,
-                    'message' => $message,
-                    'data' => null,
-                ]);
-            } else {
-                $invitation->now = $currentDateTime;
-                return Inertia::render('Invitation', [
-                    'error' => false,
-                    'message' => 'Invitation found.',
-                    'data' => $invitation,
-                ]);
-            }
-        } else {
-            return Inertia::render('Invitation', [
-                'error' => true,
-                'message' => 'Invitation not found.',
-                'data' => null,
-            ]);
+        if (!$invitation) {
+            return $this->renderError('Invitation not found.');
         }
+
+        $currentDateTime = Carbon::now();
+
+        // Log the dates for debugging
+   
+        if ($currentDateTime->greaterThan($invitation->expiration_date)) { // Corrected comparison
+            return $this->renderError('The invitation has expired.');
+        }
+
+        if ($invitation->status !== 'opened') {
+            return $this->renderError('The invitation is ' . $invitation->status . '.');
+        }
+
+        $invitation->now = $currentDateTime;
+
+        return $this->renderSuccess('Invitation found.', $invitation);
+    }
+
+
+    private function renderError(string $message)
+    {
+        return Inertia::render('Invitation', [
+            'error' => true,
+            'message' => $message,
+            'data' => null,
+        ]);
+    }
+
+    private function renderSuccess(string $message, $data)
+    {
+        return Inertia::render('Invitation', [
+            'error' => false,
+            'message' => $message,
+            'data' => $data,
+        ]);
     }
 }
