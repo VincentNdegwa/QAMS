@@ -22,6 +22,10 @@
                         Expires on:
                         <strong>{{ formatDate(data.expiration_date) }}</strong>
                     </p>
+                    <p>
+                        Now:
+                        <strong>{{ formatDate(data.now) }}</strong>
+                    </p>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button
@@ -74,6 +78,9 @@ export default {
             };
             return new Date(dateString).toLocaleDateString(undefined, options);
         },
+    },
+    mounted() {
+        console.log(this.data);
     },
 };
 </script>

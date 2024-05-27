@@ -62,12 +62,31 @@ class InvitationController extends Controller
     {
         $id = $request->input("link");
         $invitation = Invitation::where('company_hash', $id)->with(['user', 'company'])->first();
+
         if ($invitation) {
-            return Inertia::render('Invitation', [
-                'error' => false,
-                'message' => 'Invitation found.',
-                'data' => $invitation,
-            ]);
+            $currentDateTime = Carbon::now();
+
+            if ($currentDateTime < $invitation->expiration_date) {
+                return Inertia::render('Invitation', [
+                    'error' => true,
+                    'message' => 'The invitation has expired.',
+                    'data' => null,
+                ]);
+            } elseif ($invitation->status !== 'opened') {
+                $message = 'The invitation is ' . $invitation->status . '.';
+                return Inertia::render('Invitation', [
+                    'error' => true,
+                    'message' => $message,
+                    'data' => null,
+                ]);
+            } else {
+                $invitation->now = $currentDateTime;
+                return Inertia::render('Invitation', [
+                    'error' => false,
+                    'message' => 'Invitation found.',
+                    'data' => $invitation,
+                ]);
+            }
         } else {
             return Inertia::render('Invitation', [
                 'error' => true,
