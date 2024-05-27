@@ -61,7 +61,7 @@ class InvitationController extends Controller
     public function checkInvitation(Request $request)
     {
         $id = $request->input("link");
-        $invitation = Invitation::where('company_hash', $id)->first();
+        $invitation = Invitation::where('company_hash', $id)->with(['user', 'company'])->first();
         if ($invitation) {
             return Inertia::render('Invitation', [
                 'error' => false,
