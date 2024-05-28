@@ -37,9 +37,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         if ($validator->fails()) {
-            return Inertia("Register", [
-                "errors" => $request->error()->first()
-            ]);
+            return redirect()->back()->withErrors($validator)->withInput();
         } else {
             $user = User::create([
                 'name' => $request->name,

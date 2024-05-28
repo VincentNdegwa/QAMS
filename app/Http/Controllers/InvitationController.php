@@ -70,11 +70,11 @@ class InvitationController extends Controller
             return $this->renderError('Invitation not found.');
         }
 
-        $currentDateTime = Carbon::now();
+        $expectedDeadline = Carbon::parse($invitation->created_at)->addDay();
         $expirationDateTime = $invitation->expiration_date;
 
 
-        if ($currentDateTime > $expirationDateTime) {
+        if ($expectedDeadline > $expirationDateTime) {
             return $this->renderError('The invitation has expired.');
         }
 
@@ -82,7 +82,7 @@ class InvitationController extends Controller
             return $this->renderError('The invitation is ' . $invitation->status . '.');
         }
 
-        $invitation->now = $currentDateTime;
+        $invitation->now = $expectedDeadline;
         $invitation->user_id = $user_id;
 
         $userExistence = UserCompany::where("company_id", $company_id)->where("user_id", $user_id)->first();
