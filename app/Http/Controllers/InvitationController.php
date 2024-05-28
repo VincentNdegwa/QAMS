@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\InvitationMail;
 use App\Models\Invitation;
+use App\Models\UserCompany;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -62,16 +63,18 @@ class InvitationController extends Controller
     {
         $id = $request->input("link");
         $invitation = Invitation::where('company_hash', $id)->with(['user', 'company'])->first();
+        $user_id = auth()->id();
+        $company_id = $invitation->company_id;
 
         if (!$invitation) {
             return $this->renderError('Invitation not found.');
         }
 
         $currentDateTime = Carbon::now();
+        $expirationDateTime = $invitation->expiration_date;
 
-        // Log the dates for debugging
-   
-        if ($currentDateTime->greaterThan($invitation->expiration_date)) { // Corrected comparison
+
+        if ($currentDateTime > $expirationDateTime) {
             return $this->renderError('The invitation has expired.');
         }
 
@@ -80,6 +83,12 @@ class InvitationController extends Controller
         }
 
         $invitation->now = $currentDateTime;
+        $invitation->user_id = $user_id;
+
+        $userExistence = UserCompany::where("company_id", $company_id)->where("user_id", $user_id)->first();
+        if ($userExistence) {
+            return $this->renderError('You are already a member of this company.');
+        }
 
         return $this->renderSuccess('Invitation found.', $invitation);
     }

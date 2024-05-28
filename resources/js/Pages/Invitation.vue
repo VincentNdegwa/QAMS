@@ -1,4 +1,5 @@
 <template>
+    <Head title="Invitation" />
     <div class="container mt-5 text-white">
         <div v-if="error" class="alert alert-danger" role="alert">
             {{ message }}
@@ -44,8 +45,8 @@
 </template>
 
 <script>
+import { Head, router } from "@inertiajs/vue3";
 export default {
-    name: "InvitationResponseComponent",
     props: {
         error: {
             type: Boolean,
@@ -60,10 +61,17 @@ export default {
             required: false,
         },
     },
+    components: {
+        Head,
+    },
     methods: {
         openOrganization() {
-            if (this.data && this.data.company_hash) {
-                window.location.href = `${process.env.VUE_APP_BASE_URL}/organization/${this.data.company_hash}`;
+            if (this.data && !this.error) {
+                let data = {
+                    invited_user_id: this.data.user_id,
+                    company_id: this.data.company_id,
+                };
+                console.log(data);
             } else {
                 alert("Invalid invitation data.");
             }
@@ -87,7 +95,7 @@ export default {
 
 <style scoped>
 body {
-    background-color: var(--bs-dark); /* Dark background color */
+    background-color: var(--bs-dark);
 }
 
 .card {
