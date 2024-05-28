@@ -114,8 +114,65 @@ class InvitationController extends Controller
 
     public function enrollUser(Request $request)
     {
-        $user_id = $request->user_id;
+        $request->validate([
+            'invited_user_id' => 'required|exists:users,id',
+            'company_id' => 'required|exists:companies,id',
+            'status' => 'required|boolean',
+            'role' => 'required|string|max:255',
+            'company_hash' => 'required|string'
+        ]);
+
+        $user_id = $request->invited_user_id;
         $company_id = $request->company_id;
         $status = $request->status;
+        $role = $request->role;
+        $company_hash = $request->company_hash;
+
+        $invitation = Invitation::where('company_hash', $company_hash)
+            ->first();
+
+        if (!$invitation) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Invitation not found.',
+                'data' => null,
+            ], 404);
+        }
+
+        if ($status) {
+            $existingEntry = UserCompany::where('user_id', $user_id)
+                ->where('company_id', $company_id)
+                ->first();
+
+            if ($existingEntry) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'User is already enrolled in the company.',
+                    'data' => null,
+                ], 400);
+            }
+
+            $userCompany = UserCompany::create([
+                'user_id' => $user_id,
+                'company_id' => $company_id,
+                'role' => $role,
+            ]);
+
+            $invitation->update(['status' => 'joined']);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'User enrolled successfully and invitation updated to joined.',
+                'data' => $userCompany,
+            ], 201);
+        } else {
+            $invitation->update(['status' => 'closed']);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'Invitation updated to closed.',
+                'data' => $invitation,
+            ], 200);
+        }
     }
 }

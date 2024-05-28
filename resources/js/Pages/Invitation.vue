@@ -30,10 +30,16 @@
                 </div>
                 <div class="d-flex justify-content-center">
                     <button
-                        @click="openOrganization"
-                        class="btn btn-green btn-lg"
+                        @click="handleResponse(true)"
+                        class="btn btn-green btn-lg mr-3"
                     >
                         Open Invitation
+                    </button>
+                    <button
+                        @click="handleResponse(false)"
+                        class="btn btn-danger btn-lg"
+                    >
+                        Cancel Invitation
                     </button>
                 </div>
             </div>
@@ -46,6 +52,7 @@
 
 <script>
 import { Head, router } from "@inertiajs/vue3";
+
 export default {
     props: {
         error: {
@@ -65,15 +72,43 @@ export default {
         Head,
     },
     methods: {
-        openOrganization() {
+        async handleResponse(accept) {
             if (this.data && !this.error) {
-                let data = {
+                let requestData = {
                     invited_user_id: this.data.user_id,
                     company_id: this.data.company_id,
-                    status: true,
+                    status: accept,
+                    role: "dev",
+                    company_hash: this.data.company_hash,
                 };
-                
-                console.log(data);
+
+                try {
+                    let response = await axios.post(
+                        "/api/invite/enroll",
+                        requestData
+                    );
+
+                    if (response.data.error) {
+                        alert(response.data.message);
+                    } else {
+                        if (accept) {
+                            alert(
+                                "You have successfully joined the organization."
+                            );
+                            router.visit(
+                                `/organisation/${this.data.company_id}/project`
+                            );
+                        } else {
+                            alert(
+                                "You have successfully cancelled the invitation."
+                            );
+                            router.visit("/");
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("An error occurred. Please try again.");
+                }
             } else {
                 alert("Invalid invitation data.");
             }
@@ -127,6 +162,10 @@ body {
     background-color: darken(var(--bs-green), 10%);
     color: var(--bs-light) !important;
     border: 1px solid var(--bs-green) !important;
+}
+
+.btn-danger {
+    border: none;
 }
 
 .alert-danger {
