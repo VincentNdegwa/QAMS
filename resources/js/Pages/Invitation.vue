@@ -70,7 +70,9 @@ export default {
                 let data = {
                     invited_user_id: this.data.user_id,
                     company_id: this.data.company_id,
+                    status: true,
                 };
+                
                 console.log(data);
             } else {
                 alert("Invalid invitation data.");

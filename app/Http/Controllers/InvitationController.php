@@ -111,4 +111,11 @@ class InvitationController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function enrollUser(Request $request)
+    {
+        $user_id = $request->user_id;
+        $company_id = $request->company_id;
+        $status = $request->status;
+    }
 }

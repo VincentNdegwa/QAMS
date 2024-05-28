@@ -41,4 +41,7 @@ Route::prefix("/issues")->group(function () {
 });
 Route::prefix("/invite")->group(function () {
     Route::post("/add", [InvitationController::class, "inviteUser"]);
+    Route::post("/enroll", [InvitationController::class, "enrollUser"]);
+
+
 });
