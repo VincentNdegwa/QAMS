@@ -1,63 +1,52 @@
 <template>
-    <div class="modal-dialog">
-        <div class="modal-content bg-dark text-primary">
-            <div class="modal-header d-flex justify-content-between">
-                <h5 class="modal-title" id="exampleModalLabel">Invite User</h5>
-                <i
-                    class="bi bi-file-excel h3 text-danger"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></i>
-            </div>
-            <div class="modal-body">
-                <form @submit.prevent="submitOrganizationForm">
-                    <div class="mb-3">
-                        <label for="organizationName" class="form-label"
-                            >Email</label
-                        >
-                        <input
-                            type="email"
-                            class="form-control"
-                            id="organizationName"
-                            placeholder="Enter invitee's email"
-                            v-model="organizationForm.email"
-                            required
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="userId" class="form-label"
-                            >Organisation Id</label
-                        >
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="userId"
-                            v-model="organizationForm.company_id"
-                            readonly
-                            required
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="userId" class="form-label">User ID</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="userId"
-                            v-model="organizationForm.user_id"
-                            readonly
-                            required
-                        />
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        Submit
-                    </button>
-                </form>
-            </div>
-        </div>
+    <div>
+        <Overlay :open="openUserForm" @closeOverlay="toggleOverlay">
+            <form @submit.prevent="submitOrganizationForm">
+                <div class="mb-3">
+                    <label for="organizationName" class="form-label"
+                        >Email</label
+                    >
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="organizationName"
+                        placeholder="Enter invitee's email"
+                        v-model="organizationForm.email"
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <label for="userId" class="form-label"
+                        >Organisation Id</label
+                    >
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="userId"
+                        v-model="organizationForm.company_id"
+                        readonly
+                        required
+                    />
+                </div>
+                <div class="mb-3">
+                    <label for="userId" class="form-label">User ID</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="userId"
+                        v-model="organizationForm.user_id"
+                        readonly
+                        required
+                    />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </Overlay>
     </div>
 </template>
 <script>
 import axios from "axios";
+import Overlay from "@/Pages/Layouts/Overlay.vue";
 
 export default {
     props: {
@@ -65,9 +54,16 @@ export default {
             type: Number,
         },
         organisation_id: {
-            type: Number,
+            type: String,
             required: true,
         },
+        openUserForm: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    components: {
+        Overlay,
     },
     data() {
         return {
@@ -122,6 +118,10 @@ export default {
                 console.error("Request failed:", error);
             }
         },
+        toggleOverlay() {
+            this.$emit("toggleUserForm");
+        },
     },
+    mounted() {},
 };
 </script>

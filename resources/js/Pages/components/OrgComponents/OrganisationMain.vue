@@ -28,6 +28,7 @@ export default {
             openConfirm: false,
             confirmationMessage: "",
             clickedOrganisationId: "",
+            openUserForm: false,
         };
     },
     methods: {
@@ -97,6 +98,10 @@ export default {
         },
         inviteUser(id) {
             this.clickedOrganisationId = id;
+            this.openUserForm = true;
+        },
+        toggleUserForm() {
+            this.openUserForm = false;
         },
     },
     components: {
@@ -179,18 +184,12 @@ export default {
                 @updateData="updateData"
             />
         </div>
-        <div
-            class="modal fade"
-            id="form_add_user"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-        >
-            <OrganisationAddUserForm
-                :user_id="user_id"
-                :organisation_id="clickedOrganisationId"
-            />
-        </div>
+        <OrganisationAddUserForm
+            :user_id="user_id"
+            :organisation_id="clickedOrganisationId"
+            :openUserForm="openUserForm"
+            @toggleUserForm="toggleUserForm"
+        />
     </div>
     <ConfirmOverlay
         v-if="openConfirm"

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InvitationMail;
+use App\Models\Company;
 use App\Models\Invitation;
+use App\Models\User;
 use App\Models\UserCompany;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,9 +33,12 @@ class InvitationController extends Controller
                 'status' => 'opened',
                 'expiration_date' => Carbon::now()->addDay(),
             ]);
+            $company = Company::where("id", $validatedData['company_id'])->select('name', 'id')->first();
+            $user = User::where('id', $validatedData['user_id'])->select('name', 'id')->first();
             $invitationData = [
                 "link" => $invitation['company_hash'],
-                "organisation" => 'STAR'
+                "organisation" => $company->name,
+                "host" => $user->name
             ];
             Mail::to($request->input('email'))->queue(new InvitationMail($invitationData));
             DB::commit();

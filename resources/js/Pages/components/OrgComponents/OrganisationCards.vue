@@ -37,8 +37,6 @@
         <div class="card-footer border-top border-secondary">
             <div class="row">
                 <div
-                    data-bs-toggle="modal"
-                    data-bs-target="#form_add_user"
                     class="col-5 btn btn-primary text-dark"
                     @click="addUser(organisation)"
                     v-if="organisation?.role == 'creator'"

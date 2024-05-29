@@ -7,13 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Invitation to Join QAMS</title>
     <style>
+        :root {
+            --primary-color: #212529;
+            --tertiary-color: #dee2e6;
+            --quaternary-color: #084298;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #212529;
+            background-color: var(--primary-color);
             /* --bs-body-bg */
-            color: #dee2e6;
+            color: var(--tertiary-color);
             /* --bs-body-color */
         }
 
@@ -22,10 +28,8 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #343a40;
-            /* --bs-secondary-bg */
+            background-color: var(--primary-color);
             border: 1px solid #495057;
-            /* --bs-border-color */
             border-radius: 8px;
         }
 
@@ -34,10 +38,8 @@
         }
 
         .card-header {
-            background-color: #084298;
-            /* --bs-primary-border-subtle */
-            color: #f8f9fa;
-            /* --bs-light-text-emphasis */
+            background-color: #5C8374;
+            color: var(--tertiary-color);
             padding: 20px;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
@@ -45,18 +47,19 @@
 
         .card-body {
             padding: 20px;
-            color: #f8f9fa;
+            color: var(--primary-color);
 
         }
 
         .card-footer {
-            background-color: #1a1d20;
+            background-color: #00ABE4;
             /* --bs-dark-bg-subtle */
             padding: 10px;
             text-align: center;
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
-            color: #dee2e6;
+            color: var(--primary-color);
+
             /* --bs-dark-text-emphasis */
         }
 
@@ -82,13 +85,14 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h2>You're Invited to Join {{ $organisation }}</h2>
+                <h2>You're Invited by {{ $host }}</h2>
             </div>
             <div class="card-body">
                 <p>Hello,</p>
-                <p>You have been invited to join <strong>{{ $organisation }}</strong> on QAMS. Click the link below to
+                <p>You have been invited to join <strong>{{ $organisation }}</strong> Organisation on QAMS. Click the
+                    link below to
                     accept the invitation:</p>
-                <a href="{{ $link }}" class="btn-success">Accept Invitation</a>
+                <a href="{{ $link }}" class="btn-success">View Invitation</a>
                 <p class="mt-3">If you have any questions, feel free to contact us.</p>
                 <p>Thank you,<br>The QAMS Team</p>
             </div>

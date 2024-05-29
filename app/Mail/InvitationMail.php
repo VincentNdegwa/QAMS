@@ -41,7 +41,8 @@ class InvitationMail extends Mailable implements ShouldQueue
             view: 'invitation',
             with: [
                 "link" => env('APP_URL') . "/invite?link=" . $this->data['link'],
-                "organisation" => $this->data['organisation']
+                "organisation" => $this->data['organisation'],
+                "host" => $this->data['host'],
             ]
         );
     }
