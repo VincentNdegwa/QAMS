@@ -86,9 +86,17 @@ class InvitationController extends Controller
         if ($invitation->status !== 'opened') {
             return $this->renderError('The invitation is ' . $invitation->status . '.');
         }
+        $now = Carbon::now();
+        $diffInMinutes = $now->diffInMinutes($expectedDeadline, false);
+
+        $hours = floor(abs($diffInMinutes) / 60);
+        $minutes = abs($diffInMinutes) % 60;
+        $timeDifference = ($diffInMinutes < 0 ? '-' : '') . sprintf('%02d hours and %02d minutes', $hours, $minutes);
+
 
         $invitation->now = $expectedDeadline;
         $invitation->user_id = $user_id;
+        $invitation->timeDifference = $timeDifference;
 
         $userExistence = UserCompany::where("company_id", $company_id)->where("user_id", $user_id)->first();
         if ($userExistence) {

@@ -32,14 +32,10 @@
                     </p>
                     <p>
                         Expires on:
-                        <strong>{{ formatDate(data.expiration_date) }}</strong>
-                    </p>
-                    <p>
-                        Now:
-                        <strong>{{ formatDate(data.now) }}</strong>
+                        <strong>{{ data.timeDifference }}</strong>
                     </p>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex gap-3 justify-content-center">
                     <button
                         @click="handleResponse(true)"
                         class="btn btn-green btn-lg mr-3"
