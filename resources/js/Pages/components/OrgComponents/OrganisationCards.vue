@@ -41,6 +41,7 @@
                     data-bs-target="#form_add_user"
                     class="col-5 btn btn-primary text-dark"
                     @click="addUser(organisation)"
+                    v-if="organisation?.role == 'creator'"
                 >
                     <i class="bi bi-person-add"></i> Add User
                 </div>
@@ -56,6 +57,7 @@
                             title="Edit"
                             data-bs-content="Click to edit this item"
                             data-bs-trigger="hover"
+                            v-if="organisation?.role == 'creator'"
                         >
                         </i>
                         <i
@@ -65,6 +67,7 @@
                             data-bs-content="Click to delete this item"
                             data-bs-trigger="hover"
                             @click="deleteOrganisation(organisation)"
+                            v-if="organisation?.role == 'creator'"
                         >
                         </i>
                         <a :href="getUrl()">

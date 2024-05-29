@@ -23,14 +23,15 @@ class OrganisationController extends Controller
         $Organisation2 = UserCompany::where("user_id", auth()->id())->with("company")->get();
 
         foreach ($Organisation2 as $item) {
-            $org_proj = Project::with("company")->where("company_id", $item->id)->withCount("testCases")->get();
+            $org_proj = Project::with("company")->where("company_id", $item->company_id)->withCount("testCases")->get();
             $org_project_count = $org_proj->count();
             $org_test_count = $org_proj->sum("test_cases_count");
             $org = [
                 "name" => $item->company->name,
-                "id" => $item->id,
+                "id" => $item->company_id,
                 "created_at" => $item->company->created_at,
                 "created_by" => UserCompany::where("role", "creator")->with("users")->where("company_id", $item->company_id)->first(),
+                "role" => $item->role,
                 "project_count" => $org_project_count,
                 "test_case_count" => $org_test_count,
                 "issues_count" => Issue::where("project_id", $item->company_id)->count(),

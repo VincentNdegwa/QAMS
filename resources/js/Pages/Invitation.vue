@@ -1,8 +1,19 @@
 <template>
     <Head title="Invitation" />
     <div class="container mt-5 text-white">
-        <div v-if="error" class="alert alert-danger" role="alert">
-            {{ message }}
+        <div v-if="error" class="card text-white bg-gradient">
+            <div class="card-body">
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <img
+                        src="/images/sad-face.png"
+                        class="sad-image align-items-center"
+                        alt="sad face"
+                    />
+                </div>
+            </div>
         </div>
         <div v-else class="card shadow-lg rounded bg-dark text-white">
             <div class="card-header text-center bg-primary text-white py-4">
@@ -176,5 +187,11 @@ body {
 
 .card-footer {
     background-color: var(--bs-secondary);
+}
+.sad-image {
+    width: 100%;
+    height: 100% !important;
+    max-width: 200px !important;
+    max-height: 200px !important;
 }
 </style>
