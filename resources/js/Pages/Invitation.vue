@@ -31,7 +31,7 @@
                         <strong>{{ data.user.name }}</strong>
                     </p>
                     <p>
-                        Expires on:
+                        Expires in:
                         <strong>{{ data.timeDifference }}</strong>
                     </p>
                 </div>

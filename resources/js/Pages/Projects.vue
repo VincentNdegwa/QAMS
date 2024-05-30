@@ -16,6 +16,9 @@ export default {
         user_id: {
             type: Number,
         },
+        company: {
+            type: Object,
+        },
     },
     data() {
         return {
@@ -92,6 +95,7 @@ export default {
     },
     mounted() {
         this.projectArray = this.projects;
+        console.log(this.company);
     },
     watch: {
         projects: {
@@ -105,9 +109,9 @@ export default {
 </script>
 
 <template>
-    <MainLayout name="Project">
+    <MainLayout :name="company.name">
         <div class="pd-0">
-            <div class="d-flex align-items-end justify-content-end mt-5 w-100">
+            <div class="d-flex align-items-end justify-content-end mt-1 w-100">
                 <div class="btn btn-primary" @click="openOverlay">
                     <i class="bi bi-plus-lg"></i>
                     Add New Project

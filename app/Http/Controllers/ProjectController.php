@@ -24,7 +24,8 @@ class ProjectController extends Controller
         return Inertia::render("Projects", [
             "projects" => $projects,
             "org_id" => $organisation_id,
-            "user_id" => auth()->id()
+            "user_id" => auth()->id(),
+            "company" => $projects[0]->company
         ]);
     }
 

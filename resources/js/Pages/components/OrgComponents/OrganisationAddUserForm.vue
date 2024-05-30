@@ -110,10 +110,11 @@ export default {
                 );
 
                 if (response.data.error) {
-                    console.log(response.data.message);
+                    alert(response.data.message);
                 } else {
-                    console.log("Success:", response.data);
+                    alert(response.data.message);
                 }
+                this.$emit("toggleUserForm");
             } catch (error) {
                 console.error("Request failed:", error);
             }
