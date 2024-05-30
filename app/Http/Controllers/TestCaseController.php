@@ -244,4 +244,16 @@ class TestCaseController extends Controller
             "testCase_id" => $id
         ]);
     }
+    function getFullReport($organisation, $project)
+    {
+        $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
+            ->where("project_id", $project)
+            ->with(['testSteps' => function ($query) {
+                $query->select('id', 'testcase_id', 'step_description', 'step_status')
+                    ->with(['expectedResult' => function ($query) {
+                        $query->select('id', 'test_step_id', 'result_description', 'found_description', 'pass');
+                    }]);
+            }])->get();
+        return view('testReport', compact('testReport'));
+    }
 };

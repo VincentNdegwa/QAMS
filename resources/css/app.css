@@ -1,10 +1,9 @@
+@import url("../../css/app.min.css");
 :root {
     --nav_size: 170px;
     --medimu_nav_height: 2.5em;
     transition: all ease-out 1s !important;
 }
-
-
 
 .dash_container {
     display: flex;

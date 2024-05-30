@@ -32,6 +32,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         });
         Route::get("view/{id}", [TestCaseController::class, "viewTask"]);
         Route::get("/issues", [IssuesController::class, "getIssues"]);
+        Route::get("/view_report", [TestCaseController::class, "getFullReport"]);
     });
 });
 
