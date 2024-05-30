@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Company;
 use App\Models\ExpectedResult;
 use App\Models\Issue;
+use App\Models\Project;
 use App\Models\TestCase;
 use App\Models\TestStep;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -244,16 +248,49 @@ class TestCaseController extends Controller
             "testCase_id" => $id
         ]);
     }
-    function getFullReport($organisation, $project)
+    public function getFullReport($organisation, $project)
     {
+        $data = [];
         $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
             ->where("project_id", $project)
+            ->orderBy("module_name", "DESC")
             ->with(['testSteps' => function ($query) {
                 $query->select('id', 'testcase_id', 'step_description', 'step_status')
                     ->with(['expectedResult' => function ($query) {
                         $query->select('id', 'test_step_id', 'result_description', 'found_description', 'pass');
                     }]);
             }])->get();
-        return view('testReport', compact('testReport'));
+
+        $project = Project::where("id", $project)->select('id', 'name')->first();
+        $data["report"] = $testReport;
+        $data["project"] = $project;
+        return view('testReport', [
+            'testReport' => $data,
+        ]);
+        // return response()->json($data);
+    }
+    public function generatePdf($organisation, $project)
+    {
+        $data = [];
+        $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
+            ->where("project_id", $project)
+            ->orderBy("module_name", "DESC")
+            ->with(['testSteps' => function ($query) {
+                $query->select('id', 'testcase_id', 'step_description', 'step_status')
+                    ->with(['expectedResult' => function ($query) {
+                        $query->select('id', 'test_step_id', 'result_description', 'found_description', 'pass');
+                    }]);
+            }])->get();
+
+        $project = Project::where("id", $project)->select('id', 'name')->first();
+        $data["report"] = $testReport;
+        $data["project"] = $project;
+
+        $pdf = PDF::loadview("components.testReportComponent", [
+            'testReport' => $data,
+        ]);
+        return $pdf->stream();
+
+        // return pdf()->view('layout/reportHeader')->name("testcase.pdf")->download();
     }
 };

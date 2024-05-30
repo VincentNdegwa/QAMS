@@ -1,26 +1,84 @@
-<!-- resources/views/testReport.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Test Report</title>
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* background-color: #f8f9fa; */
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-bordered {
+            /* border: 1px solid #dee2e6; */
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .table th {
+            background-color: #f1f1f1;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-5 {
+            margin-top: 3rem;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .container {
+            width: 100%;
+            /* padding: 15px; */
+            margin: auto;
+        }
+
+        .bg-light {
+            /* background-color: #f8f9fa !important; */
+        }
+    </style>
+
 </head>
 
 <body>
-    <div class="container mt-5">
-        <header class=" position-fixed top-0">
-            <button>Get Pdf</button>
-        </header>
-        <h1>Test Report</h1>
-        <table class="table table-bordered">
+    <div class="container mt-5 bg-light">
+        <h1 class="text-center">Test Report</h1>
+        <div class="d-flex gap-2">
+            <div class="">
+                Project:
+            </div>
+            <div class="">
+                {{ $testReport['project']->name }}
+            </div>
+        </div>
+        <table class="table table-bordered mt-5">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Module Name</th>
+                    <th>Module</th>
                     <th>Title</th>
                     <th>Status Description</th>
                     <th>Step</th>
@@ -30,7 +88,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($testReport as $testCase)
+                @foreach ($testReport['report'] as $testCase)
                     @php
                         $testStepsCount = $testCase->testSteps->count();
                     @endphp
@@ -38,7 +96,6 @@
                         @foreach ($testCase->testSteps as $index => $testStep)
                             <tr>
                                 @if ($index === 0)
-                                    <td rowspan="{{ $testStepsCount }}">{{ $testCase->id }}</td>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->module_name }}</td>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->title }}</td>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->description ?? 'N/A' }}</td>
@@ -59,11 +116,10 @@
                         @endforeach
                     @else
                         <tr>
-                            <td>{{ $testCase->id }}</td>
                             <td>{{ $testCase->module_name }}</td>
                             <td>{{ $testCase->title }}</td>
                             <td>{{ $testCase->description ?? 'N/A' }}</td>
-                            <td colspan="6" class="text-center">No Test Steps</td>
+                            <td colspan="4" class="text-center">No Test Steps</td>
                         </tr>
                     @endif
                 @endforeach
