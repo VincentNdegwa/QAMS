@@ -15,6 +15,7 @@ class Invitation extends Model
         'company_id',
         'company_hash',
         'status',
+        "role",
         'expiration_date',
     ];
 

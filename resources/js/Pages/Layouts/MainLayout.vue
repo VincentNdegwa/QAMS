@@ -28,7 +28,6 @@ export default {
     <section class="container dash_container">
         <SideNav />
         <div class="main_content pd-0 p-md-2 mt-0">
-            <div class="mt-3">Navigations</div>
             <slot></slot>
         </div>
     </section>

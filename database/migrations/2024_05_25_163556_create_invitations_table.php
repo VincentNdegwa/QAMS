@@ -17,11 +17,11 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('company_hash');
             $table->enum('status', ['joined', 'opened', 'closed']);
+            $table->enum("role", ["admin", "dev", "tester", "creator"])->default("tester");
             $table->timestamp('expiration_date');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
-            
         });
     }
 

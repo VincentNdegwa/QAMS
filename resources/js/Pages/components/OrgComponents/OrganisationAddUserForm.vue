@@ -16,9 +16,15 @@
                     />
                 </div>
                 <div class="mb-3">
-                    <label for="userId" class="form-label"
-                        >Organisation Id</label
-                    >
+                    <label for="role" class="form-label">Role</label>
+                    <select name="role" class="form-control" id="role">
+                        <option value="">--Select the role--</option>
+                        <option value="admin" selected>Admin</option>
+                        <option value="dev">Dev</option>
+                        <option value="tester">Tester</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <input
                         type="text"
                         class="form-control"
@@ -26,10 +32,10 @@
                         v-model="organizationForm.company_id"
                         readonly
                         required
+                        hidden
                     />
                 </div>
                 <div class="mb-3">
-                    <label for="userId" class="form-label">User ID</label>
                     <input
                         type="text"
                         class="form-control"
@@ -37,6 +43,7 @@
                         v-model="organizationForm.user_id"
                         readonly
                         required
+                        hidden
                     />
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

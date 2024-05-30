@@ -119,7 +119,7 @@ export default {
         <div
             class="d-flex flex-column position-sticky top-0 bg-dark top-header"
         >
-            <div class="d-flex align-items-end justify-content-end mt-5 w-100">
+            <div class="d-flex align-items-end justify-content-end mt-1 w-100">
                 <div @click="openOverlay" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i>
                     Create Organisation
