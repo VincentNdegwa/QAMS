@@ -267,9 +267,31 @@ class TestCaseController extends Controller
         return view('testReport', [
             'testReport' => $data,
         ]);
-        // return response()->json($data);
     }
-    public function generatePdf($organisation, $project)
+    public function downloadPdf($organisation, $project)
+    {
+        $data = [];
+        $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
+            ->where("project_id", $project)
+            ->orderBy("module_name", "DESC")
+            ->with(['testSteps' => function ($query) {
+                $query->select('id', 'testcase_id', 'step_description', 'step_status')
+                    ->with(['expectedResult' => function ($query) {
+                        $query->select('id', 'test_step_id', 'result_description', 'found_description', 'pass');
+                    }]);
+            }])->get();
+
+        $project = Project::where("id", $project)->select('id', 'name')->first();
+        $data["report"] = $testReport;
+        $data["project"] = $project;
+
+        $pdf = PDF::loadview("components.testReportComponent", [
+            'testReport' => $data,
+        ]);
+        return $pdf->download();
+
+    }
+    public function previewPdf($organisation, $project)
     {
         $data = [];
         $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
@@ -290,7 +312,5 @@ class TestCaseController extends Controller
             'testReport' => $data,
         ]);
         return $pdf->stream();
-
-        // return pdf()->view('layout/reportHeader')->name("testcase.pdf")->download();
     }
 };
