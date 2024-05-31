@@ -11,16 +11,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            /* background-color: #f8f9fa; */
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        .table-bordered {
-            /* border: 1px solid #dee2e6; */
         }
 
         .table th,
@@ -53,28 +48,24 @@
 
         .container {
             width: 100%;
-            /* padding: 15px; */
             margin: auto;
-        }
-
-        .bg-light {
-            /* background-color: #f8f9fa !important; */
         }
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rasterizehtml/1.2.4/rasterizeHTML.allinone.min.js"></script>
 </head>
 
 <body>
     <div class="container mt-5 bg-light">
         <h1 class="text-center">Test Report</h1>
         <div class="d-flex gap-2">
-            <div class="">
-                Project:
-            </div>
-            <div class="">
-                {{ $testReport['project']->name }}
-            </div>
+            <div>Project:</div>
+            <div>{{ $testReport['project']->name }}</div>
         </div>
+
+        <!-- Test Cases Section -->
+        <h2 class="mt-5">Test Cases</h2>
         <table class="table table-bordered mt-5">
             <thead>
                 <tr>
@@ -125,6 +116,31 @@
                 @endforeach
             </tbody>
         </table>
+
+        <!-- Issues Section -->
+        <h2 class="mt-5">Issues</h2>
+        <table class="table table-bordered mt-5">
+            <thead>
+                <tr>
+                    <th>Issue ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($testReport['issues'] as $issue)
+                    <tr>
+                        <td>{{ $issue->id }}</td>
+                        <td>{{ $issue->title }}</td>
+                        <td>{{ $issue->description }}</td>
+                        <td>{{ $issue->stage }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        
     </div>
 </body>
 
