@@ -3,24 +3,28 @@
         <div class="container mt-4">
             <nav class="navbar navbar-expand-lg navbar-light bg-dark">
                 <div class="navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav text-primary">
-                        <li class="nav-item">
+                    <div
+                        class="text-primary d-flex flex-row gap-3 list-unstyled"
+                    >
+                        <li
+                            class="bg-primary rounded-2 p-2"
+                            @click="showSection('profile')"
+                        >
                             <a
-                                class="nav-link text-white"
-                                href="#"
-                                @click="showSection('profile')"
+                                class="text-dark bg-primary rounded-2 p-2 text-decoration-none pointer"
                                 >Profile</a
                             >
                         </li>
-                        <li class="nav-item">
+                        <li
+                            class="bg-primary rounded-2 p-2 pointer"
+                            @click="showSection('invitations')"
+                        >
                             <a
-                                class="nav-link text-white"
-                                href="#"
-                                @click="showSection('invitations')"
+                                class="text-dark bg-primary rounded-2 p-2 text-decoration-none"
                                 >Invitations</a
                             >
                         </li>
-                    </ul>
+                    </div>
                 </div>
             </nav>
 
@@ -99,7 +103,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .navbar {
     background-color: var(--bright-blue);
 }
