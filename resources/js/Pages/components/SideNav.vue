@@ -67,7 +67,7 @@ export default {
                         <i
                             class="bi bi-person-badge-fill text-primary me-2"
                         ></i>
-                        Profile
+                        Account
                     </a>
                     <!-- <a
                         @click="toggleTheme"
