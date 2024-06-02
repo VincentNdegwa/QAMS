@@ -17,18 +17,18 @@
           <td>{{ invitation.company }}</td>
           <td>
             <button
-              class="btn btn-success"
+              class="btn btn-danger text-light m-1"
               :disabled="invitation.status !== 'open'"
               @click="$emit('update-status', invitation.id)"
             >
-              Update Status
+              Cancel
             </button>
             <button
-              class="btn btn-warning text-dark"
+              class="btn btn-secondary text-dark m-1"
               :disabled="invitation.status !== 'joined'"
               @click="$emit('update-role', invitation.id)"
             >
-              Update Role
+              Update
             </button>
           </td>
         </tr>
@@ -51,13 +51,5 @@ export default {
   color: var(--white);
 }
 
-.btn-success {
-  background-color: var(--green);
-  border-color: var(--green);
-}
 
-.btn-warning {
-  background-color: var(--yellow);
-  border-color: var(--yellow);
-}
 </style>
