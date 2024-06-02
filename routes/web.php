@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\OrganisationController;
@@ -20,6 +21,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
     Route::get("dashboard", [PageController::class, "openDashboard"])->name('dashboard');
     Route::get('invite', [InvitationController::class, "checkInvitation"]);
     Route::get("organisation", [OrganisationController::class, "open"])->name("organisation");
+    Route::get("account", [AccountController::class, "openAccount"]);
     Route::get('/organisation/{organisation_id}/project/', [ProjectController::class, "open"])->name("project.open");
 
     Route::prefix("/organisation/{organisation}/project/{project}/")->group(function () {

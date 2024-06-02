@@ -63,7 +63,7 @@ export default {
                         <i class="bi bi-building-fill text-primary me-2"></i>
                         Organisation
                     </a>
-                    <a class="nav-link text-secondary w-100 mt-3" href="#">
+                    <a class="nav-link text-secondary w-100 mt-3" href="/account">
                         <i
                             class="bi bi-person-badge-fill text-primary me-2"
                         ></i>
