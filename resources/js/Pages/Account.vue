@@ -32,8 +32,8 @@
             <InvitationsSection
                 v-if="currentSection === 'invitations'"
                 :invitations="invitations?.data"
-                @update-status="updateStatus"
-                @update-role="updateRole"
+                :selectedInvite="selectedInvite"
+                @viewOptions="viewOptions"
             />
         </div>
     </MainLayout>
@@ -63,14 +63,14 @@ export default {
             user: {
                 name: "John Doe",
                 email: "john.doe@example.com",
-            },
+            },selectedInvite:{}
         };
     },
     methods: {
         showSection(section) {
             this.currentSection = section;
         },
-        updateStatus(id) {
+        viewOptions(id) {
             const invitation = this.invitations?.data.find(
                 (invite) => invite.id === id
             );
@@ -79,14 +79,7 @@ export default {
             //     invitation.status = "closed";
             // }
         },
-        updateRole(id) {
-            const invitation = this.invitations?.data.find(
-                (invite) => invite.id === id
-            );
-            if (invitation && invitation.status === "joined") {
-                // Logic to update role
-            }
-        },
+        
     },mounted(){
         console.log(this.invitations);
     }
