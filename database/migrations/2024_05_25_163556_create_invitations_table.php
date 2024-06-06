@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id');
             $table->string('company_hash');
-            $table->enum('status', ['joined', 'opened', 'closed']);
+            $table->enum('status', ['joined', 'opened', 'closed', 'expired']);
             $table->enum("role", ["admin", "dev", "tester", "creator"])->default("tester");
             $table->timestamp('expiration_date');
             $table->string("invited_email")->nullable();

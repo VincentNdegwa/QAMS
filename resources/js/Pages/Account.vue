@@ -31,7 +31,7 @@
             <ProfileSection v-if="currentSection === 'profile'" :user="user" />
             <InvitationsSection
                 v-if="currentSection === 'invitations'"
-                :invitations="invitations"
+                :invitations="invitations?.data"
                 @update-status="updateStatus"
                 @update-role="updateRole"
             />
@@ -43,11 +43,12 @@
 import MainLayout from "./Layouts/MainLayout.vue";
 import ProfileSection from "./components/AccountComponents/ProfileSection.vue";
 import InvitationsSection from "./components/AccountComponents/InvitationsSection.vue";
+import { data } from "autoprefixer";
 
 export default {
     props:{
         invitations:{
-            type:Array,
+            type:Object,
             default:[]
         }
     },
@@ -63,26 +64,6 @@ export default {
                 name: "John Doe",
                 email: "john.doe@example.com",
             },
-            // invitations: [
-            //     {
-            //         id: 1,
-            //         name: "Jane Smith",
-            //         status: "open",
-            //         company: "Example Corp",
-            //     },
-            //     {
-            //         id: 2,
-            //         name: "Emily Johnson",
-            //         status: "joined",
-            //         company: "Tech Inc",
-            //     },
-            //     {
-            //         id: 3,
-            //         name: "Michael Brown",
-            //         status: "closed",
-            //         company: "Global Solutions",
-            //     },
-            // ],
         };
     },
     methods: {
@@ -90,7 +71,7 @@ export default {
             this.currentSection = section;
         },
         updateStatus(id) {
-            const invitation = this.invitations.find(
+            const invitation = this.invitations?.data.find(
                 (invite) => invite.id === id
             );
             console.log(invitation);
@@ -99,7 +80,7 @@ export default {
             // }
         },
         updateRole(id) {
-            const invitation = this.invitations.find(
+            const invitation = this.invitations?.data.find(
                 (invite) => invite.id === id
             );
             if (invitation && invitation.status === "joined") {
