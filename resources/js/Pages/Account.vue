@@ -75,9 +75,6 @@ export default {
                 (invite) => invite.id === id
             );
             console.log(invitation);
-            // if (invitation && invitation.status === "open") {
-            //     invitation.status = "closed";
-            // }
         },
         
     },mounted(){
