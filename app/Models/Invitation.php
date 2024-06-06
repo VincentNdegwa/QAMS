@@ -17,6 +17,7 @@ class Invitation extends Model
         'status',
         "role",
         'expiration_date',
+        'invited_email'
     ];
 
     public function user()

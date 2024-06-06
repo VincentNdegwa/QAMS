@@ -4,7 +4,7 @@
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Invited User</th>
+                    <th scope="col">Invited email</th>
                     <th scope="col">Status</th>
                     <th scope="col">Company</th>
                     <th scope="col">Actions</th>
@@ -12,7 +12,7 @@
             </thead>
             <tbody>
                 <tr v-for="invitation in invitations" :key="invitation.id">
-                    <td>{{ invitation.name }}</td>
+                    <td>{{ invitation.invited_email }}</td>
                     <td>
                         <div
                             v-if="invitation.status == 'closed'"
@@ -33,7 +33,7 @@
                             {{ invitation.status }}
                         </div>
                     </td>
-                    <td>{{ invitation.company }}</td>
+                    <td>{{ invitation.company.name }}</td>
                     <td>
                         <button
                             class="btn btn-danger text-light m-1"

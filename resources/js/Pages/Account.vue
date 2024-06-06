@@ -45,6 +45,12 @@ import ProfileSection from "./components/AccountComponents/ProfileSection.vue";
 import InvitationsSection from "./components/AccountComponents/InvitationsSection.vue";
 
 export default {
+    props:{
+        invitations:{
+            type:Array,
+            default:[]
+        }
+    },
     components: {
         MainLayout,
         ProfileSection,
@@ -57,26 +63,26 @@ export default {
                 name: "John Doe",
                 email: "john.doe@example.com",
             },
-            invitations: [
-                {
-                    id: 1,
-                    name: "Jane Smith",
-                    status: "open",
-                    company: "Example Corp",
-                },
-                {
-                    id: 2,
-                    name: "Emily Johnson",
-                    status: "joined",
-                    company: "Tech Inc",
-                },
-                {
-                    id: 3,
-                    name: "Michael Brown",
-                    status: "closed",
-                    company: "Global Solutions",
-                },
-            ],
+            // invitations: [
+            //     {
+            //         id: 1,
+            //         name: "Jane Smith",
+            //         status: "open",
+            //         company: "Example Corp",
+            //     },
+            //     {
+            //         id: 2,
+            //         name: "Emily Johnson",
+            //         status: "joined",
+            //         company: "Tech Inc",
+            //     },
+            //     {
+            //         id: 3,
+            //         name: "Michael Brown",
+            //         status: "closed",
+            //         company: "Global Solutions",
+            //     },
+            // ],
         };
     },
     methods: {
@@ -87,9 +93,10 @@ export default {
             const invitation = this.invitations.find(
                 (invite) => invite.id === id
             );
-            if (invitation && invitation.status === "open") {
-                invitation.status = "closed"; // Example status change
-            }
+            console.log(invitation);
+            // if (invitation && invitation.status === "open") {
+            //     invitation.status = "closed";
+            // }
         },
         updateRole(id) {
             const invitation = this.invitations.find(
@@ -99,7 +106,9 @@ export default {
                 // Logic to update role
             }
         },
-    },
+    },mounted(){
+        console.log(this.invitations);
+    }
 };
 </script>
 

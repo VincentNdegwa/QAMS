@@ -32,6 +32,7 @@ class InvitationController extends Controller
                 'company_hash' => Str::random(32),
                 'status' => 'opened',
                 'expiration_date' => Carbon::now()->addDay(),
+                "invited_email" => $request->input("email"),
             ]);
             $company = Company::where("id", $validatedData['company_id'])->select('name', 'id')->first();
             $user = User::where('id', $validatedData['user_id'])->select('name', 'id')->first();
