@@ -78,7 +78,7 @@ export default {
         },
         
     },mounted(){
-        console.log(this.invitations);
+        //console.log(this.invitations);
     }
 };
 </script>
