@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\OrganisationController;
@@ -42,6 +43,7 @@ Route::prefix("/issues")->group(function () {
 Route::prefix("/invite")->group(function () {
     Route::post("/add", [InvitationController::class, "inviteUser"]);
     Route::post("/enroll", [InvitationController::class, "enrollUser"]);
-
-
 });
+Route::prefix("account")->group((function (){
+    Route::post("/paginate", [AccountController::class, "paginatPage"]);
+}));

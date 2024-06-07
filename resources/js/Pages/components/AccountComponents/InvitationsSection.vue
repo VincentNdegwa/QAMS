@@ -1,116 +1,211 @@
 <template>
-  <div class="mt-4 p-1">
-    <h2>Invitations</h2>
-    <table class="table table-dark">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Invited email</th>
-          <th scope="col">Status</th>
-          <th scope="col">Company</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="invitation in invitations" :key="invitation.id">
-          <td>{{ invitation.invited_email }}</td>
-          <td>
-            <div v-if="invitation.status === 'closed'" class="badge bg-danger">
-              {{ invitation.status }}
+    <div class="mt-4 p-1">
+        <h2>Invitations</h2>
+        <table class="table table-dark">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th scope="col">Invited email</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(invitation, index) in invitationdata" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ invitation.invited_email }}</td>
+                    <td>
+                        <div
+                            v-if="invitation.status === 'closed'"
+                            class="badge bg-danger"
+                        >
+                            {{ invitation.status }}
+                        </div>
+                        <div
+                            v-else-if="invitation.status === 'open'"
+                            class="badge bg-green text-dark"
+                        >
+                            {{ invitation.status }}
+                        </div>
+                        <div v-else class="badge bg-yellow text-dark">
+                            {{ invitation.status }}
+                        </div>
+                    </td>
+                    <td>{{ invitation.company.name }}</td>
+                    <td>
+                        <i
+                            @click="viewOptions(invitation, $event)"
+                            class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"
+                        ></i>
+                        <div
+                            v-if="
+                                localSelectedInvite &&
+                                localSelectedInvite.id === invitation.id
+                            "
+                            class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
+                            :style="actionButtonStyle"
+                        >
+                            <div
+                                class="bg-danger text-light m-1 p-1 rounded pointer"
+                                :class="{
+                                    'opacity-50':
+                                        localSelectedInvite.status !== 'open',
+                                }"
+                                :disabled="
+                                    localSelectedInvite.status !== 'open'
+                                "
+                                @click="
+                                    $emit(
+                                        'update-status',
+                                        localSelectedInvite.id
+                                    )
+                                "
+                            >
+                                Cancel Invite
+                            </div>
+                            <div
+                                class="bg-secondary m-1 p-1 rounded pointer"
+                                :class="{
+                                    'opacity-50':
+                                        localSelectedInvite.status !== 'joined',
+                                }"
+                                :disabled="
+                                    localSelectedInvite.status !== 'joined'
+                                "
+                                @click="
+                                    $emit('update-role', localSelectedInvite.id)
+                                "
+                            >
+                                Update Invite
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div
+            class="d-flex accordion-body flex-row justify-content-between text-light"
+        >
+            <div class="row-change">
+                <span class="text-light"> Rows per page </span>
+                <select
+                    @change="perfomSearchAndFilter"
+                    class="form bg-dark text-light"
+                    v-model="rows_per_page"
+                >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                </select>
             </div>
-            <div v-else-if="invitation.status === 'open'" class="badge bg-green text-dark">
-              {{ invitation.status }}
+            <div class="pager-nav d-flex align-items-center g-2">
+                <button
+                    :disabled="startPage === 1"
+                    @click="previousPage"
+                    class="bg-primary p-1 rounded-circle"
+                >
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div class="count">{{ startPage }} of {{ endPage }}</div>
+                <button
+                    @click="nextPage"
+                    :disabled="startPage == invitations.last_page"
+                    class="bg-primary p-1 rounded-circle"
+                >
+                    <i class="bi bi-chevron-right"></i>
+                </button>
             </div>
-            <div v-else class="badge bg-yellow text-dark">
-              {{ invitation.status }}
-            </div>
-          </td>
-          <td>{{ invitation.company.name }}</td>
-          <td>
-            <i
-              @click="viewOptions(invitation, $event)"
-              class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"
-            ></i>
-            <div
-              v-if="localSelectedInvite && localSelectedInvite.id === invitation.id"
-              class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
-              :style="actionButtonStyle"
-            >
-              <div
-                class="bg-danger text-light m-1 p-1 rounded pointer"
-                :class="{ 'opacity-50': localSelectedInvite.status !== 'open' }"
-                :disabled="localSelectedInvite.status !== 'open'"
-                @click="$emit('update-status', localSelectedInvite.id)"
-              >
-                Cancel Invite
-              </div>
-              <div
-                class="bg-secondary m-1 p-1 rounded pointer"
-                :class="{ 'opacity-50': localSelectedInvite.status !== 'joined' }"
-                :disabled="localSelectedInvite.status !== 'joined'"
-                @click="$emit('update-role', localSelectedInvite.id)"
-              >
-                Update Invite
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
-  props: {
-    invitations: Array,
-    selectedInvite: Object,
-  },
-  data() {
-    return {
-      localSelectedInvite: null,
-      actionButtonStyle: {
-        top: '0px',
-        left: '0px',
-      },
-    };
-  },
-  methods: {
-    viewOptions(invitation, event) {
-      this.localSelectedInvite = invitation;
-      this.$emit('viewOptions', invitation);
+    props: {
+        invitations: Object,
+        selectedInvite: Object,
+        user_id: Number,
+    },
+    data() {
+        return {
+            localSelectedInvite: null,
+            actionButtonStyle: {
+                top: "0px",
+                left: "0px",
+            },
+            invitationdata: this.invitations.data,
+            current_page: this.invitations.current_page,
+            startPage: this.invitations.from,
+          endPage: this.invitations.last_page,
+            rows_per_page: 10,
+        };
+    },
+    methods: {
+        viewOptions(invitation, event) {
+            this.localSelectedInvite = invitation;
+            this.$emit("viewOptions", invitation);
 
-      // Calculate the position of the action buttons
-      const rect = event.target.getBoundingClientRect();
-      this.actionButtonStyle = {
-        top: `${rect.bottom + window.scrollY}px`,
-        left: `${rect.left + window.scrollX}px`,
-      };
+            // Calculate the position of the action buttons
+            const rect = event.target.getBoundingClientRect();
+            this.actionButtonStyle = {
+                top: `${rect.bottom + window.scrollY}px`,
+                left: `${rect.left + window.scrollX}px`,
+            };
+        },
+        perfomSearchAndFilter() {
+          let data = {
+              user_id: this.user_id,
+                page: this.current_page,
+                rows_per_page: this.rows_per_page,
+            };
+            axios
+                .post("/api/account/paginate", data)
+                .then((res) => {
+                   console.log(res.data.data.data)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        previousPage() {
+            this.current_page--;
+            this.perfomSearchAndFilter();
+            this.startPage = this.current_page;
+        },
+        nextPage() {
+            this.current_page++;
+            this.perfomSearchAndFilter();
+            this.startPage = this.current_page;
+        },
     },
-  },
-  watch: {
-    selectedInvite(newVal) {
-      this.localSelectedInvite = newVal;
+    watch: {
+        selectedInvite(newVal) {
+            this.localSelectedInvite = newVal;
+        },
     },
-  },
 };
 </script>
 
 <style scoped>
 .table thead {
-  background-color: var(--dark);
-  color: var(--white);
+    background-color: var(--dark);
+    color: var(--white);
 }
 
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .position-absolute {
-  position: absolute;
-  z-index: 1000;
+    position: absolute;
+    z-index: 1000;
 }
 
 .opacity-50 {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 </style>

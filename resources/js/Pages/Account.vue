@@ -31,8 +31,9 @@
             <ProfileSection v-if="currentSection === 'profile'" :user="user" />
             <InvitationsSection
                 v-if="currentSection === 'invitations'"
-                :invitations="invitations?.data"
+                :invitations="invitations"
                 :selectedInvite="selectedInvite"
+                :user_id ="user_id"
                 @viewOptions="viewOptions"
             />
         </div>
@@ -49,7 +50,11 @@ export default {
     props:{
         invitations:{
             type:Object,
-            default:[]
+            default: [],
+        }, 
+        user_id: {
+            type: Number,
+            required:true
         }
     },
     components: {
