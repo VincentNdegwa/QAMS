@@ -79,11 +79,11 @@ export default {
             const invitation = this.invitations?.data.find(
                 (invite) => invite.id === id
             );
-            console.log(invitation);
+            // console.log(invitation);
             // if (invitation && invitation.status === "open") {
             //     invitation.status = "closed";
             // }
-        },
+        }
         
     },mounted(){
         console.log(this.invitations);

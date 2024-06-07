@@ -16,16 +16,10 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ invitation.invited_email }}</td>
                     <td>
-                        <div
-                            v-if="invitation.status === 'closed'"
-                            class="badge bg-danger"
-                        >
+                        <div v-if="invitation.status === 'closed'" class="badge bg-danger">
                             {{ invitation.status }}
                         </div>
-                        <div
-                            v-else-if="invitation.status === 'open'"
-                            class="badge bg-green text-dark"
-                        >
+                        <div v-else-if="invitation.status === 'open'" class="badge bg-green text-dark">
                             {{ invitation.status }}
                         </div>
                         <div v-else class="badge bg-yellow text-dark">
@@ -34,66 +28,35 @@
                     </td>
                     <td>{{ invitation.company.name }}</td>
                     <td>
-                        <i
-                            @click="viewOptions(invitation, $event)"
-                            class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"
-                        ></i>
-                        <div
-                            v-if="
-                                localSelectedInvite &&
-                                localSelectedInvite.id === invitation.id
-                            "
-                            class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
-                            :style="actionButtonStyle"
-                        >
-                            <div
-                                class="bg-danger text-light m-1 p-1 rounded pointer"
-                                :class="{
-                                    'opacity-50':
-                                        localSelectedInvite.status !== 'open',
-                                }"
-                                :disabled="
-                                    localSelectedInvite.status !== 'open'
-                                "
-                                @click="
-                                    $emit(
-                                        'update-status',
-                                        localSelectedInvite.id
-                                    )
-                                "
-                            >
+                        <i @click="viewOptions(invitation, $event)"
+                            class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"></i>
+                        <div v-if="
+                            localSelectedInvite &&
+                            localSelectedInvite.id === invitation.id
+                        " class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
+                            :style="actionButtonStyle">
+                            <div class="text-danger invite-action pointer rounded-1 h6">
+                                <i class="bi bi-x-square"></i>
                                 Cancel Invite
                             </div>
-                            <div
-                                class="bg-secondary m-1 p-1 rounded pointer"
-                                :class="{
-                                    'opacity-50':
-                                        localSelectedInvite.status !== 'joined',
-                                }"
-                                :disabled="
-                                    localSelectedInvite.status !== 'joined'
-                                "
-                                @click="
-                                    $emit('update-role', localSelectedInvite.id)
-                                "
-                            >
-                                Update Invite
+                             <div class="text-danger invite-action pointer rounded-1 h6">
+                                <i class="bi bi-x-square"></i>
+                                Remove User
                             </div>
+                              <div class="text-green invite-action pointer rounded-1 h6">
+                                <i class="bi bi-pencil-square"></i>
+                                Edit Role
+                            </div>
+                            
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div
-            class="d-flex accordion-body flex-row justify-content-between text-light"
-        >
+        <div class="d-flex accordion-body flex-row justify-content-between text-light">
             <div class="row-change">
                 <span class="text-light"> Rows per page </span>
-                <select
-                    @change="perfomSearchAndFilter"
-                    class="form bg-dark text-light"
-                    v-model="rows_per_page"
-                >
+                <select @change="perfomSearchAndFilter" class="form bg-dark text-light" v-model="rows_per_page">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -103,19 +66,12 @@
                 </select>
             </div>
             <div class="pager-nav d-flex align-items-center g-2">
-                <button
-                    :disabled="startPage === 1"
-                    @click="previousPage"
-                    class="bg-primary p-1 rounded-circle"
-                >
+                <button :disabled="startPage === 1" @click="previousPage" class="bg-primary p-1 rounded-circle">
                     <i class="bi bi-chevron-left"></i>
                 </button>
-                <div class="count">{{ startPage }} of {{ endPage }}</div>
-                <button
-                    @click="nextPage"
-                    :disabled="startPage == invitations.last_page"
-                    class="bg-primary p-1 rounded-circle"
-                >
+                <div class="count">{{ current_page }} of {{ endPage }}</div>
+                <button @click="nextPage" :disabled="startPage == invitations.last_page"
+                    class="bg-primary p-1 rounded-circle">
                     <i class="bi bi-chevron-right"></i>
                 </button>
             </div>
@@ -140,7 +96,7 @@ export default {
             invitationdata: this.invitations.data,
             current_page: this.invitations.current_page,
             startPage: this.invitations.from,
-          endPage: this.invitations.last_page,
+            endPage: this.invitations.last_page,
             rows_per_page: 10,
         };
     },
@@ -157,15 +113,23 @@ export default {
             };
         },
         perfomSearchAndFilter() {
-          let data = {
-              user_id: this.user_id,
+            let data = {
+                user_id: this.user_id,
                 page: this.current_page,
                 rows_per_page: this.rows_per_page,
             };
             axios
                 .post("/api/account/paginate", data)
                 .then((res) => {
-                   console.log(res.data.data.data)
+
+                    if (!res.data.error) {
+                        let newPageData = res.data.data.data
+                        this.invitationdata = newPageData
+                        console.log(res.data.data);
+                        this.current_page = res.data.data.current_page,
+                        // this.startPage = res.data.data.from,
+                        this.endPage = res.data.data.last_page
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -207,5 +171,11 @@ export default {
 
 .opacity-50 {
     opacity: 0.5;
+}
+.invite-action{
+    padding: 0.4rem;
+}
+.invite-action:hover{
+    background: var(--bs-black);
 }
 </style>
