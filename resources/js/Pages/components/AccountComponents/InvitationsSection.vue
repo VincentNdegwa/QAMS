@@ -178,4 +178,15 @@ export default {
 .invite-action:hover{
     background: var(--bs-black);
 }
+button{
+    border: none;
+}
+button:disabled {
+    background-color: #cccccc;  /* Light gray background */
+    color: #666666;             /* Dark gray text */
+    cursor: not-allowed;        /* Show not-allowed cursor */
+    opacity: 0.6;               /* Slight transparency */
+    border: none;               /* Remove any border if present */
+}
+
 </style>
