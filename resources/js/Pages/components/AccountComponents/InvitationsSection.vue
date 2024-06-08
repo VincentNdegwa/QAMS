@@ -19,16 +19,10 @@
                     </td>
                     <td v-else>---</td>
                     <td>
-                        <div
-                            v-if="invitation.status === 'closed'"
-                            class="badge bg-danger"
-                        >
+                        <div v-if="invitation.status === 'closed'" class="badge bg-danger">
                             {{ invitation.status }}
                         </div>
-                        <div
-                            v-else-if="invitation.status === 'open'"
-                            class="badge bg-green text-dark"
-                        >
+                        <div v-else-if="invitation.status === 'open'" class="badge bg-green text-dark">
                             {{ invitation.status }}
                         </div>
                         <div v-else class="badge bg-yellow text-dark">
@@ -37,34 +31,22 @@
                     </td>
                     <td>{{ invitation.company.name }}</td>
                     <td>
-                        <i
-                            @click="viewOptions(invitation, $event)"
-                            class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"
-                        ></i>
-                        <div
-                            v-if="
-                                localSelectedInvite &&
-                                localSelectedInvite.id === invitation.id
-                            "
-                            ref="optionsMenu"
-                            class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
-                            :style="actionButtonStyle"
-                        >
-                            <div
-                                class="text-danger invite-action pointer rounded-1 h6"
-                            >
+                        <i @click="viewOptions(invitation, $event)" ref="optionRef"
+                            class="bi bi-three-dots-vertical h6 border border-1 p-1 rounded-1 pointer"></i>
+                        <div v-if="
+                            localSelectedInvite &&
+                            localSelectedInvite.id === invitation.id
+                        " class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
+                            :style="actionButtonStyle">
+                            <div class="text-danger invite-action pointer rounded-1 h6">
                                 <i class="bi bi-x-square"></i>
                                 Cancel Invite
                             </div>
-                            <div
-                                class="text-danger invite-action pointer rounded-1 h6"
-                            >
+                            <div class="text-danger invite-action pointer rounded-1 h6">
                                 <i class="bi bi-x-square"></i>
                                 Remove User
                             </div>
-                            <div
-                                class="text-green invite-action pointer rounded-1 h6"
-                            >
+                            <div class="text-green invite-action pointer rounded-1 h6">
                                 <i class="bi bi-pencil-square"></i>
                                 Edit Role
                             </div>
@@ -73,16 +55,10 @@
                 </tr>
             </tbody>
         </table>
-        <div
-            class="d-flex accordion-body flex-row justify-content-between text-light"
-        >
+        <div class="d-flex accordion-body flex-row justify-content-between text-light">
             <div class="row-change">
                 <span class="text-light"> Rows per page </span>
-                <select
-                    @change="performSearchAndFilter"
-                    class="form bg-dark text-light"
-                    v-model="rows_per_page"
-                >
+                <select @change="performSearchAndFilter" class="form bg-dark text-light" v-model="rows_per_page">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -92,19 +68,12 @@
                 </select>
             </div>
             <div class="pager-nav d-flex align-items-center g-2">
-                <button
-                    :disabled="startPage === 1"
-                    @click="previousPage"
-                    class="bg-primary p-1 rounded-circle"
-                >
+                <button :disabled="startPage === 1" @click="previousPage" class="bg-primary p-1 rounded-circle">
                     <i class="bi bi-chevron-left"></i>
                 </button>
                 <div class="count">{{ current_page }} of {{ endPage }}</div>
-                <button
-                    @click="nextPage"
-                    :disabled="startPage == invitations.last_page"
-                    class="bg-primary p-1 rounded-circle"
-                >
+                <button @click="nextPage" :disabled="startPage == invitations.last_page"
+                    class="bg-primary p-1 rounded-circle">
                     <i class="bi bi-chevron-right"></i>
                 </button>
             </div>
@@ -176,13 +145,23 @@ export default {
             this.startPage = this.current_page;
         },
         handleClickOutside(event) {
-            console.log(event.target)
-            // if (
-            //     this.$refs.optionsMenu &&
-            //     !this.$refs.optionsMenu.contains(event.target)
-            // ) {
-            //     this.localSelectedInvite = null;
-            // }
+            // console.log(event.target)
+            // console.log(this.$refs.optionsMenu[0]);
+            if (
+                this.$refs.optionRef
+            ) {
+                // this.$refs.optionsMenu?.map((item) => {
+                //     if (item == event.target) {
+                //         this.localSelectedInvite = null;
+
+                //     }
+                //     console.log(item)
+                // });
+                let found = this.$refs.optionRef.includes(event.target)
+                if (!found) { 
+                    this.localSelectedInvite = null;
+                }
+            }
         },
     },
     watch: {
@@ -216,20 +195,29 @@ export default {
 .opacity-50 {
     opacity: 0.5;
 }
+
 .invite-action {
     padding: 0.4rem;
 }
+
 .invite-action:hover {
     background: var(--bs-black);
 }
+
 button {
     border: none;
 }
+
 button:disabled {
-    background-color: #cccccc; /* Light gray background */
-    color: #666666; /* Dark gray text */
-    cursor: not-allowed; /* Show not-allowed cursor */
-    opacity: 0.6; /* Slight transparency */
-    border: none; /* Remove any border if present */
+    background-color: #cccccc;
+    /* Light gray background */
+    color: #666666;
+    /* Dark gray text */
+    cursor: not-allowed;
+    /* Show not-allowed cursor */
+    opacity: 0.6;
+    /* Slight transparency */
+    border: none;
+    /* Remove any border if present */
 }
 </style>
