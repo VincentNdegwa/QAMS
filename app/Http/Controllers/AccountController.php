@@ -15,7 +15,7 @@ class AccountController extends Controller
         $user_id = auth()->id();
         // enum('joined','opened','closed', 'expired')
 
-        $invitation = Invitation::where("user_id", $user_id)->with('company')->paginate(10);
+        $invitation = Invitation::where("user_id", $user_id)->with('company')->orderBy("created_at", "DESC")->paginate(10);
         $this->confirmInvitations($invitation->items());
         return Inertia::render("Account", [
             "invitations" => $invitation,
@@ -46,6 +46,7 @@ class AccountController extends Controller
 
             $invitation = Invitation::where("user_id", $validated['user_id'])
                 ->with('company')
+                ->orderBy("created_at", "DESC")
                 ->paginate($validated['rows_per_page'], ['*'], 'page', $validated['page']);
 
             return response()->json([

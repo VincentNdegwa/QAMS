@@ -25,7 +25,7 @@
                         <div v-else-if="invitation.status === 'joined'" class="badge bg-green text-dark">
                             {{ invitation.status }}
                         </div>
-                          <div v-else-if="invitation.status === 'open'" class="badge bg-yellow text-dark">
+                          <div v-else-if="invitation.status === 'opened'" class="badge bg-yellow text-dark">
                             {{ invitation.status }}
                         </div>
                         <div v-else class="badge bg-danger text-dark">
@@ -41,7 +41,7 @@
                             localSelectedInvite.id === invitation.id
                         " class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
                             :style="actionButtonStyle">
-                            <div v-if="invitation.status === 'open'" class="text-danger invite-action pointer rounded-1 h6">
+                            <div v-if="invitation.status === 'opened'" class="text-danger invite-action pointer rounded-1 h6">
                                 <i class="bi bi-x-square"></i>
                                 Cancel Invite
                             </div>
