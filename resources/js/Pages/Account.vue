@@ -33,7 +33,7 @@
                 v-if="currentSection === 'invitations'"
                 :invitations="invitations"
                 :selectedInvite="selectedInvite"
-                :user_id ="user_id"
+                :user_id="user_id"
                 @viewOptions="viewOptions"
             />
         </div>
@@ -47,15 +47,19 @@ import InvitationsSection from "./components/AccountComponents/InvitationsSectio
 import { data } from "autoprefixer";
 
 export default {
-    props:{
-        invitations:{
-            type:Object,
+    props: {
+        invitations: {
+            type: Object,
             default: [],
-        }, 
+        },
         user_id: {
             type: Number,
-            required:true
-        }
+            required: true,
+        },
+        user: {
+            type: Object,
+            required: true,
+        },
     },
     components: {
         MainLayout,
@@ -65,10 +69,7 @@ export default {
     data() {
         return {
             currentSection: "profile",
-            user: {
-                name: "John Doe",
-                email: "john.doe@example.com",
-            },selectedInvite:{}
+            selectedInvite: {},
         };
     },
     methods: {
@@ -84,10 +85,10 @@ export default {
             //     invitation.status = "closed";
             // }
         },
-        
-    },mounted(){
-        //console.log(this.invitations);
-    }
+    },
+    mounted() {
+        console.log(this.user);
+    },
 };
 </script>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitation;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -17,9 +18,11 @@ class AccountController extends Controller
 
         $invitation = Invitation::where("user_id", $user_id)->with('company')->orderBy("created_at", "DESC")->paginate(10);
         $this->confirmInvitations($invitation->items());
+        $user = User::where("id", $user_id)->select("name", "email")->first();
         return Inertia::render("Account", [
             "invitations" => $invitation,
-            "user_id" => $user_id
+            "user_id" => $user_id,
+            "user" => $user
         ]);
     }
     public function confirmInvitations($invitations)
