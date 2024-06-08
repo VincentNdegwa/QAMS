@@ -7,7 +7,7 @@
                     <th>Id</th>
                     <th scope="col">Invited email</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Company</th>
+                    <th scope="col">Organisation</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -22,10 +22,13 @@
                         <div v-if="invitation.status === 'closed'" class="badge bg-danger">
                             {{ invitation.status }}
                         </div>
-                        <div v-else-if="invitation.status === 'open'" class="badge bg-green text-dark">
+                        <div v-else-if="invitation.status === 'joined'" class="badge bg-green text-dark">
                             {{ invitation.status }}
                         </div>
-                        <div v-else class="badge bg-yellow text-dark">
+                          <div v-else-if="invitation.status === 'open'" class="badge bg-yellow text-dark">
+                            {{ invitation.status }}
+                        </div>
+                        <div v-else class="badge bg-danger text-dark">
                             {{ invitation.status }}
                         </div>
                     </td>
@@ -38,15 +41,19 @@
                             localSelectedInvite.id === invitation.id
                         " class="d-flex flex-column position-absolute bg-dark p-1 rounded-2 text-light"
                             :style="actionButtonStyle">
-                            <div class="text-danger invite-action pointer rounded-1 h6">
+                            <div v-if="invitation.status === 'open'" class="text-danger invite-action pointer rounded-1 h6">
                                 <i class="bi bi-x-square"></i>
                                 Cancel Invite
                             </div>
-                            <div class="text-danger invite-action pointer rounded-1 h6">
+                              <div v-if="invitation.status === 'expired' || invitation.status === 'closed'" class="text-danger invite-action pointer rounded-1 h6">
+                                <i class="bi bi-x-square"></i>
+                                Delete Invite
+                            </div>
+                            <div v-if="invitation.status === 'joined'" class="text-danger invite-action pointer rounded-1 h6">
                                 <i class="bi bi-x-square"></i>
                                 Remove User
                             </div>
-                            <div class="text-green invite-action pointer rounded-1 h6">
+                            <div v-if="invitation.status === 'joined'" class="text-green invite-action pointer rounded-1 h6">
                                 <i class="bi bi-pencil-square"></i>
                                 Edit Role
                             </div>
@@ -145,18 +152,9 @@ export default {
             this.startPage = this.current_page;
         },
         handleClickOutside(event) {
-            // console.log(event.target)
-            // console.log(this.$refs.optionsMenu[0]);
             if (
                 this.$refs.optionRef
             ) {
-                // this.$refs.optionsMenu?.map((item) => {
-                //     if (item == event.target) {
-                //         this.localSelectedInvite = null;
-
-                //     }
-                //     console.log(item)
-                // });
                 let found = this.$refs.optionRef.includes(event.target)
                 if (!found) { 
                     this.localSelectedInvite = null;
