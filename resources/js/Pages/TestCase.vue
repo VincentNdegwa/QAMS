@@ -1,9 +1,13 @@
 <template>
     <SingleProject name="Test Case">
-        <div class="w-100 d-flex justify-content-end">
+        <div class="w-100 d-flex gap-2 justify-content-end">
             <a href="new" class="btn btn-secondary text-light">
                 <i class="bi bi-plus-lg"></i>
                 Add Test Case
+            </a>
+              <a href="export" class="btn btn-primary text-light">
+                <i class="bi bi-upload"></i>
+                Export CSV
             </a>
         </div>
         <div class="row ms-0  mt-3 w-100 ">

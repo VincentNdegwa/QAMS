@@ -300,4 +300,46 @@ class TestCaseController extends Controller
 
         return $pdf->stream();
     }
+
+
+    public function ExportCSV($organisation, $project)
+    {
+        $testCases = TestCase::where("project_id", $project)->with([
+            'testSteps' => function ($query) {
+                $query->with('expectedResult');
+            }
+        ])->get();
+        $project_name = Project::where("id", $project)->first();
+
+        $csvData = [];
+        $csvData[] = ['Module', 'Title', 'Description', 'Step', 'Expected Result'];
+
+        foreach ($testCases as $testCase) {
+            foreach ($testCase->testSteps as $step) {
+                $csvData[] = [
+                    $testCase->module_name,
+                    $testCase->title,
+                    $testCase->description,
+                    $step->step_description,
+                    $step->expectedResult->result_description ?? ''
+                ];
+            }
+        }
+
+        $filename = $project_name->name ."-". date('YmdHis').".csv";
+
+        $handle = fopen($filename, "w+");
+        foreach ($csvData as $data) {
+            fputcsv($handle, $data);
+        }
+        fclose($handle);
+        $headers = [
+            'Content-Type' => 'text/csv',
+        ];
+
+        return response()->download($filename, $filename, $headers);
+
+    }
+
+
 };

@@ -37,6 +37,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/view_report", [TestCaseController::class, "getFullReport"]);
         Route::get("/report_download", [TestCaseController::class, "downloadPdf"]);
         Route::get("/report_preview", [TestCaseController::class, "previewPdf"]);
+        Route::get("/export", [TestCaseController::class, "ExportCSV"]);
     });
 });
 
