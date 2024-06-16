@@ -21,11 +21,17 @@ class ProjectController extends Controller
             }
         ])->withCount(['testCases', 'issues'])->get();
 
+        if ($projects) {
+            $company = [];
+        } else {
+            $company = $projects[0]->company;
+        }
+
         return Inertia::render("Projects", [
             "projects" => $projects,
             "org_id" => $organisation_id,
             "user_id" => auth()->id(),
-            "company" => $projects[0]->company
+            "company" => $company
         ]);
     }
 

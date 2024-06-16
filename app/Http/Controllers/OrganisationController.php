@@ -20,7 +20,7 @@ class OrganisationController extends Controller
     {
         $id = auth()->id();
         $data = [];
-        $Organisation2 = UserCompany::where("user_id", auth()->id())->with("company")->get();
+        $Organisation2 = UserCompany::where("user_id", auth()->id())->with("company")->orderBy('created_at', 'DESC')->get();
 
         foreach ($Organisation2 as $item) {
             $org_proj = Project::with("company")->where("company_id", $item->company_id)->withCount("testCases")->get();
