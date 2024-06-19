@@ -297,7 +297,6 @@ class TestCaseController extends Controller
         $pdf = PDF::loadView('components.testReportComponent', [
             'testReport' => $data,
         ]);
-
         return $pdf->stream();
     }
 
@@ -327,6 +326,7 @@ class TestCaseController extends Controller
         }
 
         $filename = $project_name->name ."-". date('YmdHis').".csv";
+
 
         $handle = fopen($filename, "w+");
         foreach ($csvData as $data) {
