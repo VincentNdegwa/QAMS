@@ -9,10 +9,8 @@
                 <i class="bi bi-upload"></i>
                 Export CSV
             </a>
-            <label for="json_upload" class="bg-secondary rounded-1 upload-label position-relative">
-                <span class="">Import JSON</span>
-                <input id="json_upload" class="d-none" type="file" accept=".json" @change="handleFileUpload" />
-            </label>
+            <div class="btn btn-secondary" @click="startImport" >JSON Import</div>
+           
         </div>
         <div class="row ms-0 mt-3 w-100">
             <div class="col-12 col-md-4">
@@ -44,12 +42,17 @@
             <TestCaseTable :testCases="testCases" />
         </div>
     </SingleProject>
+    <Overlay :open="importStart" @closeOverlay="closeImport" >
+        <JsonImport :userId="userId" @closeImportOverlay="closeImport" @fetchTestCases="fetchTestCases"/>
+    </Overlay>
 </template>
 
 <script>
 import axios from "axios";
 import SingleProject from "./Layouts/SingleProject.vue";
 import TestCaseTable from "./components/TestCaseComponents/TestCaseTable.vue";
+import Overlay from "./Layouts/Overlay.vue";
+import JsonImport from "./components/TestCaseComponents/JsonImport.vue"
 export default {
     props: {
         moduleCount: { type: Array },
@@ -61,11 +64,14 @@ export default {
             testCases: [],
             file: null,
             uploadStatus: null,
+            importStart: false
         };
     },
     components: {
         SingleProject,
         TestCaseTable,
+        Overlay,
+        JsonImport
     },
     mounted() {
         if (this.moduleCount.length > 0) {
@@ -87,47 +93,20 @@ export default {
                         alert(res.data.message);
                     } else {
                         this.testCases = res.data.testCases;
-                        console.log(this.testCases);
                     }
                 })
                 .catch((err) => {
                     alert(err);
                 });
         },
-        handleFileUpload(event) {
-            this.file = event.target.files[0];
-            this.uploadFile()
+        startImport() {
+            this.importStart = true;
         },
-        async uploadFile() {
-            if (!this.file) {
-                alert("Please select a file.");
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append("file", this.file);
-            formData.append("tester_id", this.userId)
-
-            try {
-                const response = await axios.post("upload-json", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                this.uploadStatus = {
-                    error: false,
-                    message: response.data.message,
-                };
-            } catch (error) {
-                this.uploadStatus = {
-                    error: true,
-                    message:
-                        error.response.data.message ||
-                        "An error occurred while uploading the file.",
-                };
-            }
-        },
+        closeImport() {
+            this.importStart = false
+        },fetchTestCases() {
+           location.reload()
+        }
     },
 };
 </script>

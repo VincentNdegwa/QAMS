@@ -75,7 +75,7 @@ class TestCaseController extends Controller
         ]);
     }
 
-    function upDateTestCase($testCaseId)
+    public function upDateTestCase($testCaseId)
     {
         $testCase = TestCase::where("id", $testCaseId)->with("testSteps")->first();
         $allStepsComplete = $testCase->testSteps->every(function ($step) {
@@ -100,6 +100,11 @@ class TestCaseController extends Controller
             ->orderBy("module_name", "ASC")
             ->get();
 
+        $testCases = TestCase::where("project_id", $project)->with('testSteps')->get();
+
+        foreach ($testCases as $testCase) {
+            $this->upDateTestCase($testCase->id);
+        }
         return Inertia::render("TestCase", [
             "moduleCount" => $modules,
             "userId" => auth()->id(),
