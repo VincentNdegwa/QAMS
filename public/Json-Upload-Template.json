@@ -1,0 +1,30 @@
+[
+    {
+        "Module": "Items",
+        "Title": "Creating a material",
+        "Description": "User should be able to create new material",
+        "Steps": [
+            {
+                "step": "Navigate to items, then click the Materials nav",
+                "expected result": "Display of existing materials with accurate data",
+                "status": true,
+                "Found result": "",
+                "comment": ""
+            },
+            {
+                "step": "Click “Add Material”",
+                "expected result": "Display of new material form",
+                "status": true,
+                "Found result": "",
+                "comment": ""
+            },
+            {
+                "step": "Input the details of the material in the field, then click “Create material” button to submit",
+                "expected result": "The inputs are editable and the material is created and added in the Materials interface, the material should have the correct details",
+                "status": true,
+                "Found result": "",
+                "comment": ""
+            }
+        ]
+    }
+]

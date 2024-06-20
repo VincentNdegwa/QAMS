@@ -341,5 +341,97 @@ class TestCaseController extends Controller
 
     }
 
+    public function ImportJson(Request $request, $organisation, $project)
+    {
+        $request->validate([
+            'file' => 'required|mimes:json',
+            'tester_id' => 'required'
+        ]);
+
+        $path = $request->file('file')->getRealPath();
+        $jsonData = json_decode(file_get_contents($path), true);
+
+        if (!$jsonData) {
+            return response()->json([
+                "error" => true,
+                "message" => "Invalid JSON data in the file."
+            ]);
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($jsonData as $testCaseData) {
+                // Validate each test case data
+                $validator = Validator::make($testCaseData, [
+                    'Title' => "required",
+                    "Module" => "required",
+                    "Steps" => "required|array|min:1",
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        "error" => true,
+                        "message" => $validator->errors()->first(),
+                    ]);
+                }
+
+                $user = User::find($request->input('tester_id'));
+                if (!$user) {
+                    throw new \Exception("User with ID {$request->input('tester_id')} not found.");
+                }
+
+                $userName = $user->name;
+
+                // Create new test case
+                $newTestCase = TestCase::create([
+                    "module_name" => $testCaseData['Module'],
+                    "title" => $testCaseData['Title'],
+                    "tester_id" => $request->input('tester_id'), // Use tester_id from request
+                    "status" => "Incomplete",
+                    "project_id" => $project,
+                    "description" => $testCaseData['Description'] ?? '',
+                ]);
+
+                // Create activity log
+                Activity::create([
+                    "activity_text" => "@" . $userName . " Created a new TestCase '" . $newTestCase->title . "'",
+                    "project_id" => $project
+                ]);
+
+                // Create test steps and expected results
+                foreach ($testCaseData['Steps'] as $step) {
+                    $stepStatus = $step["status"] ? "Complete" : "Pending";
+
+                    $newTestStep = TestStep::create([
+                        'step_description' => $step["step"],
+                        'step_status' => $stepStatus,
+                        'testcase_id' => $newTestCase->id
+                    ]);
+
+                    $found = $step["Found result"] ?? '';
+                    $newExpected = ExpectedResult::create([
+                        'result_description' => $step["expected result"],
+                        'test_step_id' => $newTestStep->id,
+                        "found_description" => $found,
+                        'pass' => $step['status'] ? 'true' : 'false'
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return response()->json([
+                "error" => false,
+                "message" => "Test cases have been created successfully from JSON file.",
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                "error" => true,
+                "message" => $th->getMessage(),
+            ]);
+        }
+    }
+
+
 
 };

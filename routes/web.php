@@ -38,6 +38,7 @@ Route::middleware("auth")->prefix("/")->group(function () {
         Route::get("/report_download", [TestCaseController::class, "downloadPdf"]);
         Route::get("/report_preview", [TestCaseController::class, "previewPdf"]);
         Route::get("/export", [TestCaseController::class, "ExportCSV"]);
+        Route::post("/upload-json", [TestCaseController::class, "ImportJson"]);
     });
 });
 
