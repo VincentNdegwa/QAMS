@@ -16,14 +16,16 @@
         .table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed; /* Ensure table layout is fixed */
         }
 
         .table th,
         .table td {
             border: 1px solid #dee2e6;
-            padding: 8px;
+            padding: 5px;
             vertical-align: top;
-            font-size: 14px;
+            font-size: 12px;
+            word-wrap: break-word; /* Ensure text wraps within cells */
         }
 
         .table th {
@@ -50,10 +52,55 @@
             width: 100%;
             margin: auto;
         }
+
+        /* Set specific column widths to manage layout */
+        .table th:nth-child(1),
+        .table td:nth-child(1) {
+            width: 10%;
+        }
+
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 20%;
+        }
+
+        .table th:nth-child(3),
+        .table td:nth-child(3) {
+            width: 20%;
+        }
+
+        .table th:nth-child(4),
+        .table td:nth-child(4) {
+            width: 20%;
+        }
+
+        .table th:nth-child(5),
+        .table td:nth-child(5) {
+            width: 10%;
+        }
+
+        .table th:nth-child(6),
+        .table td:nth-child(6) {
+            width: 10%;
+        }
+
+        .table th:nth-child(7),
+        .table td:nth-child(7) {
+            width: 10%;
+        }
+
+        /* Page break handling */
+        .table tr {
+            page-break-inside: avoid;
+        }
+
+        .table td,
+        .table th {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/rasterizehtml/1.2.4/rasterizeHTML.allinone.min.js"></script>
 </head>
 
 <body>
@@ -85,25 +132,40 @@
                     @endphp
                     @if ($testStepsCount > 0)
                         @foreach ($testCase->testSteps as $index => $testStep)
-                            <tr>
-                                @if ($index === 0)
+                            @if ($index === 0)
+                                <tr>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->module_name }}</td>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->title }}</td>
                                     <td rowspan="{{ $testStepsCount }}">{{ $testCase->description ?? 'N/A' }}</td>
-                                @endif
-                                <td>{{ $testStep->step_description }}</td>
-                                <td>{{ $testStep->expectedResult->result_description ?? 'N/A' }}</td>
-                                <td>{{ $testStep->expectedResult->found_description ?? 'N/A' }}</td>
-                                <td>
-                                    @if (is_null($testStep->expectedResult->pass))
-                                        N/A
-                                    @elseif($testStep->expectedResult->pass === 'true')
-                                        <span style="color: green;">Passed</span>
-                                    @else
-                                        <span style="color: red;">Failed</span>
-                                    @endif
-                                </td>
-                            </tr>
+                                    <td>{{ $testStep->step_description }}</td>
+                                    <td>{{ $testStep->expectedResult->result_description ?? 'N/A' }}</td>
+                                    <td>{{ $testStep->expectedResult->found_description ?? 'N/A' }}</td>
+                                    <td>
+                                        @if (is_null($testStep->expectedResult->pass))
+                                            N/A
+                                        @elseif($testStep->expectedResult->pass === 'true')
+                                            <span style="color: green;">Passed</span>
+                                        @else
+                                            <span style="color: red;">Failed</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td>{{ $testStep->step_description }}</td>
+                                    <td>{{ $testStep->expectedResult->result_description ?? 'N/A' }}</td>
+                                    <td>{{ $testStep->expectedResult->found_description ?? 'N/A' }}</td>
+                                    <td>
+                                        @if (is_null($testStep->expectedResult->pass))
+                                            N/A
+                                        @elseif($testStep->expectedResult->pass === 'true')
+                                            <span style="color: green;">Passed</span>
+                                        @else
+                                            <span style="color: red;">Failed</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     @else
                         <tr>
@@ -139,8 +201,6 @@
                 @endforeach
             </tbody>
         </table>
-
-        
     </div>
 </body>
 

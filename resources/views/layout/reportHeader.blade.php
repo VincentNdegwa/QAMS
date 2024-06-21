@@ -14,7 +14,7 @@
 <body class="bg-dark">
     <header class="container bg-dark position-sticky top-0 p-3 row">
 
-        <a href="test" class="col-2 btn btn-danger row ms-1 col-4 text-decoration-none text-light">Exit </a>
+        {{-- <a href="test" class="col-2 btn btn-danger row ms-1 col-4 text-decoration-none text-light">Exit </a>
 
         <a href="report_download" class="col-2 btn btn-primary row ms-3 col-4 text-decoration-none text-dark">Download
             <i class="bi bi-box-arrow-in-down"></i></a>
@@ -22,7 +22,7 @@
 
         <a href="report_preview" class="col-2 btn btn-primary row ms-3 col-4 text-decoration-none text-dark">View Pdf
             <i class="bi bi-arrow-up-right-square"></i>
-        </a>
+        </a> --}}
 
     </header>
     @yield('content')
