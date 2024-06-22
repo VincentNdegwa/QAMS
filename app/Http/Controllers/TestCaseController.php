@@ -257,7 +257,7 @@ class TestCaseController extends Controller
     {
         $testReport = TestCase::select('id', 'project_id', 'module_name', 'title', 'tester_id', 'status', 'description')
             ->where('project_id', $projectId)
-            ->orderBy('module_name', 'DESC')
+            ->orderBy('module_name', 'ASC')
             ->with(['testSteps' => function ($query) {
                 $query->select('id', 'testcase_id', 'step_description', 'step_status')
                     ->with(['expectedResult' => function ($query) {
