@@ -16,7 +16,8 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed; /* Ensure table layout is fixed */
+            table-layout: fixed;
+            /* Ensure table layout is fixed */
         }
 
         .table th,
@@ -25,7 +26,8 @@
             padding: 5px;
             vertical-align: top;
             font-size: 12px;
-            word-wrap: break-word; /* Ensure text wraps within cells */
+            word-wrap: break-word;
+            /* Ensure text wraps within cells */
         }
 
         .table th {
@@ -196,7 +198,13 @@
                         <td>{{ $issue->id }}</td>
                         <td>{{ $issue->title }}</td>
                         <td>{{ $issue->description }}</td>
-                        <td>{{ $issue->stage }}</td>
+                        @if ($issue->stage === 'closed')
+                            <td style="color: green;">{{ $issue->stage }}</td>
+                        @elseif($issue->stage === 'opened')
+                            <td style="color: red;">{{ $issue->stage }}</td>
+                        @else
+                            <td style="color: yellow;">{{ $issue->stage }}</td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
